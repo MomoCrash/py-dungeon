@@ -8,7 +8,8 @@ class Weapon:
         self.attaque_tile = (0, 32)
 
     def blit(self):
-        for x in range()
+        for x in range(1):
+            return
         py.blt(self.owner.x, self.owner.y, 0, self.attaque_tile[0], self.attaque_tile[1], 16, 16)
 
 
