@@ -1,0 +1,3 @@
+cd C:\Users\trist\PycharmProjects\Dungeon
+
+C:\Users\trist\AppData\Local\Programs\Python\Python310\Scripts\pyxel edit assets.pyxres
