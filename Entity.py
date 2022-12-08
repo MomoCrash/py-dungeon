@@ -5,6 +5,7 @@ from Equipment import *
 
 class Entity:
     def __init__(self, game, x: int, y: int, img: tuple, size: tuple, hp: int, colkey: int = 0):
+        self.maxhp = hp
         self.hp = hp
         self.x = x
         self.y = y
@@ -72,12 +73,22 @@ class Entity:
             self.y += 1
         self.watch_bottom()
 
+    def damage(self, amount):
+        pass
+
+    def blit_entity(self):
+        py.blt(self.x * 16, self.y * 16, 0, self.img[0], self.img[1], self.size[0],self.size[1], self.colkey)
+
+    def blit_life_bar(self):
+        py.rect(self.x*16, self.y*16-5, 16, 5, 8)
+        py.rect(16*self.x, 16*self.y-5, (self.hp/self.maxhp)*16, 5, 11)
+
 
 class Player(Entity):
     def __init__(self, game, x:int, y:int):
         super().__init__(game, x, y, (32, 0), (16, 16), 100)
-        self.weapon = Weapon()
-        self.armor = Armor()
+        self.weapon = Hammer(self)
+        self.armor = Armor(self)
 
 
 class Ennemies(Entity):
@@ -94,6 +105,11 @@ class Ennemies(Entity):
             self.top()
         if a == 4:
             self.bottom()
+
+    def damage(self, amount):
+        self.hp -= amount
+        if self.hp <= 0:
+            self.game.ennemi.remove(self)
 
 
 class TestEn(Ennemies):
