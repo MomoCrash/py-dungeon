@@ -1,6 +1,7 @@
 import pyxel as py
 from Entity import *
 from Tile import Tile
+from random import randint
 
 
 class Game:
@@ -8,20 +9,29 @@ class Game:
         py.init(256, 256, fps=60)
         py.load("assets.pyxres")
         # map basique de taille : 16 par 16
-        self.map_dim = [0, 0, 16, 16]
+        self.map_dim = []
         self.grille = []
-        self.new_map(self.map_dim[0], self.map_dim[1], self.map_dim[2], self.map_dim[3],)
+        self.new_map(0, 0, 15, 15)
         self.player = Player(self, 1, 0)
-        self.ennemi = [TestEn(self, 10, 10)]
+        self.ennemi = []
+        self.rand_spawns(3, local_section=(8, 8, 6, 6))
 
     def new_map(self, u, v, w, h):
+        self.map_dim = [u, v, w, h]
         self.grille = []
-        for i in range(w):
+        for i in range(self.map_dim[2]):
             self.grille.append([])
-            for j in range(h):
-                self.grille[i].append(Tile(u+i, v+j))
-        """for i in grid:
-            print([j.tiles for j in i])"""
+            for j in range(self.map_dim[3]):
+                self.grille[i].append(Tile(self.map_dim[0]+i, self.map_dim[1]+j))
+
+    def rand_spawns(self, n, local_section=(0, 0, 14, 14)):
+        spawned = 0
+        while spawned < n:
+            x = randint(local_section[0], local_section[0]+local_section[2])
+            y = randint(local_section[1], local_section[1]+local_section[3])
+            if "obst" not in self.grille[x][y].types and not self.check_full_tile(x, y):
+                self.ennemi.append(TestEn(self, x, y))
+                spawned += 1
 
     def check_full_tile(self, x, y):
         for e in self.ennemi:
@@ -64,6 +74,13 @@ class Game:
                 e.damage(self.player.weapon.dmg)
             for e in self.ennemi:
                 e.rand_move()
+        if py.btnp(py.KEY_E, hold=60):
+            for e in self.ennemi:
+                print(e.get_if_player_touched())
+        if py.btnp(py.KEY_R, hold=60):
+            self.rand_spawns(3)
+        if py.btnp(py.KEY_F, hold=60):
+            self.player.damage(10)
 
     def draw(self):
         py.cls(0)
@@ -71,8 +88,11 @@ class Game:
         for e in self.ennemi:
             e.blit_entity()
             e.blit_life_bar()
+            e.range_blit()
         self.player.blit_entity()
         self.player.weapon.blit_range()
+        py.rect(0, 240, 240, 16, 8)
+        py.rect(0, 240, (self.player.hp/self.player.maxhp)*240, 16, 11)
 
     def run(self):
         py.run(self.update, self.draw)

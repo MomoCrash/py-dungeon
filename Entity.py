@@ -87,13 +87,25 @@ class Entity:
 class Player(Entity):
     def __init__(self, game, x:int, y:int):
         super().__init__(game, x, y, (32, 0), (16, 16), 100)
-        self.weapon = Hammer(self)
+        self.weapon = Spear(self)
         self.armor = Armor(self)
+
+    def damage(self, amount):
+        self.hp -= amount
+        if self.hp <= 0:
+            self.game.player = Player(self.game, 0, 0)
 
 
 class Ennemies(Entity):
     def __init__(self, game, x: int, y: int, img: tuple, size: tuple, hp: int, colkey: int = 0):
         super().__init__(game, x, y, img, size, hp, colkey=colkey)
+        self.dmg = 10
+        self.patern = {"left": [[(-1, 0)]],
+                       "right": [[(1, 0)]],
+                       "top": [[(0, -1)]],
+                       "bottom": [[(0, 1)]],
+                       }
+        self.attaque_tile = (16, 32)
 
     def rand_move(self):
         a = randint(1, 4)
@@ -110,6 +122,26 @@ class Ennemies(Entity):
         self.hp -= amount
         if self.hp <= 0:
             self.game.ennemi.remove(self)
+
+    def range_blit(self):
+        for line in self.patern[self.orient]:
+            blocked = False
+            for pos in line:
+                if not blocked and 0 <= self.x + pos[0] < len(self.game.grille) and 0 <= self.y + pos[1] < len(self.game.grille[0]) and not "obst" in self.game.grille[self.x + pos[0]][self.y + pos[1]].types:
+                    py.blt((self.x + pos[0]) * 16, (self.y + pos[1]) * 16, 0, self.attaque_tile[0],self.attaque_tile[1], 16, 16, 0)
+                else:
+                    blocked = True
+
+    def get_if_player_touched(self):
+        for line in self.patern[self.orient]:
+            blocked = False
+            for pos in line:
+                if not blocked and 0 <= self.x + pos[0] < len(self.game.grille) and 0 <= self.y + pos[1] < len(self.game.grille[0]) and not "obst" in self.game.grille[self.x + pos[0]][self.y + pos[1]].types:
+                    if self.game.player.x == self.x + pos[0] and self.game.player.y == self.y + pos[1]:
+                        return True
+                else:
+                    blocked = True
+        return False
 
 
 class TestEn(Ennemies):
