@@ -30,7 +30,7 @@ class Game:
             x = randint(local_section[0], local_section[0]+local_section[2])
             y = randint(local_section[1], local_section[1]+local_section[3])
             if "obst" not in self.grille[x][y].types and not self.check_full_tile(x, y):
-                self.ennemi.append(TestEn(self, x, y))
+                self.ennemi.append(Zombie(self, x, y))
                 spawned += 1
 
     def check_full_tile(self, x, y):

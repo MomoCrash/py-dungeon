@@ -87,7 +87,7 @@ class Entity:
 class Player(Entity):
     def __init__(self, game, x:int, y:int):
         super().__init__(game, x, y, (32, 0), (16, 16), 100)
-        self.weapon = Spear(self)
+        self.weapon = Hammer(self)
         self.armor = Armor(self)
 
     def damage(self, amount):
@@ -144,6 +144,6 @@ class Ennemies(Entity):
         return False
 
 
-class TestEn(Ennemies):
+class Zombie(Ennemies):
     def __init__(self, game, x: int, y: int):
         super().__init__(game, x, y, (32, 16), (16, 16), 20, colkey=7)
