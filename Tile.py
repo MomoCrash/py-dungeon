@@ -16,7 +16,7 @@ class Tile:
         for i in range(2):
             self.tiles.append([])
             for j in range(2):
-                self.tiles[i].append(py.tilemap(0).pget(2*self.x+i, 2*self.y+j))
+                self.tiles[i].append(py.tilemap(0).pget((self.x+i*8)/8, (self.y+j*8)/8))
         self.types = []
         for k in _equivalance.keys():
             for i in self.tiles:
