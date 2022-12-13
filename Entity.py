@@ -3,6 +3,7 @@ from random import randint
 from Equipment import *
 import random
 
+IMAGE_ENTITE = 1
 
 class Entity:
     def __init__(self, game, x: int, y: int, img: tuple, size: tuple, hp: int, colkey: int = 0):
@@ -30,6 +31,7 @@ class Entity:
         c2 = not self.game.check_full_tile(self.x-1, self.y)
         if c1 and c2:
             self.x -= 1
+
         self.watch_left()
 
     def watch_right(self):
@@ -43,7 +45,11 @@ class Entity:
         c1 = "obst" not in self.game.carte.grille[self.x + 1][self.y].types
         c2 = not self.game.check_full_tile(self.x+1, self.y)
         if c1 and c2:
-            self.x += 1
+            if "end" in self.game.carte.grille[self.x+1][self.y].types :
+                if self.game.carte.etage_completed:
+                    self.game.carte.new_stage()
+            else:
+                self.x += 1
         self.watch_right()
 
     def watch_top(self):
@@ -71,7 +77,11 @@ class Entity:
         c1 = "obst" not in self.game.carte.grille[self.x][self.y + 1].types
         c2 = not self.game.check_full_tile(self.x, self.y+1)
         if c1 and c2:
-            self.y += 1
+            if "end" in self.game.carte.grille[self.x][self.y+1].types:
+                if self.game.carte.etage_completed:
+                    self.game.carte.new_stage()
+            else:
+                self.y += 1
         self.watch_bottom()
 
     def damage(self, amount):
@@ -81,7 +91,7 @@ class Entity:
         pass
 
     def blit_entity(self):
-        py.blt(self.x * 16, self.y * 16, 0, self.img[0], self.img[1], self.size[0],self.size[1], self.colkey)
+        py.blt(self.x * 16, self.y * 16, IMAGE_ENTITE, self.img[0], self.img[1], self.size[0], self.size[1], self.colkey)
 
     def distance(self, other_entity):
         distance_x = self.x - other_entity.x
@@ -104,12 +114,12 @@ class Entity:
 
 class Player(Entity):
     def __init__(self, game, x:int, y:int):
-        super().__init__(game, x, y, (32, 0), (16, 16), 100)
-        self.weapon = Axe(self)
+        super().__init__(game, x, y, (0, 0), (16, 16), 100)
+        self.weapon = Hammer(self, 1)
         self.armor = NakedArmor(self)
 
     def damage(self, amount):
-        self.hp -= amount
+        self.hp -= amount*self.armor.defence()
         if self.hp <= 0:
             self.game.player = Player(self.game, 0, 0)
 
@@ -118,9 +128,8 @@ class Player(Entity):
 
 
 class Ennemies(Entity):
-    def __init__(self, game, x: int, y: int, img: tuple, size: tuple, hp: int, lvl: int,  colkey: int = 0):
+    def __init__(self, game, x: int, y: int, img: tuple, size: tuple, hp: int, lvl: int, dmg: int,  colkey: int = 0):
         super().__init__(game, x, y, img, size, hp, colkey=colkey)
-        self.dmg = 10
         self.patern = {"left": [[(-1, 0)]],
                        "right": [[(1, 0)]],
                        "top": [[(0, -1)]],
@@ -129,6 +138,9 @@ class Ennemies(Entity):
         self.attaque_tile = (16, 32)
         self.lvl = lvl
         self.speed = 1
+        self.dmg = (lvl - 1) * dmg + randint(1, dmg-1)
+        self.hp = (lvl - 1) * hp + randint(1, hp-1)
+        self.maxhp = self.hp
 
     def action(self):
         left_action = self.speed
@@ -198,20 +210,16 @@ class Ennemies(Entity):
 
 class Zombie(Ennemies):
     def __init__(self, game, x: int, y: int, lvl: int):
-        super().__init__(game, x, y, (32, 16), (16, 16), 20, lvl, colkey=7)
-        self.dmg = (self.lvl-1)*10 + randint(1, 9)
-        self.hp = (self.lvl-1)*self.hp + randint(1, 19)
-        self.maxhp = self.hp
+        super().__init__(game, x, y, (0, 16), (16, 16), 20, lvl, 20, colkey=7)
+        self.speed = 1
 
 
 class Squelette(Ennemies):
     def __init__(self, game, x: int, y: int, lvl: int):
-        super().__init__(game, x, y, (32, 32), (16, 16), 20, lvl, colkey=6)
-        self.dmg = (self.lvl - 1) * 10 + randint(1, 9)
-        self.hp = (self.lvl - 1) * 20 + randint(1, 19)
-        self.maxhp = self.hp
+        super().__init__(game, x, y, (0, 32), (16, 16), 20, lvl, 10, colkey=6)
         self.patern = {"left": [[(-i, 0) for i in range(1, 17)]],
                        "right": [[(i, 0) for i in range(1, 17)]],
                        "top": [[(0, -i) for i in range(1, 17)]],
                        "bottom": [[(0, i) for i in range(1, 17)]],
                        }
+        self.speed = 1
