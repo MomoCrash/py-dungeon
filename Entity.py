@@ -1,6 +1,7 @@
 import pyxel as py
 from random import randint
 from Equipment import *
+from Loot import Loot
 import random
 
 IMAGE_ENTITE = 1
@@ -115,16 +116,28 @@ class Entity:
 class Player(Entity):
     def __init__(self, game, x:int, y:int):
         super().__init__(game, x, y, (0, 0), (16, 16), 100)
-        self.weapon = Hammer(self, 1)
+        self.weapon = Hammer(self, 10)
         self.armor = NakedArmor(self)
 
+    def blit_life_bar(self):
+        py.rect(0, 256, 256, 16, 8)
+        py.rect(0, 256, (self.hp/self.maxhp)*256, 16, 11)
+        py.text(90, 264, f"{self.hp}/{self.maxhp}", 7)
+
     def damage(self, amount):
-        self.hp -= amount*self.armor.defence()
+        total = amount*self.armor.defence()
+        self.hp -= total
         if self.hp <= 0:
             self.game.player = Player(self.game, 0, 0)
 
     def attaque(self):
         self.weapon.attaque()
+
+    def set_armor(self, armor:Armor):
+        self.armor = armor
+
+    def set_weapon(self, weapon:Weapon):
+        self.weapon = weapon
 
 
 class Ennemies(Entity):
@@ -176,6 +189,7 @@ class Ennemies(Entity):
     def damage(self, amount):
         self.hp -= amount
         if self.hp <= 0:
+            self.game.loots.append(Loot(self.lvl, self.x, self.y))
             self.game.ennemi.remove(self)
 
     def range_blit(self):
@@ -210,16 +224,50 @@ class Ennemies(Entity):
 
 class Zombie(Ennemies):
     def __init__(self, game, x: int, y: int, lvl: int):
-        super().__init__(game, x, y, (0, 16), (16, 16), 20, lvl, 20, colkey=7)
+        super().__init__(game, x, y, (0, 16), (16, 16), 25, lvl, 11, colkey=7)
         self.speed = 1
 
 
 class Squelette(Ennemies):
     def __init__(self, game, x: int, y: int, lvl: int):
-        super().__init__(game, x, y, (0, 32), (16, 16), 20, lvl, 10, colkey=6)
+        super().__init__(game, x, y, (0, 32), (16, 16), 16, lvl, 9, colkey=6)
         self.patern = {"left": [[(-i, 0) for i in range(1, 17)]],
                        "right": [[(i, 0) for i in range(1, 17)]],
                        "top": [[(0, -i) for i in range(1, 17)]],
                        "bottom": [[(0, i) for i in range(1, 17)]],
+                       }
+        self.speed = 1
+
+
+class Bat(Ennemies):
+    def __init__(self, game, x: int, y: int, lvl: int):
+        super().__init__(game, x, y, (0, 0), (0, 0), 12, lvl, 7, colkey=6)
+        self.speed = 1
+
+
+class Ghost(Ennemies):
+    def __init__(self, game, x: int, y: int, lvl: int):
+        super().__init__(game, x, y, (0, 0), (0, 0), 20, lvl, 7, colkey=6)
+        self.speed = 1
+
+
+class BabyDragon(Ennemies):
+    def __init__(self, game, x: int, y: int, lvl: int):
+        super().__init__(game, x, y, (0, 32), (16, 16), 25, lvl, 13, colkey=6)
+        self.patern = {"left": [[(-1, 0), (-2, 0), (-3, 0)]],
+                       "right": [[(1, 0), (2, 0), (3, 0)]],
+                       "top": [[(0, -1), (0, -2)]],
+                       "bottom": [[(0, 1), (0, 2)]]
+                       }
+        self.speed = 1
+
+
+class Golem(Ennemies):
+    def __init__(self, game, x: int, y: int, lvl: int):
+        super().__init__(game, x, y, (0, 0), (0, 0), 35, lvl, 15, colkey=6)
+        self.patern = {"left": [[(-1, 0), (-2, 0)]],
+                       "right": [[(1, 0), (2, 0)]],
+                       "top": [[(0, -1), (0, -2)]],
+                       "bottom": [[(0, 1), (0, 2)]]
                        }
         self.speed = 1
