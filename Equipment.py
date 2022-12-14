@@ -9,7 +9,7 @@ LOOT_IMAGE = {
     "IronArmor": (0, 104),
     "GoldArmor": (0, 136),
     "DiamondArmor": (0, 168),
-    "MagmaArmor": (0, 0),
+    "MagmaArmor": (0, 200),
     "DragonScaleArmor": (0, 200),
     "Sword": (16, 0),
     "Spear": (16, 32),

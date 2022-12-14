@@ -4,19 +4,19 @@ from random import random
 
 class Loot:
     taux_loot = {
-        "NakedArmor": 0.1,
-        "LeatherArmor": 3,
-        "IronArmor": 2,
-        "GoldArmor": 1,
-        "DiamondArmor": 0.5,
+        "NakedArmor": 0.7,
+        "LeatherArmor": 0.6,
+        "IronArmor": 0.5,
+        "GoldArmor": 0.4,
+        "DiamondArmor": 0.3,
         "MagmaArmor": 0.2,
         "DragonScaleArmor": 0.1,
         "Spear": 1,
-        "Hammer": 0.1,
+        "Hammer": 0.2,
         "Bow": 1.2,
-        "Hallebarde": 0.9,
-        "Axe": 1.5,
-        "Life": 3
+        "Hallebarde": 0.8,
+        "Axe": 1.2,
+        "Life": 2
     }
     
     def __init__(self, niveau, x, y, forced=(False, )):
@@ -91,18 +91,6 @@ class Loot:
             py.text(272, 208, "lvl: \n"+chaine, 7)
 
 
-if __name__ == '__main__':
-    loot1 = []
-    a = Armor.__subclasses__()
-    for i in range(100):
-        loot1.append(Loot(1, 1, 1))
-    nbr = [[t, 0] for t in Loot.taux_loot.keys()]
-    print([l.type for l in loot1])
-    for l in loot1:
-        for i in range(len(nbr)):
-            if nbr[i][0] == l.type:
-                nbr[i][1] += 1
-    print(nbr)
 
 
 

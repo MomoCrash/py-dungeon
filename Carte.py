@@ -1,9 +1,32 @@
 import pyxel as py
-from Tile import Tile
 from random import randint
 
 IMAGE_PORTE_FERMEE = (32, 0)
 IMAGE_PORTE_OUVERTE = (48, 0)
+
+_equivalance = {
+    "obst": [
+        (0, 2), (0, 3), (1, 2), (1, 3),
+        (2, 2), (2, 3), (3, 2), (3, 3)
+    ],
+}
+
+
+class Tile:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.tiles = []
+        for i in range(2):
+            self.tiles.append([])
+            for j in range(2):
+                self.tiles[i].append(py.tilemap(0).pget((self.x+i*8)/8, (self.y+j*8)/8))
+        self.types = []
+        for k in _equivalance.keys():
+            for i in self.tiles:
+                for j in i:
+                    if j in _equivalance[k] and k not in self.types:
+                        self.types.append("obst")
 
 
 class Carte:
@@ -70,3 +93,4 @@ class Carte:
             py.blt(240, 240, 0, IMAGE_PORTE_FERMEE[0], IMAGE_PORTE_FERMEE[1], 16, 16, 7)
 
         py.text(256, 240, f" stage: \n {self.stage if self.stage < 999 else '999+'}", 7)
+
