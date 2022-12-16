@@ -5,18 +5,57 @@ from Carte import Carte
 from Loot import Loot
 
 
+"""
+file edit with Python 3.10:
+
+librairy :
+public :
+    - Pyxel 1.9.2
+    - random
+private :
+    - Entity
+    - Carte
+    - Loot
+    - Equipment
+
+Other files :
+    - assets.pyxres -> fichier avec tout les graphismes modifié avec la librairie Pyxel
+
+Content :
+contient la classe principal du jeu, qui est relié à n'importe quel élément et chaque élément est relié à elle.
+Ainsi, depuis n'importe où on peut accéder à n'importe quoi.
+"""
+
+
 class Game:
+    """
+    Class Principal du jeu :
+    """
     def __init__(self):
+        """
+        Initialise la librarie Pyxel et créé des conteneur pour chaque élément du jeu.
+        conteneurs :
+            - carte Carte -> carte sur laquel le personnage évolue
+            - player Player -> le joueur contrôlé
+            - ennemi list(Ennemies) -> tout les ennemis dans une salle
+            - loots list(Loot) -> tout les loots actifs
+        """
         py.init(288, 272, fps=60, quit_key=py.KEY_ESCAPE)
         py.load("assets.pyxres")
-        self.carte = Carte(1, 1, self)
+        self.carte = Carte(2, 2, self)
         self.player = Player(self, 0, 0)
         self.ennemi = []
         self.rand_spawns(3, local_section=(8, 8, 7, 7))
         self.loots = []
         self.looting = False
 
-    def rand_spawns(self, n, local_section=(0, 0, 15, 15)):
+    def rand_spawns(self, n, local_section=(0, 0, 15, 15)) -> None:
+        """
+        Rajoute des ennemies aléatoirement sur la map, où il n'y a pas de mur.
+        :arg n: int | nombre d'ennemis à rajouter.
+        :arg local_section: tuple(int, int, int, int) | représente le rectangle où peut spawn les ennemies
+        par défault toute la map. (x, y, width, height)
+        """
         spawned = 0
         while spawned < n:
             x = randint(local_section[0], local_section[0]+local_section[2])
@@ -26,7 +65,12 @@ class Game:
                 self.ennemi.append(type_spawn(self, x, y, self.carte.stage//4+1))
                 spawned += 1
 
-    def check_full_tile(self, x, y):
+    def check_full_tile(self, x: int, y: int) -> bool:
+        """
+        vérifie si la case est remplie par une entité
+        :arg x: position x de la case
+        :arg y: position y de la case
+        """
         for e in self.ennemi:
             if e.x == x and e.y == y:
                 return True
@@ -34,8 +78,20 @@ class Game:
             return True
         return False
 
-    def update(self):
+    def update(self) -> None:
+        """methode appelée à chaque actualisation de l'écran : fait toute les opérations et gère les inputs"""
         self.carte.actualisation()
+
+        if py.btnp(py.KEY_A, hold=60):
+            """attaquer"""
+            for e in self.ennemi:
+                e.action()
+            self.player.attaque()
+        if py.btnp(py.KEY_E, hold=60):
+            """interact"""
+            for loot in self.loots:
+                if loot.x == self.player.x and loot.y == self.player.y:
+                    loot.get_loot(self.player)
         if py.btnp(py.KEY_Q, hold=60):
             """aller à gauche"""
             self.player.left()
@@ -70,16 +126,6 @@ class Game:
             """regarger bas"""
             self.player.watch_bottom()
 
-        if py.btnp(py.KEY_A, hold=60):
-            """attaquer"""
-            for e in self.ennemi:
-                e.action()
-            self.player.attaque()
-        if py.btnp(py.KEY_E, hold=60):
-            """interact"""
-            for loot in self.loots:
-                if loot.x == self.player.x and loot.y == self.player.y:
-                    loot.get_loot(self.player)
         if py.btnp(py.KEY_W, hold=60):
             """skip on looting zone"""
             if self.looting:
@@ -91,11 +137,12 @@ class Game:
             """self damage"""
             self.player.damage(10)
 
-    def draw(self):
+    def draw(self) -> None:
+        """methode appelée à chaque actualisation de l'écran : dessine toute les images à l'écran"""
         py.cls(0)
         self.carte.blit()
         for loot in self.loots:
-            if self.looting or loot.type == "Life":
+            if self.looting or (not loot.forced[0] and loot.type == "Life"):
                 loot.blit()
         for e in self.ennemi:
             e.blit_entity()
@@ -107,10 +154,11 @@ class Game:
         self.player.armor.blit()
         self.player.weapon.blit()
         for loot in self.loots:
-            if loot.x == self.player.x and loot.y == self.player.y:
+            if loot.x == self.player.x and loot.y == self.player.y and (self.looting or (not loot.forced[0] and loot.type == "Life")):
                 loot.blit_inv()
 
-    def run(self):
+    def run(self) -> None:
+        """lance le jeu et sa fenêtre"""
         py.run(self.update, self.draw)
 
 
