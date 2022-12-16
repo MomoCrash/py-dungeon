@@ -1,12 +1,14 @@
 import pyxel as py
+from Loot import Loot
 from Entity import *
 from random import randint, choice
 from Carte import Carte
-from Loot import Loot
 
 
 """
 file edit with Python 3.10:
+
+version du jeu : 2.0
 
 librairy :
 public :
@@ -42,7 +44,7 @@ class Game:
         """
         py.init(288, 272, fps=60, quit_key=py.KEY_ESCAPE)
         py.load("assets.pyxres")
-        self.carte = Carte(2, 2, self)
+        self.carte = Carte(self)
         self.player = Player(self, 0, 0)
         self.ennemi = []
         self.rand_spawns(3, local_section=(8, 8, 7, 7))

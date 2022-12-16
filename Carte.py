@@ -1,5 +1,5 @@
 import pyxel as py
-from random import randint
+from random import randint, choice
 
 # variable globals -----------------------------------------------------------------------------------------------------
 
@@ -22,8 +22,8 @@ _equivalance = {
 
 # position des biomes
 LIMITE = {
-    "Cave": (0, 3, 3),
-    "Grass": (1, 2, 1)
+    "Cave": (0, 3, 2),
+    "Grass": (1, 2, 0)
 }
 
 
@@ -61,7 +61,7 @@ class Tile:
 class Carte:
     """classe qui représente la carte formé de plein de grandes tuiles composé de tuiles plus petite"""
 
-    def __init__(self, limiteX: int, limiteY: int, game):
+    def __init__(self, game):
         """
         :param game: Game | lien d'accès au jeu entier
         :var self.game: Game | accès au jeu entier
@@ -72,12 +72,12 @@ class Carte:
         :var self.stage: int | niveau actuel
         """
         self.game = game
-        self.limite = (limiteX, limiteY)
         # map basique de taille : 16 par 16
         self.map_dim = [()]
         self.grille = []
         self.new_map()
         self.etage_completed = False
+        self.biome = "Cave"
         self.stage = 1
 
     def new_map(self, forced: list = None, loot=False) -> None:
@@ -91,11 +91,12 @@ class Carte:
         :param forced: si renseigné créé une map en particulier (non random)
         """
         if loot:
-            self.map_dim = [(3, 0) for _ in range(4)]
+            self.map_dim = [(0, LIMITE[self.biome][0]*3) for _ in range(4)]
         elif forced is not None:
             self.map_dim = forced
         else:
-            self.map_dim = [(randint(0, self.limite[0]), randint(0, self.limite[1])) for _ in range(4)]
+            self.biome = choice(list(LIMITE.keys()))
+            self.map_dim = [(randint(0, LIMITE[self.biome][1]), randint(LIMITE[self.biome][0]*3, LIMITE[self.biome][2] + LIMITE[self.biome][0]*3)) for _ in range(4)]
         self.grille = []
         temp = []
         for i in range(4):

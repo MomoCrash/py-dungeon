@@ -287,7 +287,7 @@ class Ennemies(Entity):
     def blit_life_bar(self):
         """affichage de la bar de vie au dessus + niveau"""
         py.rect(self.x*16, self.y*16-5, 16, 5, 8)
-        py.rect(16*self.x, 16*self.y-5, (self.hp/self.maxhp)*16, 5, 11)
+        py.rect(16*self.x, 16*self.y-5, (self.hp/self.maxhp)*16, 5, 11 if self.game.carte.biome != "Grass" else 3)
         py.text(16*self.x, 16*self.y-10, "lvl "+str(self.lvl), 7)
 
 
@@ -347,6 +347,15 @@ class Golem(Ennemies):
                        "bottom": [[(0, 1), (0, 2)]]
                        }
         self.speed = 1
+
+    def blit_entity(self) -> None:
+        if self.game.carte.biome != "Cave":
+            self.img = (0, 96)
+        else:
+            self.img = (0, 112)
+        self.imgX = self.img
+        self.imgY = self.imgY = (self.img[0] + self.size[0], self.img[1])
+        super().blit_entity()
 
 
 class Demon(Ennemies):
