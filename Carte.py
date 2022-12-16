@@ -121,7 +121,7 @@ class Carte:
             self.stage += 1
             self.game.looting = not self.game.looting
         else:
-            self.new_map(True)
+            self.new_map(loot=True)
             self.game.player.x = 0
             self.game.player.y = 0
             for iloot in range(len(self.game.loots)):
