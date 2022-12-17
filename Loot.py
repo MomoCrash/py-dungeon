@@ -49,35 +49,36 @@ class Loot:
 
     def get_loot(self, getter):
         """récupère le loot et le donne à getter (Player) en appliquant toute les modifications implicite"""
-        if self.forced[0]:
-            if type(self.forced[1]) in Weapon.__subclasses__():
-                getter.game.loots.insert(0, Loot(0, getter.x, getter.y, (True, getter.weapon)))
-                getter.set_weapon(self.forced[1])
-                getter.game.loots.remove(self)
+        if getter.game.looting or self.type == "Life":
+            if self.forced[0]:
+                if type(self.forced[1]) in Weapon.__subclasses__():
+                    getter.game.loots.insert(0, Loot(0, getter.x, getter.y, (True, getter.weapon)))
+                    getter.set_weapon(self.forced[1])
+                    getter.game.loots.remove(self)
+                else:
+                    getter.game.loots.insert(0, Loot(0, getter.x, getter.y, (True, getter.armor)))
+                    getter.set_armor(self.forced[1])
+                    getter.game.loots.remove(self)
             else:
-                getter.game.loots.insert(0, Loot(0, getter.x, getter.y, (True, getter.armor)))
-                getter.set_armor(self.forced[1])
-                getter.game.loots.remove(self)
-        else:
-            all_armor_loot = Armor.__subclasses__()
-            all_weapon_loot = Weapon.__subclasses__()
-            if self.type == "Life":
-                getter.hp += self.niveau*10
-                if getter.hp > getter.maxhp:
-                    getter.hp = getter.maxhp
-                getter.game.loots.remove(self)
-            else:
-                for classe in all_weapon_loot:
-                    if self.type == classe.__name__:
-                        getter.game.loots.insert(0, Loot(0, getter.x, getter.y, (True, getter.weapon)))
-                        getter.set_weapon(classe(getter, self.niveau))
-                        getter.game.loots.remove(self)
+                all_armor_loot = Armor.__subclasses__()
+                all_weapon_loot = Weapon.__subclasses__()
+                if self.type == "Life":
+                    getter.hp += self.niveau*10
+                    if getter.hp > getter.maxhp:
+                        getter.hp = getter.maxhp
+                    getter.game.loots.remove(self)
+                else:
+                    for classe in all_weapon_loot:
+                        if self.type == classe.__name__:
+                            getter.game.loots.insert(0, Loot(0, getter.x, getter.y, (True, getter.weapon)))
+                            getter.set_weapon(classe(getter, self.niveau))
+                            getter.game.loots.remove(self)
 
-                for classe in all_armor_loot:
-                    if self.type == classe.__name__:
-                        getter.game.loots.insert(0, Loot(0, getter.x, getter.y, (True, getter.armor)))
-                        getter.set_armor(classe(getter))
-                        getter.game.loots.remove(self)
+                    for classe in all_armor_loot:
+                        if self.type == classe.__name__:
+                            getter.game.loots.insert(0, Loot(0, getter.x, getter.y, (True, getter.armor)))
+                            getter.set_armor(classe(getter))
+                            getter.game.loots.remove(self)
 
     def blit(self):
         """affiche le loot par terre"""

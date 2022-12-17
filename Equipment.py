@@ -9,12 +9,12 @@ IMAGE_EQUIPMENT = 2
 # toute les images des différents items
 LOOT_IMAGE = {
     "NakedArmor": (0, 0),
-    "LeatherArmor": (0, 72),
-    "IronArmor": (0, 104),
-    "GoldArmor": (0, 136),
-    "DiamondArmor": (0, 168),
-    "MagmaArmor": (0, 200),
-    "DragonScaleArmor": (0, 200),
+    "LeatherArmor": (0, 208),
+    "IronArmor": (0, 144),
+    "GoldArmor": (0, 176),
+    "DiamondArmor": (0, 112),
+    "MagmaArmor": (64, 224),
+    "DragonScaleArmor": (48, 224),
     "Sword": (16, 0),
     "Spear": (16, 32),
     "Hammer": (16, 128),
@@ -23,30 +23,36 @@ LOOT_IMAGE = {
     "Axe": (16, 96),
 }
 
+EFFICACITE = [[1, 1, 1, 1], [1, 0.9, 0.5, 2], [1, 2, 0.9, 0.5], [1, 0.5, 2, 0.9]]
+
+ORIENT_EQ = ["left", "right", "top", "bottom"]
+
 # Objects --------------------------------------------------------------------------------------------------------------
 
 
 class Weapon:
     """Classe Génériques des armes"""
-    def __init__(self, owner, image: tuple, lvl: int, dmg: int):
+    def __init__(self, owner, image: tuple, lvl: int, dmg: int, element: int = 0):
         """
         :param owner: Player                | joueur qui à l'arme
         :param image: tuple(u:int, v:int)   | image de l'armes (pour l'inventaire)
         :param lvl: int                     | niveau de l'arme pour gérer les stats
         :param dmg: int                     | dégâts de base de l'arme au niveau 1 max
+        :param element: int                 | entier qui représente l'élément
         :var self. patern dict()            | défini les attaques des armes tuile par tuile
         :var self.attaque_tile: tuple       | image de la case de visé de l'attque
         """
+        self.element = element
         self.owner = owner
         self.patern = {}
         self.attaque_tile = (0, 32)
-        self.image = image
+        self.image = (image[0]+self.element*16, image[1])
         self.lvl = lvl
         self.dmg = dmg*lvl + randint(0, dmg-1)
 
     def blit_range(self) -> None:
         """affiche la portée de l'arme"""
-        for line in self.patern[self.owner.orient]:
+        for line in self.patern[ORIENT_EQ[self.owner.orient]]:
             blocked = False
             for pos in line:
                 if not blocked and 0 <= self.owner.x + pos[0] < len(
@@ -62,7 +68,7 @@ class Weapon:
     def get_ennemi_in_range(self) -> list:
         """renvoie une liste avec tout les ennemis touchés"""
         ennemi = []
-        for line in self.patern[self.owner.orient]:
+        for line in self.patern[ORIENT_EQ[self.owner.orient]]:
             blocked = False
             for pos in line:
                 if not blocked and 0 <= self.owner.x + pos[0] < len(
@@ -81,7 +87,7 @@ class Weapon:
         """attaque avec l'arme"""
         touched = self.get_ennemi_in_range()
         for e in touched:
-            e.damage(self.owner.weapon.dmg)
+            e.damage(self.owner.weapon.dmg, self.element, self.owner)
 
     def blit(self, decalY=0) -> None:
         """
@@ -97,18 +103,34 @@ class Weapon:
             chaine += temp[i]
             if i % 4 == 3:
                 chaine += "\n"
-        py.blt(256, 32+decalY, IMAGE_EQUIPMENT, self.image[0], self.image[1], 16, 32,
+        py.blt(256, decalY, IMAGE_EQUIPMENT, self.image[0], self.image[1], 16, 32,
                self.image[3] if len(self.image) == 3 else 0)
-        py.text(272, 32+decalY, chaine, 7)
+        py.text(272, decalY, chaine, 7)
 
 
-class Sword(Weapon):
+class RustySword(Weapon):
     """
     héritage de Weapon avec des charactéristique défini (Epee rouillé)
     patern : 1 case en avant
     """
+    def __init__(self, owner):
+        super().__init__(owner, (0, 80), 1, 10, 0)
+        self.dmg = 10
+        self.patern = {
+            "left": [[(-1, 0)]],
+            "right": [[(1, 0)]],
+            "top": [[(0, -1)]],
+            "bottom": [[(0, 1)]],
+        }
+
+
+class Sword(Weapon):
+    """
+    héritage de Weapon avec des charactéristique défini (Epee)
+    patern : 1 case en avant
+    """
     def __init__(self, owner, lvl):
-        super().__init__(owner, LOOT_IMAGE["Sword"], lvl, 10)
+        super().__init__(owner, LOOT_IMAGE["Sword"], lvl, 10, randint(0, 3))
         self.patern = {
             "left": [[(-1, 0)]],
             "right": [[(1, 0)]],
@@ -123,7 +145,8 @@ class Spear(Weapon):
     patern: 3 cases en avant
     """
     def __init__(self, owner, lvl):
-        super().__init__(owner, LOOT_IMAGE["Spear"], lvl, 10)
+        self.element = randint(0, 3)
+        super().__init__(owner, LOOT_IMAGE["Spear"], lvl, 10, randint(0, 3))
         self.patern = {
             "left": [[(-1, 0), (-2, 0), (-3, 0)]],
             "right": [[(1, 0), (2, 0), (3, 0)]],
@@ -138,7 +161,7 @@ class Hammer(Weapon):
     patern: 6 case devant
     """
     def __init__(self, owner, lvl):
-        super().__init__(owner, LOOT_IMAGE["Hammer"], lvl, 18)
+        super().__init__(owner, LOOT_IMAGE["Hammer"], lvl, 18, randint(0, 3))
         self.patern = {
             "left": [[(-1, 0), (-2, 0)], [(-1, 1), (-2, 1)], [(-1, -1), (-2, -1)]],
             "right": [[(1, 0), (2, 0)], [(1, 1), (2, 1)], [(1, -1), (2, -1)]],
@@ -169,7 +192,7 @@ class Hallebarde(Weapon):
     patern: deux case en avant sur les deux rangée parallèle a la vision
     """
     def __init__(self, owner, lvl):
-        super().__init__(owner, LOOT_IMAGE["Hallebarde"], lvl, 15)
+        super().__init__(owner, LOOT_IMAGE["Hallebarde"], lvl, 15, randint(0, 3))
         self.patern = {
             "left": [[(-1, 1), (-2, 1)], [(-1, -1), (-2, -1)]],
             "right": [[(1, 1), (2, 1)], [(1, -1), (2, -1)]],
@@ -184,7 +207,7 @@ class Axe(Weapon):
     patern : attaque les trois case devant
     """
     def __init__(self, owner, lvl):
-        super().__init__(owner, LOOT_IMAGE["Axe"], lvl, 12)
+        super().__init__(owner, LOOT_IMAGE["Axe"], lvl, 12, randint(0, 3))
         self.patern = {
             "left": [[(-1, 0)], [(-1, 1)], [(-1, -1)]],
             "right": [[(1, 0)], [(1, 1)], [(1, -1)]],
@@ -194,7 +217,7 @@ class Axe(Weapon):
 
 
 class Armor:
-    def __init__(self, owner, name, defence_p, image):
+    def __init__(self, owner, name, defence_p, image, element):
         """
         :param owner: Joueur qui porte l'armure
         :param name: nom de l'armure
@@ -205,6 +228,8 @@ class Armor:
         self.defence_point = defence_p
         self.name = name
         self.image = image
+        self.colkey = 0
+        self.element = element
 
     def defence(self) -> float:
         """renvoie un coeficient de défense"""
@@ -224,47 +249,48 @@ class Armor:
             chaine += temp[i]
             if i % 4 == 3:
                 chaine += "\n"
-        py.blt(256, decalY, IMAGE_EQUIPMENT, self.image[0], self.image[1], 16, 32, 0)
+        py.blt(256, decalY, IMAGE_EQUIPMENT, self.image[0], self.image[1], 16, 32, self.colkey)
         py.text(272, decalY, chaine, 7)
 
 
 class NakedArmor(Armor):
     """héritage de Armor avec des charactéristique défini"""
     def __init__(self, owner):
-        super().__init__(owner, "Tout nu", 1, LOOT_IMAGE["NakedArmor"])
+        super().__init__(owner, "Tout nu", 1, LOOT_IMAGE["NakedArmor"], 0)
 
 
 class LeatherArmor(Armor):
     """héritage de Armor avec des charactéristique défini"""
     def __init__(self, owner):
-        super().__init__(owner, "Armure en Cuir", 12, LOOT_IMAGE["LeatherArmor"])
+        super().__init__(owner, "Armure en Cuir", 12, LOOT_IMAGE["LeatherArmor"], 0)
 
 
 class IronArmor(Armor):
     """héritage de Armor avec des charactéristique défini"""
     def __init__(self, owner):
-        super().__init__(owner, "Armure en Fer", 19, LOOT_IMAGE["IronArmor"])
+        super().__init__(owner, "Armure en Fer", 19, LOOT_IMAGE["IronArmor"], 0)
 
 
 class GoldArmor(Armor):
     """héritage de Armor avec des charactéristique défini"""
     def __init__(self, owner):
-        super().__init__(owner, "Armure en Or", 26, LOOT_IMAGE["GoldArmor"])
+        super().__init__(owner, "Armure en Or", 26, LOOT_IMAGE["GoldArmor"], 0)
 
 
 class DiamondArmor(Armor):
     """héritage de Armor avec des charactéristique défini"""
     def __init__(self, owner):
-        super().__init__(owner, "Armure en Diamants", 32, LOOT_IMAGE["DiamondArmor"])
+        super().__init__(owner, "Armure en Diamants", 32, LOOT_IMAGE["DiamondArmor"], 0)
 
 
 class MagmaArmor(Armor):
     """héritage de Armor avec des charactéristique défini"""
     def __init__(self, owner):
-        super().__init__(owner, "Armure en Magma", 52, LOOT_IMAGE["MagmaArmor"])
+        super().__init__(owner, "Armure en Magma", 52, LOOT_IMAGE["MagmaArmor"], 1)
+        self.colkey = 7
 
 
 class DragonScaleArmor(Armor):
     """héritage de Armor avec des charactéristique défini"""
     def __init__(self, owner):
-        super().__init__(owner, "Armure en Ecaille", 72, LOOT_IMAGE["DragonScaleArmor"])
+        super().__init__(owner, "Armure en Ecaille", 72, LOOT_IMAGE["DragonScaleArmor"], 1)

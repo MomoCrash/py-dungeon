@@ -1,5 +1,6 @@
 import pyxel as py
 from random import randint, choice
+from Entity import *
 
 # variable globals -----------------------------------------------------------------------------------------------------
 
@@ -24,6 +25,11 @@ _equivalance = {
 LIMITE = {
     "Cave": (0, 3, 2),
     "Grass": (1, 2, 0)
+}
+
+CARTE_SPAWN = {
+    "Cave": [Zombie, Squelette, Ghost, Bat, Demon, Golem],
+    "Grass": [Zombie, Squelette, Ghost, Demon, BabyDragon]
 }
 
 
@@ -114,22 +120,19 @@ class Carte:
         """créé un nouveau stage en fonction de la situation du personnage."""
         if self.game.looting:
             self.new_map()
-            self.game.player.x = 0
-            self.game.player.y = 0
+            self.game.player.place(0, 0)
             self.game.loots.clear()
-            self.game.rand_spawns(randint(2, 5), local_section=(8, 8, 7, 7))
+            self.game.rand_spawns(randint(2, 5), specifique=CARTE_SPAWN[self.biome], local_section=(8, 8, 7, 7))
             self.etage_completed = False
             self.stage += 1
             self.game.looting = not self.game.looting
         else:
             self.new_map(loot=True)
-            self.game.player.x = 0
-            self.game.player.y = 0
+            self.game.player.place(0, 0)
             for iloot in range(len(self.game.loots)):
                 self.game.loots[iloot].x = 1 + iloot % 14
                 self.game.loots[iloot].y = 1 + iloot // 14
             self.etage_completed = False
-            self.stage += 1
             self.game.looting = not self.game.looting
 
     def actualisation(self) -> None:
