@@ -68,11 +68,12 @@ class AttaqueEnnemi(Animation):
     def __init__(self, game, origine):
         super().__init__(game, "Attaque", origine)
         self.frame = 4
+        self.tiles_coors = origine.get_coor_in_range()
 
     def animate(self):
         self.frame -= 1
-        if self.origine.get_if_player_touched():
-            self.game.animation_layer.append((self.game.player.reel_x, self.game.player.reel_y, 0, 32+(4-self.frame)*16, 32, 16, 16, 0))
+        for coor in self.tiles_coors:
+            self.game.animation_layer.append((coor[0], coor[1], 0, 32 + (4 - self.frame) * 16, 32, 16, 16, 0))
         if self.frame <= 0:
             self.origine.attaque()
             self.delete()

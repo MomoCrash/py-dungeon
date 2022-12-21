@@ -1,10 +1,14 @@
+from typing import Type
+
 import pyxel as py
-from random import randint, choice
+from random import randint, choice, random
 from Entity import *
 
 # variable globals -----------------------------------------------------------------------------------------------------
 
 # image de la porte de sortie :
+from Entity import Ennemies
+
 IMAGE_PORTE_FERMEE = (32, 0)
 IMAGE_PORTE_OUVERTE = (48, 0)
 
@@ -21,7 +25,7 @@ _equivalance = {
         (6, 12), (7, 12), (6, 13), (7, 13),  # Cactus
         (8, 12), (9, 12), (8, 13), (9, 13),  # feuille
         (10, 12), (11, 12), (10, 13), (11, 13),  # cailloux
-        ],
+    ],
     "ground": [
         (16, 6), (17, 6), (16, 7), (17, 7),  # eau
         (18, 6), (19, 6), (18, 7), (19, 7),  # eau
@@ -41,7 +45,7 @@ _equivalance = {
         (18, 8), (19, 8), (18, 9), (19, 9),  # eau
         (20, 8), (21, 8), (20, 9), (21, 9),  # eau
         (22, 8), (23, 8), (22, 9), (23, 9),  # eau
-        (8, 10), (9, 10), (8, 11), (9, 11),   # eau
+        (8, 10), (9, 10), (8, 11), (9, 11),  # eau
         (10, 10), (11, 10), (10, 11), (11, 11),  # eau
         (12, 10), (13, 10), (12, 11), (13, 11),  # eau
         (14, 10), (15, 10), (14, 11), (15, 11),  # eau
@@ -71,8 +75,8 @@ LIMITE = {
 }
 
 CARTE_SPAWN = {
-    "Cave": [Zombie, Squelette, Demon, Golem, Ghost, Bat],
-    "Grass": [Loup, Fox, Aligator, Zombie, BabyDragon, BlobEau, BlobFeu]
+    "Cave": [(Zombie, 1), (Squelette, 1), (Demon, 1), (Golem, 1), (Ghost, 1), (Bat, 1), (Necromancien, 1.5)],
+    "Grass": [(Loup, 1), (Fox, 1), (Aligator, 1), (Zombie, 1), (BabyDragon, 1), (BlobEau, 1), (BlobFeu, 1), (Necromancien, 1.5)]
 }
 
 
@@ -125,7 +129,7 @@ class Carte:
         self.new_map()
         self.etage_completed = False
         self.biome = "Grass"
-        self.stage = 1
+        self.stage = 0
 
     def new_map(self, forced: list = None, loot=False) -> None:
         """
@@ -138,12 +142,14 @@ class Carte:
         :param forced: si renseigné créé une map en particulier (non random)
         """
         if loot:
-            self.map_dim = [(0, LIMITE[self.biome][0]*3) for _ in range(4)]
+            self.map_dim = [(0, LIMITE[self.biome][0] * 3) for _ in range(4)]
         elif forced is not None:
             self.map_dim = forced
         else:
             self.biome = choice(list(LIMITE.keys()))
-            self.map_dim = [(randint(0, LIMITE[self.biome][1]), randint(LIMITE[self.biome][0]*3, LIMITE[self.biome][2] + LIMITE[self.biome][0]*3)) for _ in range(4)]
+            self.map_dim = [(randint(0, LIMITE[self.biome][1]),
+                             randint(LIMITE[self.biome][0] * 3, LIMITE[self.biome][2] + LIMITE[self.biome][0] * 3)) for
+                            _ in range(4)]
         self.grille = []
         temp = []
         for i in range(4):
@@ -157,18 +163,16 @@ class Carte:
                 self.grille.append(temp[i * 2][iColumn] + temp[i * 2 + 1][iColumn])
         self.grille[15][15].types.append("end")
 
-    def new_stage(self) -> None:
+    def new_stage(self, forced: list = None) -> None:
         """créé un nouveau stage en fonction de la situation du personnage."""
         if self.game.looting:
-            self.new_map()
+            self.new_map(forced=forced)
             self.game.player.place(0, 0)
             self.game.loots.clear()
-            self.game.rand_spawns(randint(2, 5), specifique=CARTE_SPAWN[self.biome], local_section=(8, 8, 7, 7))
+            self.rand_spawns(randint(2, 5), specifique_biome=CARTE_SPAWN[self.biome], local_section=(8, 8, 7, 7))
             self.etage_completed = False
             self.stage += 1
             self.game.looting = not self.game.looting
-            for line in self.grille:
-                print([tile.types for tile in line])
         else:
             self.new_map(loot=True)
             self.game.player.place(0, 0)
@@ -177,6 +181,35 @@ class Carte:
                 self.game.loots[iloot].y = 1 + iloot // 14
             self.etage_completed = False
             self.game.looting = not self.game.looting
+
+    def rand_spawns(self, n, loot=True, specifique_biome: list = None, local_section=(0, 0, 15, 15)) -> None:
+        """
+        Rajoute des ennemies aléatoirement sur la map, où il n'y a pas de mur.
+        :param loot: bool                               | défini si les ennemis laisse de l'equipment ou non
+        :param specifique_biome: list(type)             | liste de tout les monstres qui peuvent apparaître dans un biome
+        :arg n: int                                     | nombre d'ennemis à rajouter.
+        :arg local_section: tuple(int, int, int, int)   | représente le rectangle où peut spawn les ennemies par défault toute la map. (x, y, width, height)
+        """
+        specifique = Zombie
+        spawned = 0
+        if specifique_biome is None:
+            specifique_biome = [(e, 1) for e in Ennemies.__subclasses__()]
+        while spawned < n:
+            x = randint(local_section[0], local_section[0] + local_section[2])
+            y = randint(local_section[1], local_section[1] + local_section[3])
+            if "obst" not in self.grille[x][y].types and not self.game.check_full_tile(x, y):
+                total = 0
+                for monster in specifique_biome:
+                    total += monster[1]
+                val = total * random.random()
+                for monster in specifique_biome:
+                    val -= monster[1]
+                    if val <= 0:
+                        specifique = monster[0]
+                        break
+                type_spawn = specifique
+                self.game.ennemi.append(type_spawn(self.game, x, y, self.stage // 4 + 1, loot))
+                spawned += 1
 
     def actualisation(self) -> None:
         """actualise les évênements sur la map"""

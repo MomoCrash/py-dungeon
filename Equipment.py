@@ -61,12 +61,10 @@ class Weapon:
         for line in self.patern[ORIENT_EQ[self.owner.orient]]:
             blocked = False
             for pos in line:
-                if not blocked and 0 <= self.owner.x + pos[0] < len(
-                        self.owner.game.carte.grille) and 0 <= self.owner.y + pos[1] < len(
-                        self.owner.game.carte.grille[0]) and not "obst" in \
-                                                                 self.owner.game.carte.grille[self.owner.x + pos[0]][
-                                                                     self.owner.y + pos[1]].types:
-                    py.blt((self.owner.x + pos[0]) * 16, (self.owner.y + pos[1]) * 16, 0, self.attaque_tile[0],
+                is_in_width = 0 <= self.owner.x + pos[0] < len(self.owner.game.carte.grille)
+                is_in_height = 0 <= self.owner.y + pos[1] < len(self.owner.game.carte.grille[0])
+                if not blocked and is_in_width and is_in_height and "obst" not in self.owner.game.carte.grille[self.owner.x + pos[0]][self.owner.y + pos[1]].types:
+                    py.blt(self.owner.reel_x + pos[0] * 16, self.owner.reel_y + pos[1] * 16, 0, self.attaque_tile[0],
                            self.attaque_tile[1], 16, 16, 0)
                 else:
                     blocked = True
@@ -77,11 +75,9 @@ class Weapon:
         for line in self.patern[ORIENT_EQ[self.owner.orient]]:
             blocked = False
             for pos in line:
-                if not blocked and 0 <= self.owner.x + pos[0] < len(
-                        self.owner.game.carte.grille) and 0 <= self.owner.y + pos[1] < len(
-                        self.owner.game.carte.grille[0]) and not "obst" in \
-                                                                 self.owner.game.carte.grille[self.owner.x + pos[0]][
-                                                                     self.owner.y + pos[1]].types:
+                is_in_width = 0 <= self.owner.x + pos[0] < len(self.owner.game.carte.grille)
+                is_in_height = 0 <= self.owner.y + pos[1] < len(self.owner.game.carte.grille[0])
+                if not blocked and is_in_width and is_in_height and "obst" not in self.owner.game.carte.grille[self.owner.x + pos[0]][self.owner.y + pos[1]].types:
                     for e in self.owner.game.ennemi:
                         if e.x == self.owner.x + pos[0] and e.y == self.owner.y + pos[1]:
                             ennemi.append(e)
@@ -95,9 +91,9 @@ class Weapon:
         for line in self.patern[ORIENT_EQ[self.owner.orient]]:
             blocked = False
             for pos in line:
-
-                if not blocked and 0 <= self.owner.x + pos[0] < len(self.owner.game.carte.grille) and 0 <= self.owner.y + pos[1] < len(self.owner.game.carte.grille[0]) and not "obst" in self.owner.game.carte.grille[self.owner.x + pos[0]][self.owner.y + pos[1]].types:
-                    print(self.owner.game.carte.grille[self.owner.x + pos[0]][self.owner.y + pos[1]].types)
+                is_in_width = 0 <= self.owner.x + pos[0] < len(self.owner.game.carte.grille)
+                is_in_height = 0 <= self.owner.y + pos[1] < len(self.owner.game.carte.grille[0])
+                if not blocked and is_in_width and is_in_height and "obst" not in self.owner.game.carte.grille[self.owner.x + pos[0]][self.owner.y + pos[1]].types:
                     coors.append((self.owner.reel_x + pos[0]*16, self.owner.reel_y + pos[1]*16))
                 else:
                     blocked = True
@@ -245,7 +241,8 @@ class Armor:
         :param image: image de l'armure
         """
         self.owner = owner
-        self.defence_point = defence_p
+        self.defence_coef = 1 - defence_p/100
+        self.defence_percent = defence_p
         self.name = name
         self.image = image
         self.colkey = 0
@@ -253,14 +250,14 @@ class Armor:
 
     def defence(self) -> float:
         """renvoie un coeficient de défense"""
-        return 1 / self.defence_point
+        return self.defence_coef
 
     def blit(self, decalY=0) -> None:
         """
         affiche l'armure dans l'inventaire.
         :param decalY: int | décale verticalement (en pixels)
         """
-        temp = str(self.defence_point)
+        temp = str(self.defence_percent) + "%"
         chaine = ""
         for i in range(len(temp)):
             if i == 17:
@@ -268,6 +265,7 @@ class Armor:
                 break
             chaine += temp[i]
             if i % 4 == 3:
+
                 chaine += "\n"
         py.blt(256, decalY, IMAGE_EQUIPMENT, self.image[0], self.image[1], 16, 32, self.colkey)
         py.text(272, decalY, chaine, 7)
@@ -276,41 +274,41 @@ class Armor:
 class NakedArmor(Armor):
     """héritage de Armor avec des charactéristique défini"""
     def __init__(self, owner):
-        super().__init__(owner, "Tout nu", 1, LOOT_IMAGE["NakedArmor"], 0)
+        super().__init__(owner, "Tout nu", 0, LOOT_IMAGE["NakedArmor"], 0)
 
 
 class LeatherArmor(Armor):
     """héritage de Armor avec des charactéristique défini"""
     def __init__(self, owner):
-        super().__init__(owner, "Armure en Cuir", 12, LOOT_IMAGE["LeatherArmor"], 0)
+        super().__init__(owner, "Armure en Cuir", 2.5, LOOT_IMAGE["LeatherArmor"], 0)
 
 
 class IronArmor(Armor):
     """héritage de Armor avec des charactéristique défini"""
     def __init__(self, owner):
-        super().__init__(owner, "Armure en Fer", 19, LOOT_IMAGE["IronArmor"], 0)
+        super().__init__(owner, "Armure en Fer", 5, LOOT_IMAGE["IronArmor"], 0)
 
 
 class GoldArmor(Armor):
     """héritage de Armor avec des charactéristique défini"""
     def __init__(self, owner):
-        super().__init__(owner, "Armure en Or", 26, LOOT_IMAGE["GoldArmor"], 0)
+        super().__init__(owner, "Armure en Or", 10, LOOT_IMAGE["GoldArmor"], 0)
 
 
 class DiamondArmor(Armor):
     """héritage de Armor avec des charactéristique défini"""
     def __init__(self, owner):
-        super().__init__(owner, "Armure en Diamants", 32, LOOT_IMAGE["DiamondArmor"], 0)
+        super().__init__(owner, "Armure en Diamants", 15, LOOT_IMAGE["DiamondArmor"], 0)
 
 
 class MagmaArmor(Armor):
     """héritage de Armor avec des charactéristique défini"""
     def __init__(self, owner):
-        super().__init__(owner, "Armure en Magma", 52, LOOT_IMAGE["MagmaArmor"], 2)
+        super().__init__(owner, "Armure en Magma", 25, LOOT_IMAGE["MagmaArmor"], 2)
         self.colkey = 7
 
 
 class DragonScaleArmor(Armor):
     """héritage de Armor avec des charactéristique défini"""
     def __init__(self, owner):
-        super().__init__(owner, "Armure en Ecaille", 72, LOOT_IMAGE["DragonScaleArmor"], 2)
+        super().__init__(owner, "Armure en Ecaille", 35, LOOT_IMAGE["DragonScaleArmor"], 2)

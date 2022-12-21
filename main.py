@@ -51,25 +51,19 @@ class Game:
         self.carte.new_stage()
         self.animation_list = []
         self.animation_layer = []
+        self.start()
 
-    def rand_spawns(self, n, specifique = None, local_section=(0, 0, 15, 15)) -> None:
-        """
-        Rajoute des ennemies aléatoirement sur la map, où il n'y a pas de mur.
-        :arg n: int | nombre d'ennemis à rajouter.
-        :arg local_section: tuple(int, int, int, int) | représente le rectangle où peut spawn les ennemies
-        :arg specifique: list(type) | liste de tout les monstres qui peuvent apparaître dans un biome
-        par défault toute la map. (x, y, width, height)
-        """
-        spawned = 0
-        if specifique is None:
-            specifique = Ennemies.__subclasses__()
-        while spawned < n:
-            x = randint(local_section[0], local_section[0]+local_section[2])
-            y = randint(local_section[1], local_section[1]+local_section[3])
-            if "obst" not in self.carte.grille[x][y].types and not self.check_full_tile(x, y):
-                type_spawn = choice(specifique)
-                self.ennemi.append(type_spawn(self, x, y, self.carte.stage//4+1))
-                spawned += 1
+    def start(self):
+        """remet à zéro tout le jeu"""
+        py.load("assets.pyxres")
+        self.carte = Carte(self)
+        self.player = Player(self, 0, 0)
+        self.ennemi = []
+        self.loots = []
+        self.looting = True
+        self.carte.new_stage()
+        self.animation_list = []
+        self.animation_layer = []
 
     def check_full_tile(self, x: int, y: int) -> bool:
         """
@@ -146,7 +140,7 @@ class Game:
                     self.carte.new_stage()
             if py.btn(py.KEY_R):
                 """spawn"""
-                self.rand_spawns(3)
+                self.start()
             if py.btnp(py.KEY_F, hold=60):
                 """changer d'arme"""
                 self.player.swap_weapon()

@@ -5,7 +5,6 @@ from Loot import Loot
 from Animate import *
 import random
 
-
 # Variables globals :
 IMAGE_ENTITE = 1
 
@@ -14,6 +13,7 @@ class Entity:
     """
     classe générique pour n'importe quel Entité, c'est-a-dire tout ce qui est capable de bouger et interagir avec d'autre Entité
     """
+
     def __init__(self, game, x: int, y: int, img: tuple, size: tuple, hp: int, colkey: int = 0):
         """
         :param game: Game                   | accès au jeu entier
@@ -33,8 +33,8 @@ class Entity:
         self.hp = hp
         self.x = x
         self.y = y
-        self.reel_x = x*16
-        self.reel_y = y*16
+        self.reel_x = x * 16
+        self.reel_y = y * 16
         self.imgX = img
         self.imgY = (img[0] + size[0], img[1])
         self.img = self.imgX
@@ -42,6 +42,7 @@ class Entity:
         self.game = game
         self.colkey = colkey
         self.orient = 1
+        self.watch_right()
         self.debuff = []
         self.buff = []
 
@@ -56,7 +57,7 @@ class Entity:
         if not self.x > 0:
             return
         c1 = "obst" not in self.game.carte.grille[self.x - 1][self.y].types
-        c2 = not self.game.check_full_tile(self.x-1, self.y)
+        c2 = not self.game.check_full_tile(self.x - 1, self.y)
         c3 = "ground" not in self.game.carte.grille[self.x - 1][self.y].types
         if c1 and c2 and c3:
             self.x -= 1
@@ -75,10 +76,10 @@ class Entity:
         if not self.x < len(self.game.carte.grille) - 1:
             return
         c1 = "obst" not in self.game.carte.grille[self.x + 1][self.y].types
-        c2 = not self.game.check_full_tile(self.x+1, self.y)
+        c2 = not self.game.check_full_tile(self.x + 1, self.y)
         c3 = "ground" not in self.game.carte.grille[self.x + 1][self.y].types
         if c1 and c2 and c3:
-            if "end" in self.game.carte.grille[self.x+1][self.y].types:
+            if "end" in self.game.carte.grille[self.x + 1][self.y].types:
                 if self.game.carte.etage_completed:
                     self.game.carte.new_stage()
             else:
@@ -97,7 +98,7 @@ class Entity:
         if not self.y > 0:
             return
         c1 = "obst" not in self.game.carte.grille[self.x][self.y - 1].types
-        c2 = not self.game.check_full_tile(self.x, self.y-1)
+        c2 = not self.game.check_full_tile(self.x, self.y - 1)
         c3 = "ground" not in self.game.carte.grille[self.x][self.y - 1].types
         if c1 and c2 and c3:
             self.y -= 1
@@ -115,10 +116,10 @@ class Entity:
         if not self.y < len(self.game.carte.grille[0]) - 1:
             return
         c1 = "obst" not in self.game.carte.grille[self.x][self.y + 1].types
-        c2 = not self.game.check_full_tile(self.x, self.y+1)
+        c2 = not self.game.check_full_tile(self.x, self.y + 1)
         c3 = "ground" not in self.game.carte.grille[self.x][self.y + 1].types
         if c1 and c2 and c3:
-            if "end" in self.game.carte.grille[self.x][self.y+1].types:
+            if "end" in self.game.carte.grille[self.x][self.y + 1].types:
                 if self.game.carte.etage_completed:
                     self.game.carte.new_stage()
             else:
@@ -129,8 +130,8 @@ class Entity:
     def place(self, x, y):
         self.x = x
         self.y = y
-        self.reel_x = x*16
-        self.reel_y = y*16
+        self.reel_x = x * 16
+        self.reel_y = y * 16
 
     def damage(self, amount, el, source) -> None:
         """
@@ -147,7 +148,10 @@ class Entity:
 
     def blit_entity(self) -> None:
         """affiche une entité"""
-        py.blt(self.reel_x, self.reel_y, IMAGE_ENTITE, self.img[0], self.img[1], self.size[0], self.size[1], self.colkey)
+        py.blt(self.reel_x, self.reel_y, IMAGE_ENTITE, self.img[0], self.img[1], self.size[0], self.size[1],
+               self.colkey)
+        if type(self) == Golem:
+            print(self.img)
 
     def distance(self, other_entity) -> tuple:
         distance_x = self.x - other_entity.x
@@ -172,7 +176,8 @@ class Player(Entity):
     """
     classe Player hérité de Entité.
     """
-    def __init__(self, game, x:int, y:int):
+
+    def __init__(self, game, x: int, y: int):
         """
         :param game: accès au jeu
         :param x: position x en tuiles
@@ -188,7 +193,7 @@ class Player(Entity):
     def blit_life_bar(self) -> None:
         """affiche la bar de vie du joueur en bas de l'écran"""
         py.rect(0, 256, 256, 16, 8)
-        py.rect(0, 256, (self.hp/self.maxhp)*256, 16, 11)
+        py.rect(0, 256, (self.hp / self.maxhp) * 256, 16, 11)
         py.text(90, 264, f"{self.hp}/{self.maxhp}", 7)
 
     def damage(self, amount, el, source) -> None:
@@ -217,7 +222,9 @@ class Player(Entity):
 
 class Ennemies(Entity):
     """classe des Ennemies hérité de Entité"""
-    def __init__(self, game, x: int, y: int, img: tuple, size: tuple, hp: int, lvl: int, dmg: int,  colkey: int = 0):
+
+    def __init__(self, game, x: int, y: int, img: tuple, size: tuple, hp: int, lvl: int, dmg: int, loot: bool = True,
+                 colkey: int = 0):
         """
                 :param game: Game                   | accès au jeu entier
         :param x: int                       | position x (en tuiles)
@@ -242,10 +249,11 @@ class Ennemies(Entity):
         self.attaque_tile = (16, 32)
         self.lvl = lvl
         self.speed = 1
-        self.dmg = (lvl - 1) * dmg + randint(1, dmg-1)
-        self.hp = (lvl - 1) * hp + randint(1, hp-1)
+        self.dmg = (lvl - 1) * dmg + randint(1, dmg - 1)
+        self.hp = (lvl - 1) * hp + randint(1, hp - 1)
         self.maxhp = self.hp
         self.element = 0
+        self.loot = loot
 
     def action(self, forced=None):
         """effectue une action"""
@@ -285,7 +293,7 @@ class Ennemies(Entity):
                 left_action -= 1
             if left_action > 0:
                 distances = self.distance(self.game.player)
-                if abs(distances[0])+abs(distances[1]) > 10:
+                if abs(distances[0]) + abs(distances[1]) > 10:
                     side = self.low_distance_side(self.game.player)
                     if side == 0:
                         self.top()
@@ -312,7 +320,7 @@ class Ennemies(Entity):
         """applique les dégâts, en cas de mort, ajoute un loot et détruit sa propre itération"""
         self.hp -= amount * EFFICACITE[self.element][el]
         if self.hp <= 0:
-            if bool(randint(0, 1)):
+            if bool(randint(0, 1)) and self.loot:
                 self.game.loots.append(Loot(self.lvl, self.x, self.y))
             self.game.ennemi.remove(self)
 
@@ -321,8 +329,12 @@ class Ennemies(Entity):
         for line in self.patern[ORIENT_EQ[self.orient]]:
             blocked = False
             for pos in line:
-                if not blocked and 0 <= self.x + pos[0] < len(self.game.carte.grille) and 0 <= self.y + pos[1] < len(self.game.carte.grille[0]) and not "obst" in self.game.carte.grille[self.x + pos[0]][self.y + pos[1]].types:
-                    py.blt((self.x + pos[0]) * 16, (self.y + pos[1]) * 16, 0, self.attaque_tile[0],self.attaque_tile[1], 16, 16, 0)
+                is_in_width = 0 <= self.x + pos[0] < len(self.game.carte.grille)
+                is_in_height = 0 <= self.y + pos[1] < len(self.game.carte.grille[0])
+                if not blocked and is_in_width and is_in_height and "obst" not in \
+                        self.game.carte.grille[self.x + pos[0]][self.y + pos[1]].types:
+                    py.blt(self.reel_x + pos[0] * 16, self.reel_y + pos[1] * 16, 0, self.attaque_tile[0],
+                           self.attaque_tile[1], 16, 16, 0)
                 else:
                     blocked = True
 
@@ -331,12 +343,30 @@ class Ennemies(Entity):
         for line in self.patern[ORIENT_EQ[self.orient]]:
             blocked = False
             for pos in line:
-                if not blocked and 0 <= self.x + pos[0] < len(self.game.carte.grille) and 0 <= self.y + pos[1] < len(self.game.carte.grille[0]) and not "obst" in self.game.carte.grille[self.x + pos[0]][self.y + pos[1]].types:
+                is_in_width = 0 <= self.x + pos[0] < len(self.game.carte.grille)
+                is_in_height = 0 <= self.y + pos[1] < len(self.game.carte.grille[0])
+                if not blocked and is_in_width and is_in_height and "obst" not in \
+                        self.game.carte.grille[self.x + pos[0]][self.y + pos[1]].types:
                     if self.game.player.x == self.x + pos[0] and self.game.player.y == self.y + pos[1]:
                         return True
                 else:
                     blocked = True
         return False
+
+    def get_coor_in_range(self) -> list:
+        """renvoie une liste avec tout les tuiles dans la portée"""
+        coors = []
+        for line in self.patern[ORIENT_EQ[self.orient]]:
+            blocked = False
+            for pos in line:
+                is_in_width = 0 <= self.x + pos[0] < len(self.game.carte.grille)
+                is_in_height = 0 <= self.y + pos[1] < len(self.game.carte.grille[0])
+                if not blocked and is_in_width and is_in_height and "obst" not in \
+                        self.game.carte.grille[self.x + pos[0]][self.y + pos[1]].types:
+                    coors.append((self.reel_x + pos[0] * 16, self.reel_y + pos[1] * 16))
+                else:
+                    blocked = True
+        return coors
 
     def attaque(self):
         """action d'attaque"""
@@ -345,25 +375,28 @@ class Ennemies(Entity):
 
     def blit_life_bar(self):
         """affichage de la bar de vie au dessus + niveau"""
-        py.rect(self.reel_x, self.reel_y-5, 16, 5, 8)
-        py.rect(self.reel_x, self.reel_y-5, (self.hp/self.maxhp)*16, 5, 11 if self.game.carte.biome != "Grass" else 3)
-        py.text(self.reel_x, self.reel_y-10, "lvl "+str(self.lvl), 7)
+        py.rect(self.reel_x, self.reel_y - 5, 16, 5, 8)
+        py.rect(self.reel_x, self.reel_y - 5, (self.hp / self.maxhp) * 16, 5,
+                11 if self.game.carte.biome != "Grass" else 3)
+        py.text(self.reel_x, self.reel_y - 10, "lvl " + str(self.lvl), 7)
 
 
 # Tout les différents ennemis possibles : ------------------------------------------------------------------------------
 
 class Zombie(Ennemies):
     """héritage de Ennemi avec des valeurs prédéfini"""
-    def __init__(self, game, x: int, y: int, lvl: int):
-        super().__init__(game, x, y, (0, 16), (16, 16), 25, lvl, 11, colkey=7)
+
+    def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
+        super().__init__(game, x, y, (0, 16), (16, 16), 25, lvl, 11, loot=loot, colkey=7)
         self.speed = 1
         self.element = 0
 
 
 class Squelette(Ennemies):
     """héritage de Ennemi avec des valeurs prédéfini"""
-    def __init__(self, game, x: int, y: int, lvl: int):
-        super().__init__(game, x, y, (0, 32), (16, 16), 16, lvl, 9, colkey=6)
+
+    def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
+        super().__init__(game, x, y, (0, 32), (16, 16), 16, lvl, 9, loot=loot, colkey=6)
         self.patern = {"left": [[(-i, 0) for i in range(1, 17)]],
                        "right": [[(i, 0) for i in range(1, 17)]],
                        "top": [[(0, -i) for i in range(1, 17)]],
@@ -375,8 +408,9 @@ class Squelette(Ennemies):
 
 class Bat(Ennemies):
     """héritage de Ennemi avec des valeurs prédéfini"""
-    def __init__(self, game, x: int, y: int, lvl: int):
-        super().__init__(game, x, y, (0, 64), (16, 16), 12, lvl, 7, colkey=7)
+
+    def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
+        super().__init__(game, x, y, (0, 64), (16, 16), 12, lvl, 7, loot=loot, colkey=7)
         self.speed = 1
         self.element = 0
 
@@ -387,8 +421,9 @@ class Ghost(Ennemies):
     compétence :
         - résistance extrême aux Arcs
     """
-    def __init__(self, game, x: int, y: int, lvl: int):
-        super().__init__(game, x, y, (0, 80), (16, 16), 20, lvl, 7, colkey=7)
+
+    def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
+        super().__init__(game, x, y, (0, 80), (16, 16), 20, lvl, 7, loot=loot, colkey=7)
         self.speed = 1
 
     def damage(self, amount, el, source):
@@ -398,8 +433,8 @@ class Ghost(Ennemies):
 
 
 class BabyDragon(Ennemies):
-    def __init__(self, game, x: int, y: int, lvl: int):
-        super().__init__(game, x, y, (32, 64), (16, 16), 35, lvl, 15, colkey=7)
+    def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
+        super().__init__(game, x, y, (32, 64), (16, 16), 35, lvl, 15, loot=loot, colkey=7)
         self.patern = {"left": [[(-1, 0), (-2, 0), (-3, 0)]],
                        "right": [[(1, 0), (2, 0), (3, 0)]],
                        "top": [[(0, -1), (0, -2), (0, -3)]],
@@ -415,14 +450,9 @@ class Golem(Ennemies):
     compétence :
         - résistance aux dégats physique mais faiblesse aux dégâts élémentaires.
     """
-    def __init__(self, game, x: int, y: int, lvl: int):
-        super().__init__(game, x, y, (0, 96), (16, 16), 35, lvl, 15, colkey=7)
-        if self.game.carte.biome != "Cave":
-            self.img = (0, 96)
-        else:
-            self.img = (0, 112)
-        self.imgX = self.img
-        self.imgY = (self.img[0] + self.size[0], self.img[1])
+
+    def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
+        super().__init__(game, x, y, (0, 112), (16, 16), 35, lvl, 15, loot=loot, colkey=7)
         self.patern = {"left": [[(-1, 0), (-2, 0)]],
                        "right": [[(1, 0), (2, 0)]],
                        "top": [[(0, -1), (0, -2)]],
@@ -442,8 +472,9 @@ class Golem(Ennemies):
 
 class Demon(Ennemies):
     """héritage de Ennemi avec des valeurs prédéfini"""
-    def __init__(self, game, x: int, y: int, lvl: int):
-        super().__init__(game, x, y, (0, 48), (16, 16), 10, lvl, 30, colkey=7)
+
+    def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
+        super().__init__(game, x, y, (0, 48), (16, 16), 10, lvl, 30, loot=loot, colkey=7)
         self.speed = 1
         self.element = 2
         self.patern = {"left": [[(-1, 0), (-2, 0)]],
@@ -455,101 +486,157 @@ class Demon(Ennemies):
 
 class Spider(Ennemies):
     """héritage de Ennemi avec des valeurs prédéfini"""
-    def __init__(self, game, x: int, y: int, lvl: int):
-        super().__init__(game, x, y, (0, 128), (16, 16), 20, lvl, 12, colkey=7)
+
+    def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
+        super().__init__(game, x, y, (0, 128), (16, 16), 20, lvl, 12, loot=loot, colkey=7)
         self.speed = 1
         self.element = 3
 
 
 class Vampire(Ennemies):
     """héritage de Ennemi avec des valeurs prédéfini"""
-    def __init__(self, game, x: int, y: int, lvl: int):
-        super().__init__(game, x, y, (0, 160), (16, 16), 20, lvl, 10, colkey=6)
+
+    def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
+        super().__init__(game, x, y, (0, 160), (16, 16), 20, lvl, 10, loot=loot, colkey=6)
         self.speed = 1
         self.element = 0
 
-    def damage(self, amount, el, source):
-        super().damage(amount, el, source)
-        self.hp += self.maxhp/2
+    def attaque(self):
+        self.hp += self.maxhp / 2
         if self.hp > self.maxhp:
             self.hp = self.maxhp
+        super().attaque()
 
 
 class Diablotin(Ennemies):
     """héritage de Ennemi avec des valeurs prédéfini"""
-    def __init__(self, game, x: int, y: int, lvl: int):
-        super().__init__(game, x, y, (0, 144), (16, 16), 10, lvl, 20, colkey=7)
+
+    def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
+        super().__init__(game, x, y, (0, 144), (16, 16), 10, lvl, 20, loot=loot, colkey=7)
         self.speed = 1
         self.element = 2
 
 
 class BlobFeu(Ennemies):
     """héritage de Ennemi avec des valeurs prédéfini"""
-    def __init__(self, game, x: int, y: int, lvl: int):
-        super().__init__(game, x, y, (0, 176), (16, 16), 15, lvl, 15, colkey=7)
+
+    def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
+        super().__init__(game, x, y, (0, 176), (16, 16), 15, lvl, 15, loot=loot, colkey=7)
         self.speed = 1
         self.element = 2
 
 
 class BlobEau(Ennemies):
     """héritage de Ennemi avec des valeurs prédéfini"""
-    def __init__(self, game, x: int, y: int, lvl: int):
-        super().__init__(game, x, y, (32, 32), (16, 16), 15, lvl, 15, colkey=7)
+
+    def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
+        super().__init__(game, x, y, (32, 32), (16, 16), 15, lvl, 15, loot=loot, colkey=7)
         self.speed = 1
         self.element = 1
 
 
 class Necromancien(Ennemies):
     """héritage de Ennemi avec des valeurs prédéfini"""
-    def __init__(self, game, x: int, y: int, lvl: int):
-        super().__init__(game, x, y, (0, 192), (16, 16), 10, lvl, 2, colkey=6)
+
+    def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
+        super().__init__(game, x, y, (0, 192), (16, 16), 10, lvl, 2, loot=loot, colkey=6)
         self.speed = 1
         self.element = 0
+        self.timer_invocation = randint(12, 20)
+
+    def action(self, forced=None):
+        if forced is not None:
+            super().action(forced)
+        left_action = self.speed
+        while left_action > 0:
+            self.timer_invocation -= 1
+            if self.timer_invocation <= 0 and len(self.game.ennemi) < 50:
+                self.timer_invocation = randint(12, 20)
+                arround = [self.x - 3, self.y - 3, 7, 7]
+                if arround[0] < 0: arround[0] = 0
+                if arround[1] < 0: arround[1] = 0
+                if arround[0] + arround[2] > 15: arround[2] = 15 - arround[0]
+                if arround[1] + arround[3] > 15: arround[3] = 15 - arround[1]
+                self.game.carte.rand_spawns(randint(1, 2), loot=False, specifique_biome=[(Zombie, 1)],
+                                            local_section=arround)
+            if self.get_if_player_touched():
+                self.game.animation_list.append(AttaqueEnnemi(self.game, self))
+                left_action -= 1
+            if left_action > 0:
+                distances = self.distance(self.game.player)
+                if abs(distances[0]) + abs(distances[1]) > 10:
+                    side = self.low_distance_side(self.game.player)
+                    if side == 0:
+                        self.top()
+                    elif side == 1:
+                        self.bottom()
+                    elif side == 2:
+                        self.left()
+                    elif side == 3:
+                        self.right()
+                    left_action -= 1
+                else:
+                    rand = random.randint(0, 3)
+                    if rand == 0:
+                        self.top()
+                    elif rand == 1:
+                        self.bottom()
+                    elif rand == 2:
+                        self.left()
+                    elif rand == 3:
+                        self.right()
+                    left_action -= 1
 
 
 class Aligator(Ennemies):
     """héritage de Ennemi avec des valeurs prédéfini"""
-    def __init__(self, game, x: int, y: int, lvl: int):
-        super().__init__(game, x, y, (0, 208), (16, 16), 20, lvl, 20, colkey=7)
+
+    def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
+        super().__init__(game, x, y, (0, 208), (16, 16), 20, lvl, 20, loot=loot, colkey=7)
         self.speed = 1
         self.element = 0
 
 
 class Abomination(Ennemies):
     """héritage de Ennemi avec des valeurs prédéfini"""
-    def __init__(self, game, x: int, y: int, lvl: int):
-        super().__init__(game, x, y, (0, 224), (16, 16), 75, lvl, 50, colkey=7)
+
+    def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
+        super().__init__(game, x, y, (0, 224), (16, 16), 75, lvl, 50, loot=loot, colkey=7)
         self.speed = 1
         self.element = 0
 
 
 class Mommies(Ennemies):
     """héritage de Ennemi avec des valeurs prédéfini"""
-    def __init__(self, game, x: int, y: int, lvl: int):
-        super().__init__(game, x, y, (0, 240), (16, 16), 10, lvl, 10, colkey=7)
+
+    def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
+        super().__init__(game, x, y, (0, 240), (16, 16), 10, lvl, 10, loot=loot, colkey=7)
         self.speed = 1
         self.element = 0
 
 
 class Loup(Ennemies):
     """héritage de Ennemi avec des valeurs prédéfini"""
-    def __init__(self, game, x: int, y: int, lvl: int):
-        super().__init__(game, x, y, (32, 0), (16, 16), 8, lvl, 8, colkey=7)
+
+    def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
+        super().__init__(game, x, y, (32, 0), (16, 16), 8, lvl, 8, loot=loot, colkey=7)
         self.speed = 2
         self.element = 0
 
 
 class Fox(Ennemies):
     """héritage de Ennemi avec des valeurs prédéfini"""
-    def __init__(self, game, x: int, y: int, lvl: int):
-        super().__init__(game, x, y, (32, 16), (16, 16), 8, lvl, 8, colkey=7)
+
+    def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
+        super().__init__(game, x, y, (32, 16), (16, 16), 8, lvl, 8, loot=loot, colkey=7)
         self.speed = 2
         self.element = 0
 
 
 class Witch(Ennemies):
     """héritage de Ennemi avec des valeurs prédéfini"""
-    def __init__(self, game, x: int, y: int, lvl: int):
-        super().__init__(game, x, y, (32, 48), (16, 16), 10, lvl, 10, colkey=7)
+
+    def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
+        super().__init__(game, x, y, (32, 48), (16, 16), 10, lvl, 10, loot=loot, colkey=7)
         self.speed = 1
         self.element = 0
