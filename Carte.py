@@ -1,5 +1,3 @@
-from typing import Type
-
 import pyxel as py
 from random import randint, choice, random
 from Entity import *

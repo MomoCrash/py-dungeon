@@ -550,7 +550,7 @@ class Necromancien(Ennemies):
         left_action = self.speed
         while left_action > 0:
             self.timer_invocation -= 1
-            if self.timer_invocation <= 0 and len(self.game.ennemi) < 50:
+            if self.timer_invocation <= 0 and len(self.game.ennemi) < 10:
                 self.timer_invocation = randint(12, 20)
                 arround = [self.x - 3, self.y - 3, 7, 7]
                 if arround[0] < 0: arround[0] = 0

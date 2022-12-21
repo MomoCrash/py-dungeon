@@ -250,7 +250,7 @@ class Armor:
 
     def defence(self) -> float:
         """renvoie un coeficient de défense"""
-        return self.defence_coef
+        return 1/self.defence_coef
 
     def blit(self, decalY=0) -> None:
         """
