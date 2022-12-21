@@ -4,7 +4,6 @@ from Entity import *
 from random import randint, choice
 from Carte import Carte
 
-
 """
 file edit with Python 3.10:
 
@@ -12,7 +11,7 @@ version du jeu : 2.0
 
 librairy :
 public :
-    - Pyxel 1.9.2
+    - Pyxel 1.9.6
     - random
 private :
     - Entity
@@ -52,7 +51,6 @@ class Game:
         self.carte.new_stage()
         self.animation_list = []
         self.animation_layer = []
-        self.last_key = None
 
     def rand_spawns(self, n, specifique = None, local_section=(0, 0, 15, 15)) -> None:
         """

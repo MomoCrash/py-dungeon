@@ -19,7 +19,7 @@ class Loot:
         "Bow": 1.2,
         "Hallebarde": 0.8,
         "Axe": 1.2,
-        "Life": 2
+        "Life": 1.3
     }
     
     def __init__(self, niveau, x, y, forced=(False, )):
@@ -92,7 +92,7 @@ class Loot:
             py.blt(256, 208, IMAGE_EQUIPMENT, 0, 48, 16, 32, 7)
         else:
             img = LOOT_IMAGE[self.type]
-            py.blt(256, 208, IMAGE_EQUIPMENT, img[0], img[1], 16, 32, 0)
+            py.blt(256, 208, IMAGE_EQUIPMENT, img[0], img[1], 16, 32, 0 if self.type != "MagmaArmor" else 7)
             temp = str(self.niveau)
             chaine = ""
             for i in range(len(temp)):

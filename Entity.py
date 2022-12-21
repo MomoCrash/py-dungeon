@@ -26,6 +26,8 @@ class Entity:
         :var self.orient: str               | défini l'orientation du personnage
         :var self.imgY: tuple(int, int)     | image a utiliser pour haut, bas
         :var self.imgX: tuple(int, int)     | image a utiliser pour gauche droite
+        :var self.debuff: list()            | liste de tout les debuffs actifs
+        :var self.buff: list()              | liste de tout les buffs actifs
         """
         self.maxhp = hp
         self.hp = hp
@@ -40,6 +42,8 @@ class Entity:
         self.game = game
         self.colkey = colkey
         self.orient = 1
+        self.debuff = []
+        self.buff = []
 
     def watch_left(self) -> None:
         """regarder à gauche"""
@@ -53,7 +57,8 @@ class Entity:
             return
         c1 = "obst" not in self.game.carte.grille[self.x - 1][self.y].types
         c2 = not self.game.check_full_tile(self.x-1, self.y)
-        if c1 and c2:
+        c3 = "ground" not in self.game.carte.grille[self.x - 1][self.y].types
+        if c1 and c2 and c3:
             self.x -= 1
             self.game.animation_list.insert(0, Move(self.game, self, 0))
 
@@ -71,7 +76,8 @@ class Entity:
             return
         c1 = "obst" not in self.game.carte.grille[self.x + 1][self.y].types
         c2 = not self.game.check_full_tile(self.x+1, self.y)
-        if c1 and c2:
+        c3 = "ground" not in self.game.carte.grille[self.x + 1][self.y].types
+        if c1 and c2 and c3:
             if "end" in self.game.carte.grille[self.x+1][self.y].types:
                 if self.game.carte.etage_completed:
                     self.game.carte.new_stage()
@@ -92,7 +98,8 @@ class Entity:
             return
         c1 = "obst" not in self.game.carte.grille[self.x][self.y - 1].types
         c2 = not self.game.check_full_tile(self.x, self.y-1)
-        if c1 and c2:
+        c3 = "ground" not in self.game.carte.grille[self.x][self.y - 1].types
+        if c1 and c2 and c3:
             self.y -= 1
             self.game.animation_list.insert(0, Move(self.game, self, 2))
         self.watch_top()
@@ -109,7 +116,8 @@ class Entity:
             return
         c1 = "obst" not in self.game.carte.grille[self.x][self.y + 1].types
         c2 = not self.game.check_full_tile(self.x, self.y+1)
-        if c1 and c2:
+        c3 = "ground" not in self.game.carte.grille[self.x][self.y + 1].types
+        if c1 and c2 and c3:
             if "end" in self.game.carte.grille[self.x][self.y+1].types:
                 if self.game.carte.etage_completed:
                     self.game.carte.new_stage()
@@ -239,10 +247,39 @@ class Ennemies(Entity):
         self.maxhp = self.hp
         self.element = 0
 
-    def action(self):
+    def action(self, forced=None):
         """effectue une action"""
         left_action = self.speed
         while left_action > 0:
+            if forced is not None:
+                if forced == "Attaque":
+                    self.game.animation_list.append(AttaqueEnnemi(self.game, self))
+                    left_action -= 1
+                if forced == "Move":
+                    distances = self.distance(self.game.player)
+                    if abs(distances[0]) + abs(distances[1]) > 10:
+                        side = self.low_distance_side(self.game.player)
+                        if side == 0:
+                            self.top()
+                        elif side == 1:
+                            self.bottom()
+                        elif side == 2:
+                            self.left()
+                        elif side == 3:
+                            self.right()
+                        left_action -= 1
+                    else:
+                        rand = random.randint(0, 3)
+                        if rand == 0:
+                            self.top()
+                        elif rand == 1:
+                            self.bottom()
+                        elif rand == 2:
+                            self.left()
+                        elif rand == 3:
+                            self.right()
+                        left_action -= 1
+
             if self.get_if_player_touched():
                 self.game.animation_list.append(AttaqueEnnemi(self.game, self))
                 left_action -= 1
@@ -362,7 +399,7 @@ class Ghost(Ennemies):
 
 class BabyDragon(Ennemies):
     def __init__(self, game, x: int, y: int, lvl: int):
-        super().__init__(game, x, y, (32, 64), (16, 16), 25, lvl, 13, colkey=7)
+        super().__init__(game, x, y, (32, 64), (16, 16), 35, lvl, 15, colkey=7)
         self.patern = {"left": [[(-1, 0), (-2, 0), (-3, 0)]],
                        "right": [[(1, 0), (2, 0), (3, 0)]],
                        "top": [[(0, -1), (0, -2), (0, -3)]],
@@ -396,7 +433,7 @@ class Golem(Ennemies):
 
     def damage(self, amount, el, source):
         """application des statistiques du golem aux dégâts"""
-        if el == 0:
+        if el != 0:
             amount *= 0.5
         else:
             amount *= 1.2
@@ -406,7 +443,113 @@ class Golem(Ennemies):
 class Demon(Ennemies):
     """héritage de Ennemi avec des valeurs prédéfini"""
     def __init__(self, game, x: int, y: int, lvl: int):
-        super().__init__(game, x, y, (0, 48), (16, 16), 10, lvl, 10, colkey=7)
+        super().__init__(game, x, y, (0, 48), (16, 16), 10, lvl, 30, colkey=7)
+        self.speed = 1
+        self.element = 2
+        self.patern = {"left": [[(-1, 0), (-2, 0)]],
+                       "right": [[(1, 0), (2, 0)]],
+                       "top": [[(0, -1), (0, -2)]],
+                       "bottom": [[(0, 1), (0, 2)]],
+                       }
+
+
+class Spider(Ennemies):
+    """héritage de Ennemi avec des valeurs prédéfini"""
+    def __init__(self, game, x: int, y: int, lvl: int):
+        super().__init__(game, x, y, (0, 128), (16, 16), 20, lvl, 12, colkey=7)
+        self.speed = 1
+        self.element = 3
+
+
+class Vampire(Ennemies):
+    """héritage de Ennemi avec des valeurs prédéfini"""
+    def __init__(self, game, x: int, y: int, lvl: int):
+        super().__init__(game, x, y, (0, 160), (16, 16), 20, lvl, 10, colkey=6)
+        self.speed = 1
+        self.element = 0
+
+    def damage(self, amount, el, source):
+        super().damage(amount, el, source)
+        self.hp += self.maxhp/2
+        if self.hp > self.maxhp:
+            self.hp = self.maxhp
+
+
+class Diablotin(Ennemies):
+    """héritage de Ennemi avec des valeurs prédéfini"""
+    def __init__(self, game, x: int, y: int, lvl: int):
+        super().__init__(game, x, y, (0, 144), (16, 16), 10, lvl, 20, colkey=7)
         self.speed = 1
         self.element = 2
 
+
+class BlobFeu(Ennemies):
+    """héritage de Ennemi avec des valeurs prédéfini"""
+    def __init__(self, game, x: int, y: int, lvl: int):
+        super().__init__(game, x, y, (0, 176), (16, 16), 15, lvl, 15, colkey=7)
+        self.speed = 1
+        self.element = 2
+
+
+class BlobEau(Ennemies):
+    """héritage de Ennemi avec des valeurs prédéfini"""
+    def __init__(self, game, x: int, y: int, lvl: int):
+        super().__init__(game, x, y, (32, 32), (16, 16), 15, lvl, 15, colkey=7)
+        self.speed = 1
+        self.element = 1
+
+
+class Necromancien(Ennemies):
+    """héritage de Ennemi avec des valeurs prédéfini"""
+    def __init__(self, game, x: int, y: int, lvl: int):
+        super().__init__(game, x, y, (0, 192), (16, 16), 10, lvl, 2, colkey=6)
+        self.speed = 1
+        self.element = 0
+
+
+class Aligator(Ennemies):
+    """héritage de Ennemi avec des valeurs prédéfini"""
+    def __init__(self, game, x: int, y: int, lvl: int):
+        super().__init__(game, x, y, (0, 208), (16, 16), 20, lvl, 20, colkey=7)
+        self.speed = 1
+        self.element = 0
+
+
+class Abomination(Ennemies):
+    """héritage de Ennemi avec des valeurs prédéfini"""
+    def __init__(self, game, x: int, y: int, lvl: int):
+        super().__init__(game, x, y, (0, 224), (16, 16), 75, lvl, 50, colkey=7)
+        self.speed = 1
+        self.element = 0
+
+
+class Mommies(Ennemies):
+    """héritage de Ennemi avec des valeurs prédéfini"""
+    def __init__(self, game, x: int, y: int, lvl: int):
+        super().__init__(game, x, y, (0, 240), (16, 16), 10, lvl, 10, colkey=7)
+        self.speed = 1
+        self.element = 0
+
+
+class Loup(Ennemies):
+    """héritage de Ennemi avec des valeurs prédéfini"""
+    def __init__(self, game, x: int, y: int, lvl: int):
+        super().__init__(game, x, y, (32, 0), (16, 16), 8, lvl, 8, colkey=7)
+        self.speed = 2
+        self.element = 0
+
+
+class Fox(Ennemies):
+    """héritage de Ennemi avec des valeurs prédéfini"""
+    def __init__(self, game, x: int, y: int, lvl: int):
+        super().__init__(game, x, y, (32, 16), (16, 16), 8, lvl, 8, colkey=7)
+        self.speed = 2
+        self.element = 0
+
+
+class Witch(Ennemies):
+    """héritage de Ennemi avec des valeurs prédéfini"""
+    def __init__(self, game, x: int, y: int, lvl: int):
+        super().__init__(game, x, y, (32, 48), (16, 16), 10, lvl, 10, colkey=7)
+        self.speed = 1
+        self.element = 0

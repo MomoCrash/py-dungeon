@@ -3,6 +3,12 @@ from random import randint
 
 # Varibales globals ----------------------------------------------------------------------------------------------------
 
+# math pour transformer le int de l'orientation en coordonné
+f = lambda x: round((2/3)*x**3 - (7/2)*x**2 + (29/6)*x - 1)
+g = lambda x: round((2/3)*x**3 - (5/2)*x**2 + (11/6)*x)
+
+orient_to_coor = lambda orient: (f(orient), g(orient))
+
 # numméro de l'images du fichier
 IMAGE_EQUIPMENT = 2
 
@@ -82,6 +88,20 @@ class Weapon:
                 else:
                     blocked = True
         return ennemi
+
+    def get_coor_in_range(self) -> list:
+        """renvoie une liste avec tout les tuiles dans la portée"""
+        coors = []
+        for line in self.patern[ORIENT_EQ[self.owner.orient]]:
+            blocked = False
+            for pos in line:
+
+                if not blocked and 0 <= self.owner.x + pos[0] < len(self.owner.game.carte.grille) and 0 <= self.owner.y + pos[1] < len(self.owner.game.carte.grille[0]) and not "obst" in self.owner.game.carte.grille[self.owner.x + pos[0]][self.owner.y + pos[1]].types:
+                    print(self.owner.game.carte.grille[self.owner.x + pos[0]][self.owner.y + pos[1]].types)
+                    coors.append((self.owner.reel_x + pos[0]*16, self.owner.reel_y + pos[1]*16))
+                else:
+                    blocked = True
+        return coors
 
     def attaque(self) -> None:
         """attaque avec l'arme"""
@@ -286,11 +306,11 @@ class DiamondArmor(Armor):
 class MagmaArmor(Armor):
     """héritage de Armor avec des charactéristique défini"""
     def __init__(self, owner):
-        super().__init__(owner, "Armure en Magma", 52, LOOT_IMAGE["MagmaArmor"], 1)
+        super().__init__(owner, "Armure en Magma", 52, LOOT_IMAGE["MagmaArmor"], 2)
         self.colkey = 7
 
 
 class DragonScaleArmor(Armor):
     """héritage de Armor avec des charactéristique défini"""
     def __init__(self, owner):
-        super().__init__(owner, "Armure en Ecaille", 72, LOOT_IMAGE["DragonScaleArmor"], 1)
+        super().__init__(owner, "Armure en Ecaille", 72, LOOT_IMAGE["DragonScaleArmor"], 2)

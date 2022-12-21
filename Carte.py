@@ -11,25 +11,68 @@ IMAGE_PORTE_OUVERTE = (48, 0)
 # définition des murs et des pièges
 _equivalance = {
     "obst": [
-        (0, 2), (0, 3), (1, 2), (1, 3),
-        (2, 2), (2, 3), (3, 2), (3, 3),
-        (12, 6), (13, 6), (12, 7), (13, 7),
-        (14, 6), (15, 6), (14, 7), (15, 7)
+        (0, 2), (0, 3), (1, 2), (1, 3),  # rondin sur dalle
+        (2, 2), (2, 3), (3, 2), (3, 3),  # brique
+        (12, 6), (13, 6), (12, 7), (13, 7),  # rondin sur herbe
+        (14, 6), (15, 6), (14, 7), (15, 7),  # buisson
+        (2, 10), (3, 10), (2, 11), (3, 11),  # Carcasse
+        (4, 10), (5, 10), (4, 11), (5, 11),  # Carcasse
+        (6, 10), (7, 10), (6, 11), (7, 11),  # Carcasse
+        (6, 12), (7, 12), (6, 13), (7, 13),  # Cactus
+        (8, 12), (9, 12), (8, 13), (9, 13),  # feuille
+        (10, 12), (11, 12), (10, 13), (11, 13),  # cailloux
+        ],
+    "ground": [
+        (16, 6), (17, 6), (16, 7), (17, 7),  # eau
+        (18, 6), (19, 6), (18, 7), (19, 7),  # eau
+        (20, 6), (21, 6), (20, 7), (21, 7),  # eau
+        (22, 6), (23, 6), (22, 7), (23, 7),  # eau
+        (24, 6), (25, 6), (24, 7), (25, 7),  # eau
+        (26, 6), (27, 6), (26, 7), (27, 7),  # eau
+        (28, 6), (29, 6), (28, 7), (29, 7),  # eau
+        (2, 8), (3, 8), (2, 9), (3, 9),  # eau
+        (4, 8), (5, 8), (4, 9), (5, 9),  # eau
+        (6, 8), (7, 8), (6, 9), (7, 9),  # eau
+        (8, 8), (9, 8), (8, 9), (9, 9),  # eau
+        (10, 8), (11, 8), (10, 9), (11, 9),  # eau
+        (12, 8), (13, 8), (12, 9), (13, 9),  # eau
+        (14, 8), (15, 8), (14, 9), (15, 9),  # eau
+        (16, 8), (17, 8), (16, 9), (17, 9),  # eau
+        (18, 8), (19, 8), (18, 9), (19, 9),  # eau
+        (20, 8), (21, 8), (20, 9), (21, 9),  # eau
+        (22, 8), (23, 8), (22, 9), (23, 9),  # eau
+        (8, 10), (9, 10), (8, 11), (9, 11),   # eau
+        (10, 10), (11, 10), (10, 11), (11, 11),  # eau
+        (12, 10), (13, 10), (12, 11), (13, 11),  # eau
+        (14, 10), (15, 10), (14, 11), (15, 11),  # eau
+        (16, 10), (17, 10), (16, 11), (17, 11),  # eau
+        (18, 10), (19, 10), (18, 11), (19, 11),  # eau
+        (20, 10), (21, 10), (20, 11), (21, 11),  # eau
+        (22, 10), (23, 10), (22, 11), (23, 11),  # eau
+        (24, 10), (25, 10), (24, 11), (25, 11),  # eau
+        (26, 10), (27, 10), (26, 11), (27, 11),  # eau
+        (28, 10), (29, 10), (28, 11), (29, 11),  # eau
+        (20, 12), (21, 12), (20, 13), (21, 13),  # eau
+        (22, 12), (23, 12), (22, 13), (23, 13),  # eau
+        (24, 12), (25, 12), (24, 13), (25, 13),  # eau
+        (26, 12), (27, 12), (26, 13), (27, 13),  # eau
+        (28, 8), (29, 8), (28, 9), (29, 9),  # eau
+        (30, 8), (31, 8), (30, 9), (31, 9),  # eau
     ],
     "trap": [
-        (5, 2), (6, 2), (5, 3), (6, 3)
+        (5, 2), (6, 2), (5, 3), (6, 3)  # piège éclaté
     ]
 }
 
 # position des biomes
 LIMITE = {
     "Cave": (0, 3, 2),
-    "Grass": (1, 2, 0)
+    "Grass": (1, 3, 1)
 }
 
 CARTE_SPAWN = {
-    "Cave": [Zombie, Squelette, Ghost, Bat, Demon, Golem],
-    "Grass": [Zombie, Squelette, Ghost, Demon, BabyDragon]
+    "Cave": [Zombie, Squelette, Demon, Golem, Ghost, Bat],
+    "Grass": [Loup, Fox, Aligator, Zombie, BabyDragon, BlobEau, BlobFeu]
 }
 
 
@@ -43,8 +86,6 @@ class Tile:
         """
         :param x: int                           | position en x (en pixels)
         :param y: int                           | position en y (en pixels)
-        :var x: int                             | position en x en pixels
-        :var y: int                             | position en y en pixels
         :var self.tiles: list(tuple(int, int)) | images des 4 petite tuiles dans le carré de 16x16
         :var self.types: list(str)              | pour les 4 petites tuiles, avec la variable _equivalance je peux savoir si c'est un mur, un piège ou autre ou rien
 
@@ -61,7 +102,7 @@ class Tile:
             for i in self.tiles:
                 for j in i:
                     if j in _equivalance[k] and k not in self.types:
-                        self.types.append("obst")
+                        self.types.append(k)
 
 
 class Carte:
@@ -83,7 +124,7 @@ class Carte:
         self.grille = []
         self.new_map()
         self.etage_completed = False
-        self.biome = "Cave"
+        self.biome = "Grass"
         self.stage = 1
 
     def new_map(self, forced: list = None, loot=False) -> None:
@@ -126,6 +167,8 @@ class Carte:
             self.etage_completed = False
             self.stage += 1
             self.game.looting = not self.game.looting
+            for line in self.grille:
+                print([tile.types for tile in line])
         else:
             self.new_map(loot=True)
             self.game.player.place(0, 0)
