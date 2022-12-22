@@ -4,9 +4,8 @@ from Equipment import *
 from Loot import Loot
 from Animate import *
 import random
+from Settings import IMAGE_ENTITE
 
-# Variables globals :
-IMAGE_ENTITE = 1
 
 
 class Entity:
@@ -59,7 +58,9 @@ class Entity:
         c1 = "obst" not in self.game.carte.grille[self.x - 1][self.y].types
         c2 = not self.game.check_full_tile(self.x - 1, self.y)
         c3 = "ground" not in self.game.carte.grille[self.x - 1][self.y].types
-        if c1 and c2 and c3:
+        c4 = "left-side" not in self.game.carte.grille[self.x][self.y].types
+        c5 = "right-side" not in self.game.carte.grille[self.x - 1][self.y].types
+        if c1 and c2 and c3 and c4 and c5:
             self.x -= 1
             self.game.animation_list.insert(0, Move(self.game, self, 0))
 
@@ -78,7 +79,9 @@ class Entity:
         c1 = "obst" not in self.game.carte.grille[self.x + 1][self.y].types
         c2 = not self.game.check_full_tile(self.x + 1, self.y)
         c3 = "ground" not in self.game.carte.grille[self.x + 1][self.y].types
-        if c1 and c2 and c3:
+        c4 = "right-side" not in self.game.carte.grille[self.x][self.y].types
+        c5 = "left-side" not in self.game.carte.grille[self.x + 1][self.y].types
+        if c1 and c2 and c3 and c4 and c5:
             if "end" in self.game.carte.grille[self.x + 1][self.y].types:
                 if self.game.carte.etage_completed:
                     self.game.carte.new_stage()
@@ -100,7 +103,9 @@ class Entity:
         c1 = "obst" not in self.game.carte.grille[self.x][self.y - 1].types
         c2 = not self.game.check_full_tile(self.x, self.y - 1)
         c3 = "ground" not in self.game.carte.grille[self.x][self.y - 1].types
-        if c1 and c2 and c3:
+        c4 = "top-side" not in self.game.carte.grille[self.x][self.y].types
+        c5 = "bottom-side" not in self.game.carte.grille[self.x][self.y-1].types
+        if c1 and c2 and c3 and c4 and c5:
             self.y -= 1
             self.game.animation_list.insert(0, Move(self.game, self, 2))
         self.watch_top()
@@ -118,7 +123,9 @@ class Entity:
         c1 = "obst" not in self.game.carte.grille[self.x][self.y + 1].types
         c2 = not self.game.check_full_tile(self.x, self.y + 1)
         c3 = "ground" not in self.game.carte.grille[self.x][self.y + 1].types
-        if c1 and c2 and c3:
+        c4 = "bottom-side" not in self.game.carte.grille[self.x][self.y].types
+        c5 = "top-side" not in self.game.carte.grille[self.x][self.y + 1].types
+        if c1 and c2 and c3 and c4 and c5:
             if "end" in self.game.carte.grille[self.x][self.y + 1].types:
                 if self.game.carte.etage_completed:
                     self.game.carte.new_stage()

@@ -1,39 +1,6 @@
 import pyxel as py
 from random import randint
-
-# Varibales globals ----------------------------------------------------------------------------------------------------
-
-# math pour transformer le int de l'orientation en coordonné
-f = lambda x: round((2/3)*x**3 - (7/2)*x**2 + (29/6)*x - 1)
-g = lambda x: round((2/3)*x**3 - (5/2)*x**2 + (11/6)*x)
-
-orient_to_coor = lambda orient: (f(orient), g(orient))
-
-# numméro de l'images du fichier
-IMAGE_EQUIPMENT = 2
-
-# toute les images des différents items
-LOOT_IMAGE = {
-    "NakedArmor": (0, 0),
-    "LeatherArmor": (0, 208),
-    "IronArmor": (0, 144),
-    "GoldArmor": (0, 176),
-    "DiamondArmor": (0, 112),
-    "MagmaArmor": (64, 224),
-    "DragonScaleArmor": (48, 224),
-    "Sword": (16, 0),
-    "Spear": (16, 32),
-    "Hammer": (16, 128),
-    "Bow": (16, 152),
-    "Hallebarde": (16, 64),
-    "Axe": (16, 96),
-}
-
-EFFICACITE = [[1, 1, 1, 1], [1, 0.9, 0.5, 2], [1, 2, 0.9, 0.5], [1, 0.5, 2, 0.9]]
-
-ORIENT_EQ = ["left", "right", "top", "bottom"]
-
-# Objects --------------------------------------------------------------------------------------------------------------
+from Settings import IMAGE_EQUIPMENT, LOOT_IMAGE, ORIENT_EQ, orient_to_coor, EFFICACITE
 
 
 class Weapon:
