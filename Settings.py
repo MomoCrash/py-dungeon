@@ -1,8 +1,10 @@
+from Menu import *
+
 IMAGE_PORTE_FERMEE = (32, 0)
 IMAGE_PORTE_OUVERTE = (48, 0)
 
 # définition des murs et des pièges
-_equivalance = {
+EQUIVALANCE = {
     "obst": [  # Tuiles qui bloque le déplacement et les attaques
         (0, 2), (0, 3), (1, 2), (1, 3),  # rondin sur dalle
         (2, 2), (2, 3), (3, 2), (3, 3),  # brick (brown)
@@ -64,6 +66,17 @@ _equivalance = {
         (30, 8), (31, 8), (30, 9), (31, 9),  # eau
         (28, 12), (29, 12), (28, 13), (29, 13),  # eau
         (30, 12), (31, 12), (30, 13), (31, 13),  # eau
+        (24, 2), (25, 2), (24, 3), (25, 3),  # eau
+        (26, 2), (27, 2), (26, 3), (27, 3),  # eau
+        (28, 2), (29, 2), (28, 3), (29, 3),  # eau
+        (30, 2), (31, 2), (30, 3), (31, 3),  # eau
+        (18, 4), (19, 4), (18, 5), (19, 5),  # eau
+        (20, 4), (21, 4), (20, 5), (21, 5),  # eau
+        (22, 4), (23, 4), (22, 5), (23, 5),  # eau
+        (24, 4), (25, 4), (24, 5), (25, 5),  # eau
+        (26, 4), (27, 4), (26, 5), (27, 5),  # eau
+        (28, 4), (29, 4), (28, 5), (29, 5),  # eau
+        (30, 4), (31, 4), (30, 5), (31, 5),  # eau
     ],
     "left-side": [
         (22, 16), (23, 16), (22, 17), (23, 17),  # wall (top left corner)
@@ -133,8 +146,55 @@ LOOT_IMAGE = {
     "Axe": (16, 96),
 }
 
-EFFICACITE = [[1, 1, 1, 1], [1, 0.9, 0.5, 2], [1, 2, 0.9, 0.5], [1, 0.5, 2, 0.9]]
+EFFICACITE = ((1, 1, 1, 1, 1, 1), (1, 0.9, 0.5, 2, 0.7, 0.7), (1, 2, 0.9, 0.5, 0.7, 0.7), (1, 0.5, 2, 0.9, 0.7, 0.7), (1, 1, 1, 1, 0, 3), (1, 1, 1, 1, 3, 0))
 
 ORIENT_EQ = ["left", "right", "top", "bottom"]
 
 IMAGE_ENTITE = 1
+
+# images :
+
+KATANA0 = lambda x, y: (x, y, 2, 16, 184, 16, 32, 0)
+KATANA1 = lambda x, y: (x, y, 2, 32, 184, 16, 32, 0)
+KATANA2 = lambda x, y: (x, y, 2, 48, 184, 16, 32, 0)
+DRAGON_SCAlE_ARMOR = lambda x, y: (x, y, 2, 48, 224, 16, 32, 0)
+BABY_DRAGON = lambda x, y: (x, y, 1, 32, 64, 16, 16, 7)
+
+# Text
+
+texts = {
+    "touches": "[Touches]\n"
+               "\t - Z,Q,S,D -> Déplacements\n"
+               "\t - A -> Attaquer\n"
+               "\t - E -> Interagir/Ramasser\n"
+               "\t - Flèches -> Diriger la visée\n"
+               "\t - F -> Echanger d'armes\n"
+               "\t - W -> Skip la salle de loot\n"
+               "\t - TAB -> Ouvrir/Fermer les menus",
+    "test": "[HISTOIRE]\n"
+            "   testtesttesttesttesttesttesttesttestt\n"
+            "testtesttesttesttesttesttesttesttesttest\n"
+            "testtesttesttesttesttesttesttesttesttest\n"
+            "testtesttesttesttesttesttesttesttesttest\n"
+            "testtesttesttesttesttesttesttesttesttest\n"
+            "testtesttesttesttesttesttesttesttesttest\n"
+            "testtesttesttesttesttesttesttesttesttest\n"
+            "testtesttesttesttesttesttesttesttesttest\n"
+            "testtesttesttesttesttesttesttesttesttest\n"
+            "testtesttesttesttesttesttesttesttesttest\n"
+            "testtesttesttesttesttesttesttesttesttest\n"
+            "testtesttesttesttesttesttesttesttesttest\n"
+            "testtesttesttesttesttesttesttesttesttest\n"
+            "testtesttesttesttesttesttesttesttesttest\n"
+            "testtesttesttesttesttesttesttesttesttest\n"
+            "testtesttesttesttesttesttesttesttesttest\n"
+            "testtesttesttesttesttesttesttesttesttest\n"
+            "testtesttesttesttesttesttesttesttesttest\n"
+            "testtesttesttesttesttesttesttesttesttest\n"
+            "testtesttesttesttesttesttesttesttesttest\n"
+            "testtesttesttesttesttesttesttesttesttest\n"
+            "testtesttesttesttesttesttesttesttesttest\n"
+            "testtesttesttesttesttesttesttesttesttest\n"
+            "testtesttesttesttesttesttesttesttesttest\n"
+            "testtesttesttesttesttesttesttesttesttest\n"
+}

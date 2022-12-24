@@ -1,6 +1,6 @@
 import pyxel as py
 from random import randint
-from Settings import IMAGE_EQUIPMENT, LOOT_IMAGE, ORIENT_EQ, orient_to_coor, EFFICACITE
+from Settings import IMAGE_EQUIPMENT, LOOT_IMAGE, ORIENT_EQ, orient_to_coor
 
 
 class Weapon:

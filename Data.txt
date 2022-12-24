@@ -1,0 +1,16 @@
+cd C:\Users\trist\PycharmProjects\Dungeon
+
+C:\Users\trist\AppData\Local\Programs\Python\Python310\Scripts\pyxel edit assets.pyxres
+
+C:\Users\trist\AppData\Local\Programs\Python\Python310\Scripts\auto-py-to-exe
+
+Touches :
+Z, Q, S, D -> mouvement
+A -> attaquer
+flèches -> Viser
+F -> swap entre les deux armes
+E -> interagir
+W -> skip la salle de loot (pour ne pas avoir a traverser toute le map)
+(R -> restart (étage 1 sans armes etc...) )
+
+23/12/2022 : 1597 lines | 62289 char | ~39 char/lines | >line="Entity.py":649 | >char="Entity.py":25438

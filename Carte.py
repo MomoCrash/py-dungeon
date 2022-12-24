@@ -1,15 +1,14 @@
-import pyxel as py
-from random import randint, choice, random
+from random import choice, random
 from Entity import *
-from Settings import _equivalance, IMAGE_PORTE_FERMEE, IMAGE_PORTE_OUVERTE, LIMITE
+from Settings import EQUIVALANCE, IMAGE_PORTE_FERMEE, IMAGE_PORTE_OUVERTE, LIMITE
 
 # variable globals -----------------------------------------------------------------------------------------------------
 
 CARTE_SPAWN = {
-    "Cave": [(Zombie, 1), (Squelette, 1), (Demon, 1), (Golem, 1), (Ghost, 1), (Bat, 1), (Necromancien, 1.5)],
-    "Grass": [(Loup, 1), (Fox, 1), (Zombie, 1), (BabyDragon, 1), (BlobEau, 1), (BlobFeu, 1), (Necromancien, 1.5)],
+    "Cave": [(Zombie, 1), (Squelette, 1), (Demon, 1), (Golem, 1), (Ghost, 1), (Bat, 1)],
+    "Grass": [(Loup, 1), (Fox, 1), (Zombie, 1), (BabyDragon, 1), (BlobEau, 1), (BlobFeu, 1)],
     "Desert": [(Aligator, 1), (Golem, 1), (Mommies, 1), (Squelette, 1), (Zombie, 1)],
-    "Catacombes": [(Zombie, 1)],
+    "Catacombes": [(Zombie, 1), (Necromancien, 2), (Vampire, 2)],
 }
 
 
@@ -35,10 +34,10 @@ class Tile:
             for j in range(2):
                 self.tiles[i].append(py.tilemap(0).pget((self.x + i * 8) / 8, (self.y + j * 8) / 8))
         self.types = []
-        for k in _equivalance.keys():
+        for k in EQUIVALANCE.keys():
             for i in self.tiles:
                 for j in i:
-                    if j in _equivalance[k] and k not in self.types:
+                    if j in EQUIVALANCE[k] and k not in self.types:
                         self.types.append(k)
 
 
@@ -130,7 +129,7 @@ class Carte:
         while spawned < n:
             x = randint(local_section[0], local_section[0] + local_section[2])
             y = randint(local_section[1], local_section[1] + local_section[3])
-            if "obst" not in self.grille[x][y].types and not self.game.check_full_tile(x, y):
+            if "obst" not in self.grille[x][y].types and "ground" not in self.grille[x][y].types and not self.game.check_full_tile(x, y):
                 total = 0
                 for monster in specifique_biome:
                     total += monster[1]

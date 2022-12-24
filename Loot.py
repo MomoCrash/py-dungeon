@@ -14,6 +14,7 @@ class Loot:
         "DiamondArmor": 0.3,
         "MagmaArmor": 0.2,
         "DragonScaleArmor": 0.1,
+        "Sword": 1,
         "Spear": 1,
         "Hammer": 0.2,
         "Bow": 1.2,

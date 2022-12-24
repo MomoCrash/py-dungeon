@@ -1,11 +1,8 @@
-import pyxel as py
-from random import randint
 from Equipment import *
 from Loot import Loot
 from Animate import *
 import random
-from Settings import IMAGE_ENTITE
-
+from Settings import IMAGE_ENTITE, EFFICACITE
 
 
 class Entity:
@@ -53,6 +50,7 @@ class Entity:
 
     def left(self) -> None:
         """se déplacer si possible vers la case à gauche"""
+        self.watch_left()
         if not self.x > 0:
             return
         c1 = "obst" not in self.game.carte.grille[self.x - 1][self.y].types
@@ -64,8 +62,6 @@ class Entity:
             self.x -= 1
             self.game.animation_list.insert(0, Move(self.game, self, 0))
 
-        self.watch_left()
-
     def watch_right(self) -> None:
         """regarder à droite"""
         self.size = (-abs(self.size[0]), abs(self.size[1]))
@@ -74,6 +70,7 @@ class Entity:
 
     def right(self) -> None:
         """se déplacer à droite si possible"""
+        self.watch_right()
         if not self.x < len(self.game.carte.grille) - 1:
             return
         c1 = "obst" not in self.game.carte.grille[self.x + 1][self.y].types
@@ -88,7 +85,6 @@ class Entity:
             else:
                 self.x += 1
                 self.game.animation_list.insert(0, Move(self.game, self, 1))
-        self.watch_right()
 
     def watch_top(self) -> None:
         """regarder en haut"""
@@ -98,6 +94,7 @@ class Entity:
 
     def top(self) -> None:
         """se déplcaer vers le haut si possible"""
+        self.watch_top()
         if not self.y > 0:
             return
         c1 = "obst" not in self.game.carte.grille[self.x][self.y - 1].types
@@ -108,7 +105,6 @@ class Entity:
         if c1 and c2 and c3 and c4 and c5:
             self.y -= 1
             self.game.animation_list.insert(0, Move(self.game, self, 2))
-        self.watch_top()
 
     def watch_bottom(self) -> None:
         """regarder vers le bas"""
@@ -118,6 +114,7 @@ class Entity:
 
     def bottom(self) -> None:
         """se déplacer vers le bas si possible"""
+        self.watch_bottom()
         if not self.y < len(self.game.carte.grille[0]) - 1:
             return
         c1 = "obst" not in self.game.carte.grille[self.x][self.y + 1].types
@@ -132,7 +129,6 @@ class Entity:
             else:
                 self.y += 1
                 self.game.animation_list.insert(0, Move(self.game, self, 3))
-        self.watch_bottom()
 
     def place(self, x, y):
         self.x = x
@@ -157,8 +153,6 @@ class Entity:
         """affiche une entité"""
         py.blt(self.reel_x, self.reel_y, IMAGE_ENTITE, self.img[0], self.img[1], self.size[0], self.size[1],
                self.colkey)
-        if type(self) == Golem:
-            print(self.img)
 
     def distance(self, other_entity) -> tuple:
         distance_x = self.x - other_entity.x
@@ -532,6 +526,11 @@ class BlobFeu(Ennemies):
         self.speed = 1
         self.element = 2
 
+    def damage(self, amount, el, source):
+        if el == 3:
+            amount *= 0
+        super().damage(amount, el, source)
+
 
 class BlobEau(Ennemies):
     """héritage de Ennemi avec des valeurs prédéfini"""
@@ -540,6 +539,11 @@ class BlobEau(Ennemies):
         super().__init__(game, x, y, (32, 32), (16, 16), 15, lvl, 15, loot=loot, colkey=7)
         self.speed = 1
         self.element = 1
+
+    def damage(self, amount, el, source):
+        if el == 2:
+            amount *= 0
+        super().damage(amount, el, source)
 
 
 class Necromancien(Ennemies):

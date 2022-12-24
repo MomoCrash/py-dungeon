@@ -1,8 +1,7 @@
-import pyxel as py
-from Loot import Loot
 from Entity import *
-from random import randint, choice
 from Carte import Carte
+from Menu import *
+from Settings import texts, KATANA0, KATANA1, KATANA2
 
 """
 file edit with Python 3.10:
@@ -51,6 +50,32 @@ class Game:
         self.carte.new_stage()
         self.animation_list = []
         self.animation_layer = []
+        self.all_menus = {
+            "TAB": Box((0, 0),
+                   (Bloc, (0, 0), (288, 25), 1),
+                   (Text, (119, 7), "MENU", 7),
+                   (Text, (35, 30), texts["touches"], 0),
+                   (Bloc, (5, 46), (16, 40), 14),
+                   (Bloc, (5, 96), (16, 40), 14),
+                   (Bloc, (5, 146), (16, 40), 14),
+                   (Bloc, (5, 196), (16, 40), 14),
+                   (Canevas, KATANA0(5, 50), KATANA2(5, 100), KATANA1(5, 150), KATANA2(5, 200)),
+                   (Text, (30, 82), texts["test"], 0),
+                   wh=(288, 272), bg=10, root=self, f=((109, 240), (70, 20), "EXIT", 1, 6, None)),
+            "START": Box((0, 0),
+                     (Bloc, (0, 0), (288, 25), 1),
+                     (Text, (110, 7), "-| Py-Dungeon |-", 7),
+                     (Text, (35, 30), texts["touches"], 0),
+                     (Bloc, (5, 46), (16, 40), 14),
+                     (Bloc, (5, 96), (16, 40), 14),
+                     (Bloc, (5, 146), (16, 40), 14),
+                     (Bloc, (5, 196), (16, 40), 14),
+                     (Canevas, KATANA0(5, 50), KATANA2(5, 100), KATANA1(5, 150), KATANA2(5, 200)),
+                     (Text, (30, 82), texts["test"], 0),
+                     wh=(288, 272), bg=10, root=self, f=((109, 240), (70, 20), "START !", 1, 6, None))
+        }
+        self.menu = self.all_menus["START"]
+
         self.start()
 
     def start(self):
@@ -89,7 +114,8 @@ class Game:
                         anime.animate()
             else:
                 self.animation_list[0].animate()
-        else:
+        elif self.menu is None:
+            py.mouse(False)
             if py.btn(py.KEY_A):
                 """attaquer"""
                 for e in self.ennemi:
@@ -144,34 +170,45 @@ class Game:
             if py.btnp(py.KEY_F, hold=60):
                 """changer d'arme"""
                 self.player.swap_weapon()
+            if py.btnp(py.KEY_TAB, hold=60):
+                """Affiche le Menu"""
+                self.menu = self.all_menus["TAB"]
+        else:
+            py.mouse(True)
+            if py.btnp(py.KEY_TAB, hold=60):
+                """changer d'arme"""
+                self.menu = None
 
     def draw(self) -> None:
         """methode appelée à chaque actualisation de l'écran : dessine toute les images à l'écran"""
         py.cls(0)
-        self.carte.blit()
-        for loot in self.loots:
-            if self.looting or (not loot.forced[0] and loot.type == "Life"):
-                loot.blit()
-        for e in self.ennemi:
-            e.blit_entity()
-            e.range_blit()
-            e.blit_life_bar()
-        self.player.blit_entity()
-        self.player.weapon.blit_range()
-        self.player.blit_life_bar()
-        py.text(256, 0, "Armor :", 7)
-        self.player.armor.blit(decalY=8)
-        py.rect(256, 40, 32, 2, 7)
-        py.text(256, 50, "weapon \nin hand :", 7)
-        self.player.weapon.blit(decalY=64)
-        py.text(256, 95, "weapon \nin bag :", 7)
-        self.player.secondary_weapon.blit(decalY=110)
-        for loot in self.loots:
-            if loot.x == self.player.x and loot.y == self.player.y and (self.looting or (not loot.forced[0] and loot.type == "Life")):
-                loot.blit_inv()
-        for anime in self.animation_layer:
-            py.blt(anime[0], anime[1], anime[2], anime[3], anime[4], anime[5], anime[6], anime[7])
-        self.animation_layer.clear()
+        if self.menu is None:
+            self.carte.blit()
+            for loot in self.loots:
+                if self.looting or (not loot.forced[0] and loot.type == "Life"):
+                    loot.blit()
+            for e in self.ennemi:
+                e.blit_entity()
+                e.range_blit()
+                e.blit_life_bar()
+            self.player.blit_entity()
+            self.player.weapon.blit_range()
+            self.player.blit_life_bar()
+            py.text(256, 0, "Armor :", 7)
+            self.player.armor.blit(decalY=8)
+            py.rect(256, 40, 32, 2, 7)
+            py.text(256, 50, "weapon \nin hand :", 7)
+            self.player.weapon.blit(decalY=64)
+            py.text(256, 95, "weapon \nin bag :", 7)
+            self.player.secondary_weapon.blit(decalY=110)
+            for loot in self.loots:
+                if loot.x == self.player.x and loot.y == self.player.y and (self.looting or (not loot.forced[0] and loot.type == "Life")):
+                    loot.blit_inv()
+            for anime in self.animation_layer:
+                py.blt(anime[0], anime[1], anime[2], anime[3], anime[4], anime[5], anime[6], anime[7])
+            self.animation_layer.clear()
+        else:
+            self.menu.blit()
 
     def run(self) -> None:
         """lance le jeu et sa fenêtre"""
