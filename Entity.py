@@ -195,7 +195,7 @@ class Player(Entity):
         """affiche la bar de vie du joueur en bas de l'écran"""
         py.rect(0, 256, 256, 16, 8)
         py.rect(0, 256, (self.hp / self.maxhp) * 256, 16, 11)
-        py.text(90, 264, f"{self.hp}/{self.maxhp}", 7)
+        py.text(90, 264, f"{round(self.hp)}/{self.maxhp}", 7)
 
     def damage(self, amount, el, source) -> None:
         """applique une quantité de dégâts, et défend grâce à l'armure, en cas de mort le Player est reset"""
