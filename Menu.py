@@ -3,13 +3,14 @@ import pyxel as py
 
 class Box:
     def __init__(self, xy, *elem, wh=None, bg=None, root=None, f=None):
+        self.root = root
         self.x, self.y = xy
         self.w, self.h = wh if wh is not None else (-1, -1)
         self.bgc = bg
         self.element = []
         for e in elem:
-            if e[0] == Text:
-                self.element.append(Text(self, e[1], e[2], e[3]))
+            if issubclass(e[0], Text):
+                self.element.append(e[0](self, e[1], e[2], e[3]))
             if e[0] == Button:
                 self.element.append(Button(self, e[1], e[2], e[3], e[4], e[5], e[6]))
             if e[0] == Bloc:
@@ -17,7 +18,6 @@ class Box:
             if e[0] == Canevas:
                 self.element.append(Canevas(*[e[i] for i in range(1, len(e))]))
         self.f = Button(self, f[0], f[1], f[2], f[3], f[4], f[5]) if f is not None else None
-        self.root = root
 
     def blit(self):
         if self.bgc is not None:
@@ -96,6 +96,11 @@ class Text:
 
     def blit(self):
         py.text(self.x, self.y, self.text, self.col)
+
+
+class ScoreText(Text):
+    def __init__(self, root, xy, score, col):
+        super().__init__(root, xy, f"Votre score est de : {score}", col)
 
 
 

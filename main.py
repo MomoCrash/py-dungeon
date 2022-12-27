@@ -1,7 +1,7 @@
 from Entity import *
 from Carte import Carte
 from Menu import *
-from Settings import texts, KATANA0, KATANA1, KATANA2
+from Settings import texts, KATANA0, KATANA1, KATANA2, DEAFEAT_FIRST_PART, DEAFEAT_SECOND_PART
 
 """
 file edit with Python 3.10:
@@ -50,6 +50,7 @@ class Game:
         self.carte.new_stage()
         self.animation_list = []
         self.animation_layer = []
+        self.score = 0
         self.all_menus = {
             "TAB": Box((0, 0),
                    (Bloc, (0, 0), (288, 25), 1),
@@ -72,10 +73,10 @@ class Game:
                      (Bloc, (5, 196), (16, 40), 14),
                      (Canevas, KATANA0(5, 50), KATANA2(5, 100), KATANA1(5, 150), KATANA2(5, 200)),
                      (Text, (30, 82), texts["test"], 0),
-                     wh=(288, 272), bg=10, root=self, f=((109, 240), (70, 20), "START !", 1, 6, None))
+                     wh=(288, 272), bg=10, root=self, f=((109, 240), (70, 20), "START !", 1, 6, None)),
         }
-        self.menu = self.all_menus["START"]
 
+        self.menu = None
         self.start()
 
     def start(self):
@@ -89,6 +90,14 @@ class Game:
         self.carte.new_stage()
         self.animation_list = []
         self.animation_layer = []
+        self.menu = self.all_menus["START"]
+        self.score = 0
+
+    def loose(self):
+        self.menu = Box((0, 0),
+                    (Canevas, DEAFEAT_FIRST_PART(110, 50), DEAFEAT_SECOND_PART(142, 50)),
+                    (ScoreText, (70, 70), self.score, 0),
+                    wh=(288, 272), bg=8, root=self, f=((0, 250), (288, 22), "RESTART !", 0, 7, self.start))
 
     def check_full_tile(self, x: int, y: int) -> bool:
         """
@@ -207,6 +216,16 @@ class Game:
             for anime in self.animation_layer:
                 py.blt(anime[0], anime[1], anime[2], anime[3], anime[4], anime[5], anime[6], anime[7])
             self.animation_layer.clear()
+            temp = f"Score :\n{self.score} pts"
+            chaine = ""
+            for i in range(len(temp)):
+                if i == 37:
+                    chaine += "..."
+                    break
+                chaine += temp[i]
+                if i % 8 == 7:
+                    chaine += "\n"
+            py.text(256, 200, chaine, 7)
         else:
             self.menu.blit()
 

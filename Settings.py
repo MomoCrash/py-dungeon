@@ -161,6 +161,8 @@ KATANA1 = lambda x, y: (x, y, 2, 32, 184, 16, 32, 0)
 KATANA2 = lambda x, y: (x, y, 2, 48, 184, 16, 32, 0)
 DRAGON_SCAlE_ARMOR = lambda x, y: (x, y, 2, 48, 224, 16, 32, 0)
 BABY_DRAGON = lambda x, y: (x, y, 1, 32, 64, 16, 16, 7)
+DEAFEAT_FIRST_PART = lambda x, y: (x, y, 2, 0, 240, 32, 16, 7)
+DEAFEAT_SECOND_PART = lambda x, y: (x, y, 2, 16, 224, 16, 16, 7)
 
 # Text
 
