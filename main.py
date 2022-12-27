@@ -203,19 +203,19 @@ class Game:
             self.player.blit_entity()
             self.player.weapon.blit_range()
             self.player.blit_life_bar()
-            py.text(256, 0, "Armor :", 7)
+            py.text(257, 0, "Armor :", 7)
             self.player.armor.blit(decalY=8)
             py.rect(256, 40, 32, 2, 7)
-            py.text(256, 50, "weapon \nin hand :", 7)
-            self.player.weapon.blit(decalY=64)
-            py.text(256, 95, "weapon \nin bag :", 7)
+            py.text(257, 45, "weapon \nin hand :", 7)
+            self.player.weapon.blit(decalY=59)
+            py.text(257, 95, "weapon \nin bag :", 7)
             self.player.secondary_weapon.blit(decalY=110)
+            py.rect(256, 145, 32, 2, 7)
+            py.text(257, 148, "Au sol :", 7)
             for loot in self.loots:
                 if loot.x == self.player.x and loot.y == self.player.y and (self.looting or (not loot.forced[0] and loot.type == "Life")):
                     loot.blit_inv()
-            for anime in self.animation_layer:
-                py.blt(anime[0], anime[1], anime[2], anime[3], anime[4], anime[5], anime[6], anime[7])
-            self.animation_layer.clear()
+            py.rect(256, 195, 32, 2, 7)
             temp = f"Score :\n{self.score} pts"
             chaine = ""
             for i in range(len(temp)):
@@ -225,7 +225,11 @@ class Game:
                 chaine += temp[i]
                 if i % 8 == 7:
                     chaine += "\n"
-            py.text(256, 200, chaine, 7)
+            py.text(257, 200, chaine, 7)
+            for anime in self.animation_layer:
+                py.blt(anime[0], anime[1], anime[2], anime[3], anime[4], anime[5], anime[6], anime[7])
+            self.animation_layer.clear()
+
         else:
             self.menu.blit()
 

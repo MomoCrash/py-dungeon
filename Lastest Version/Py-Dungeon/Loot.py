@@ -14,11 +14,11 @@ class Loot:
         "DiamondArmor": 0.3,
         "MagmaArmor": 0.2,
         "DragonScaleArmor": 0.1,
-        "Sword": 1,
+        "Sword": 1.2,
         "Spear": 1,
         "Hammer": 0.2,
-        "Bow": 1.2,
-        "Hallebarde": 0.8,
+        "Bow": 1,
+        "Hallebarde": 0.6,
         "Axe": 1.2,
         "Life": 1.3
     }
@@ -88,12 +88,12 @@ class Loot:
     def blit_inv(self):
         """affiche l'objet dans l'inventaire à l'emplacement pour voir ce qui est au sol"""
         if self.forced[0]:
-            self.forced[1].blit(decalY=176 if type(self.forced[1]) in Weapon.__subclasses__() else 208)
+            self.forced[1].blit(decalY=160 if type(self.forced[1]) in Weapon.__subclasses__() else 160)
         elif self.type == "Life":
-            py.blt(256, 208, IMAGE_EQUIPMENT, 0, 48, 16, 32, 7)
+            py.blt(256, 160, IMAGE_EQUIPMENT, 0, 48, 16, 32, 7)
         else:
             img = LOOT_IMAGE[self.type]
-            py.blt(256, 208, IMAGE_EQUIPMENT, img[0], img[1], 16, 32, 0 if self.type != "MagmaArmor" else 7)
+            py.blt(256, 160, IMAGE_EQUIPMENT, img[0], img[1], 16, 32, 0 if self.type != "MagmaArmor" else 7)
             temp = str(self.niveau)
             chaine = ""
             for i in range(len(temp)):
@@ -103,7 +103,7 @@ class Loot:
                 chaine += temp[i]
                 if i % 4 == 3:
                     chaine += "\n"
-            py.text(272, 208, "lvl: \n"+chaine, 7)
+            py.text(272, 160, "lvl: \n"+chaine, 7)
 
 
 
