@@ -1,7 +1,7 @@
 from Entity import *
 from Carte import Carte
 from Menu import *
-from Settings import texts, KATANA0, KATANA1, KATANA2, DEAFEAT_FIRST_PART, DEAFEAT_SECOND_PART
+from Settings import (TEXTS, KATANA0, KATANA1, KATANA2, DEAFEAT_FIRST_PART, DEAFEAT_SECOND_PART, MONSTER_IMG)
 
 """
 file edit with Python 3.10:
@@ -17,6 +17,10 @@ private :
     - Carte
     - Loot
     - Equipment
+    - Settings
+    - Loot
+    - Animate
+    
 
 Other files :
     - assets.pyxres -> fichier avec tout les graphismes modifié avec la librairie Pyxel
@@ -31,6 +35,7 @@ class Game:
     """
     Class Principal du jeu :
     """
+
     def __init__(self):
         """
         Initialise la librarie Pyxel et créé des conteneur pour chaque élément du jeu.
@@ -53,31 +58,100 @@ class Game:
         self.score = 0
         self.all_menus = {
             "TAB": Box((0, 0),
-                   (Bloc, (0, 0), (288, 25), 1),
-                   (Text, (119, 7), "MENU", 7),
-                   (Text, (35, 30), texts["touches"], 0),
-                   (Bloc, (5, 46), (16, 40), 14),
-                   (Bloc, (5, 96), (16, 40), 14),
-                   (Bloc, (5, 146), (16, 40), 14),
-                   (Bloc, (5, 196), (16, 40), 14),
-                   (Canevas, KATANA0(5, 50), KATANA2(5, 100), KATANA1(5, 150), KATANA2(5, 200)),
-                   (Text, (30, 82), texts["test"], 0),
-                   wh=(288, 272), bg=10, root=self, f=((109, 240), (70, 20), "EXIT", 1, 6, None)),
+                       (Bloc, (0, 0), (288, 25), 1),
+                       (Text, (119, 7), "MENU", 7),
+                       (Text, (35, 26), TEXTS["touches"], 0),
+                       (Bloc, (5, 46), (16, 40), 14),
+                       (Bloc, (5, 96), (16, 40), 14),
+                       (Bloc, (5, 146), (16, 40), 14),
+                       (Bloc, (5, 196), (16, 40), 14),
+                       (Canevas, KATANA0(5, 50), KATANA2(5, 100), KATANA1(5, 150), KATANA2(5, 200)),
+                       (Text, (30, 82), TEXTS["test"], 0),
+                       wh=(288, 272), bg=10, root=self, exit=((109, 240), (70, 20), "EXIT", 1, 6)),
             "START": Box((0, 0),
-                     (Bloc, (0, 0), (288, 25), 1),
-                     (Text, (110, 7), "-| Py-Dungeon |-", 7),
-                     (Text, (35, 30), texts["touches"], 0),
-                     (Bloc, (5, 46), (16, 40), 14),
-                     (Bloc, (5, 96), (16, 40), 14),
-                     (Bloc, (5, 146), (16, 40), 14),
-                     (Bloc, (5, 196), (16, 40), 14),
-                     (Canevas, KATANA0(5, 50), KATANA2(5, 100), KATANA1(5, 150), KATANA2(5, 200)),
-                     (Text, (30, 82), texts["test"], 0),
-                     wh=(288, 272), bg=10, root=self, f=((109, 240), (70, 20), "START !", 1, 6, None)),
+                         (Bloc, (0, 0), (288, 25), 1),
+                         (Text, (110, 7), "-| Py-Dungeon |-", 7),
+                         (Text, (35, 26), TEXTS["touches"], 0),
+                         (Bloc, (5, 46), (16, 40), 14),
+                         (Bloc, (5, 96), (16, 40), 14),
+                         (Bloc, (5, 146), (16, 40), 14),
+                         (Bloc, (5, 196), (16, 40), 14),
+                         (Canevas, KATANA0(5, 50), KATANA2(5, 100), KATANA1(5, 150), KATANA2(5, 200)),
+                         (Text, (30, 82), TEXTS["test"], 0),
+                         wh=(288, 272), bg=10, root=self, exit=((109, 240), (70, 20), "START !", 1, 6, self.start)),
         }
 
+        self.bestiaire = {
+            "HEADER": Box((0, 0),
+                          (Bloc, (0, 0), (288, 25), 10),
+                          (Text, (115, 10), "BESTIAIRE", 1),
+                          (Iframe, MONSTER_IMG["Zombie"](41, 40), 0, self.open_Zombie),
+                          (Iframe, MONSTER_IMG["Squelette"](75, 40), 0, self.open_Squelette),
+                          (Iframe, MONSTER_IMG["Demon"](109, 40), 1, self.open_Demon),
+                          (Iframe, MONSTER_IMG["Bat"](142, 40), 0, self.open_Bat),
+                          (Iframe, MONSTER_IMG["Ghost"](176, 40), 1, self.open_Ghost),
+                          (Iframe, MONSTER_IMG["Golem"](210, 40), 0, self.open_Golem),
+                          (Iframe, MONSTER_IMG["Spider"](41, 74), 7, self.open_Spider),
+                          (Iframe, MONSTER_IMG["Diablotin"](75, 74), 1, self.open_Diablotin),
+                          (Iframe, MONSTER_IMG["Vampire"](109, 74), 1, self.open_Vampire),
+                          wh=(288, 272), bg=0, root=self, exit=((0, 252), (288, 20), "QUIT", 7, 8)),
+            "Zombie": Box((0, 0),
+                          (Bloc, (0, 0), (288, 25), 10),
+                          (Text, (115, 10), "ZOMBIE", 1),
+                          (Iframe, MONSTER_IMG["Zombie"](41, 40), 0, self.open_header),
+                          (Text, (57, 40), TEXTS["Zombie"], 7),
+                          wh=(288, 272), bg=0, root=self, exit=((0, 252), (288, 20), "QUIT", 7, 8)),
+            "Squelette": Box((0, 0),
+                             (Bloc, (0, 0), (288, 25), 10),
+                             (Text, (115, 10), "SQUELETTE", 1),
+                             (Iframe, MONSTER_IMG["Squelette"](75, 40), 0, self.open_header),
+                             (Text, (91, 40), TEXTS["Squelette"], 7),
+                             wh=(288, 272), bg=0, root=self, exit=((0, 252), (288, 20), "QUIT", 7, 8)),
+            "Demon": Box((0, 0),
+                         (Bloc, (0, 0), (288, 25), 10),
+                         (Text, (115, 10), "DEMON", 1),
+                         (Iframe, MONSTER_IMG["Demon"](109, 40), 1, self.open_header),
+                         (Text, (125, 40), TEXTS["Demon"], 7),
+                         wh=(288, 272), bg=1, root=self, exit=((0, 252), (288, 20), "QUIT", 7, 8)),
+            "Bat": Box((0, 0),
+                       (Bloc, (0, 0), (288, 25), 10),
+                       (Text, (115, 10), "BAT", 1),
+                       (Iframe, MONSTER_IMG["Bat"](142, 40), 0, self.open_header),
+                       (Text, (158, 40), TEXTS["Bat"], 7),
+                       wh=(288, 272), bg=0, root=self, exit=((0, 252), (288, 20), "QUIT", 7, 8)),
+            "Ghost": Box((0, 0),
+                         (Bloc, (0, 0), (288, 25), 10),
+                         (Text, (115, 10), "GHOST", 1),
+                         (Iframe, MONSTER_IMG["Ghost"](176, 40), 1, self.open_header),
+                         (Text, (192, 40), TEXTS["Ghost"], 7),
+                         wh=(288, 272), bg=1, root=self, exit=((0, 252), (288, 20), "QUIT", 7, 8)),
+            "Golem": Box((0, 0),
+                         (Bloc, (0, 0), (288, 25), 10),
+                         (Text, (115, 10), "GOLEM", 1),
+                         (Iframe, MONSTER_IMG["Golem"](210, 40), 0, self.open_header),
+                         (Text, (226, 40), TEXTS["Golem"], 7),
+                         wh=(288, 272), bg=0, root=self, exit=((0, 252), (288, 20), "QUIT", 7, 8)),
+            "Spider": Box((0, 0),
+                          (Bloc, (0, 0), (288, 25), 10),
+                          (Text, (115, 10), "SPIDER", 1),
+                          (Iframe, MONSTER_IMG["Spider"](41, 74), 7, self.open_header),
+                          (Text, (57, 74), TEXTS["Spider"], 7),
+                          wh=(288, 272), bg=0, root=self, exit=((0, 252), (288, 20), "QUIT", 7, 8)),
+            "Diablotin": Box((0, 0),
+                             (Bloc, (0, 0), (288, 25), 10),
+                             (Text, (115, 10), "DIABLOTIN", 1),
+                             (Iframe, MONSTER_IMG["Diablotin"](75, 74), 1, self.open_header),
+                             (Text, (91, 74), TEXTS["Diablotin"], 7),
+                             wh=(288, 272), bg=0, root=self, exit=((0, 252), (288, 20), "QUIT", 7, 8)),
+            "Vampire": Box((0, 0),
+                           (Bloc, (0, 0), (288, 25), 10),
+                           (Text, (115, 10), "Vampire", 1),
+                           (Iframe, MONSTER_IMG["Vampire"](109, 74), 1, self.open_header),
+                           (Text, (125, 74), TEXTS["Vampire"], 7),
+                           wh=(288, 272), bg=1, root=self, exit=((0, 252), (288, 20), "QUIT", 7, 8)),
+        }
         self.menu = None
-        self.start()
+        self.open_header()
 
     def start(self):
         """remet à zéro tout le jeu"""
@@ -90,14 +164,80 @@ class Game:
         self.carte.new_stage()
         self.animation_list = []
         self.animation_layer = []
-        self.menu = self.all_menus["START"]
+        self.menu = None
         self.score = 0
 
     def loose(self):
         self.menu = Box((0, 0),
-                    (Canevas, DEAFEAT_FIRST_PART(110, 50), DEAFEAT_SECOND_PART(142, 50)),
-                    (ScoreText, (70, 70), self.score, 0),
-                    wh=(288, 272), bg=8, root=self, f=((0, 250), (288, 22), "RESTART !", 0, 7, self.start))
+                        (Canevas, DEAFEAT_FIRST_PART(110, 50), DEAFEAT_SECOND_PART(142, 50)),
+                        (ScoreText, (70, 70), self.score, 0),
+                        wh=(288, 272), bg=8, root=self, exit=((0, 250), (288, 22), "RESTART !", 0, 7, self.start))
+
+    def open_start(self):
+        self.menu = self.all_menus["START"]
+
+    def open_tab(self):
+        self.menu = self.all_menus["TAB"]
+
+    def open_header(self):
+        self.menu = self.bestiaire["HEADER"]
+
+    def open_Zombie(self):
+        self.menu = self.bestiaire["Zombie"]
+
+    def open_Squelette(self):
+        self.menu = self.bestiaire["Squelette"]
+
+    def open_Demon(self):
+        self.menu = self.bestiaire["Demon"]
+
+    def open_Bat(self):
+        self.menu = self.bestiaire["Bat"]
+
+    def open_Ghost(self):
+        self.menu = self.bestiaire["Ghost"]
+
+    def open_Golem(self):
+        self.menu = self.bestiaire["Golem"]
+
+    def open_Spider(self):
+        self.menu = self.bestiaire["Spider"]
+
+    def open_Diablotin(self):
+        self.menu = self.bestiaire["Diablotin"]
+
+    def open_Vampire(self):
+        self.menu = self.bestiaire["Vampire"]
+
+    def open_BlobFeu(self):
+        self.menu = self.bestiaire["BlobFeu"]
+
+    def open_Necromancien(self):
+        self.menu = self.bestiaire["Necromancien"]
+
+    def open_Aligator(self):
+        self.menu = self.bestiaire["Aligator"]
+
+    def open_Abomination(self):
+        self.menu = self.bestiaire["Abomination"]
+
+    def open_Mommies(self):
+        self.menu = self.bestiaire["Mommies"]
+
+    def open_Loup(self):
+        self.menu = self.bestiaire["Loup"]
+
+    def open_Fox(self):
+        self.menu = self.bestiaire["Fox"]
+
+    def open_BlobEau(self):
+        self.menu = self.bestiaire["BlobEau"]
+
+    def open_Witch(self):
+        self.menu = self.bestiaire["Witch"]
+
+    def open_BabyDragon(self):
+        self.menu = self.bestiaire["BabyDragon"]
 
     def check_full_tile(self, x: int, y: int) -> bool:
         """
@@ -182,8 +322,11 @@ class Game:
             if py.btnp(py.KEY_TAB, hold=60):
                 """Affiche le Menu"""
                 self.menu = self.all_menus["TAB"]
+            if py.btnp(py.KEY_X, hold=30):
+                self.menu = self.bestiaire['HEADER']
         else:
             py.mouse(True)
+            self.menu.update()
             if py.btnp(py.KEY_TAB, hold=60):
                 """changer d'arme"""
                 self.menu = None
@@ -191,47 +334,45 @@ class Game:
     def draw(self) -> None:
         """methode appelée à chaque actualisation de l'écran : dessine toute les images à l'écran"""
         py.cls(0)
-        if self.menu is None:
-            self.carte.blit()
-            for loot in self.loots:
-                if self.looting or (not loot.forced[0] and loot.type == "Life"):
-                    loot.blit()
-            for e in self.ennemi:
-                e.blit_entity()
-                e.range_blit()
-                e.blit_life_bar()
-            self.player.blit_entity()
-            self.player.weapon.blit_range()
-            self.player.blit_life_bar()
-            py.text(257, 0, "Armor :", 7)
-            self.player.armor.blit(decalY=8)
-            py.rect(256, 40, 32, 2, 7)
-            py.text(257, 45, "weapon \nin hand :", 7)
-            self.player.weapon.blit(decalY=59)
-            py.text(257, 95, "weapon \nin bag :", 7)
-            self.player.secondary_weapon.blit(decalY=110)
-            py.rect(256, 145, 32, 2, 7)
-            py.text(257, 148, "Au sol :", 7)
-            for loot in self.loots:
-                if loot.x == self.player.x and loot.y == self.player.y and (self.looting or (not loot.forced[0] and loot.type == "Life")):
-                    loot.blit_inv()
-            py.rect(256, 195, 32, 2, 7)
-            temp = f"Score :\n{self.score} pts"
-            chaine = ""
-            for i in range(len(temp)):
-                if i == 37:
-                    chaine += "..."
-                    break
-                chaine += temp[i]
-                if i % 8 == 7:
-                    chaine += "\n"
-            py.text(257, 200, chaine, 7)
-            for anime in self.animation_layer:
-                py.blt(anime[0], anime[1], anime[2], anime[3], anime[4], anime[5], anime[6], anime[7])
-            self.animation_layer.clear()
-
-        else:
-            self.menu.blit()
+        self.carte.blit()
+        for loot in self.loots:
+            if self.looting or (not loot.forced[0] and loot.type == "Life"):
+                loot.blit()
+        for e in self.ennemi:
+            e.blit_entity()
+            e.range_blit()
+            e.blit_life_bar()
+        self.player.blit_entity()
+        self.player.weapon.blit_range()
+        self.player.blit_life_bar()
+        py.text(257, 0, "Armor :", 7)
+        self.player.armor.blit(decalY=8)
+        py.rect(256, 40, 32, 2, 7)
+        py.text(257, 45, "weapon \nin hand :", 7)
+        self.player.weapon.blit(decalY=59)
+        py.text(257, 95, "weapon \nin bag :", 7)
+        self.player.secondary_weapon.blit(decalY=110)
+        py.rect(256, 145, 32, 2, 7)
+        py.text(257, 148, "Au sol :", 7)
+        for loot in self.loots:
+            if loot.x == self.player.x and loot.y == self.player.y and (
+                    self.looting or (not loot.forced[0] and loot.type == "Life")):
+                loot.blit_inv()
+        py.rect(256, 195, 32, 2, 7)
+        temp = f"Score :\n{self.score} pts"
+        chaine = ""
+        for i in range(len(temp)):
+            if i == 37:
+                chaine += "..."
+                break
+            chaine += temp[i]
+            if i % 8 == 7:
+                chaine += "\n"
+        py.text(257, 200, chaine, 7)
+        for anime in self.animation_layer:
+            py.blt(anime[0], anime[1], anime[2], anime[3], anime[4], anime[5], anime[6], anime[7])
+        self.animation_layer.clear()
+        self.menu.blit() if self.menu is not None else None
 
     def run(self) -> None:
         """lance le jeu et sa fenêtre"""

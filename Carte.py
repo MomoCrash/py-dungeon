@@ -11,6 +11,13 @@ CARTE_SPAWN = {
     "Catacombes": [(Zombie, 1), (Necromancien, 2), (Vampire, 2)],
 }
 
+CARTE_BOSS = {
+    "Cave": (),
+    "Grass": (),
+    "Desert": (),
+    "Catacombes": ()
+}
+
 
 # Objects --------------------------------------------------------------------------------------------------------------
 class Tile:
@@ -129,7 +136,8 @@ class Carte:
         while spawned < n:
             x = randint(local_section[0], local_section[0] + local_section[2])
             y = randint(local_section[1], local_section[1] + local_section[3])
-            if "obst" not in self.grille[x][y].types and "ground" not in self.grille[x][y].types and not self.game.check_full_tile(x, y):
+            if "obst" not in self.grille[x][y].types and "ground" not in self.grille[x][
+                y].types and not self.game.check_full_tile(x, y):
                 total = 0
                 for monster in specifique_biome:
                     total += monster[1]

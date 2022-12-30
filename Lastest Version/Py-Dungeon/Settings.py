@@ -160,35 +160,13 @@ KATANA0 = lambda x, y: (x, y, 2, 16, 184, 16, 32, 0)
 KATANA1 = lambda x, y: (x, y, 2, 32, 184, 16, 32, 0)
 KATANA2 = lambda x, y: (x, y, 2, 48, 184, 16, 32, 0)
 DRAGON_SCAlE_ARMOR = lambda x, y: (x, y, 2, 48, 224, 16, 32, 0)
+BABY_DRAGON = lambda x, y: (x, y, 1, 32, 64, 16, 16, 7)
 DEAFEAT_FIRST_PART = lambda x, y: (x, y, 2, 0, 240, 32, 16, 7)
 DEAFEAT_SECOND_PART = lambda x, y: (x, y, 2, 16, 224, 16, 16, 7)
 
-MONSTER_IMG = {
-    "Zombie": lambda x, y: (x, y, 1, 0, 16, 16, 16, 7),
-    "Squelette": lambda x, y: (x, y, 1, 0, 32, 16, 16, 6),
-    "Demon": lambda x, y: (x, y, 1, 0, 48, 16, 16, 7),
-    "Bat": lambda x, y: (x, y, 1, 0, 64, 16, 16, 7),
-    "Ghost": lambda x, y: (x, y, 1, 0, 80, 16, 16, 7),
-    "Golem": lambda x, y: (x, y, 1, 0, 112, 16, 16, 7),
-    "Spider": lambda x, y: (x, y, 1, 0, 128, 16, 16, 7),
-    "Diablotin": lambda x, y: (x, y, 1, 0, 144, 16, 16, 7),
-    "Vampire": lambda x, y: (x, y, 1, 0, 160, 16, 16, 6),
-    "BlobFeu": lambda x, y: (x, y, 1, 0, 176, 16, 16, 7),
-    "Necromancien": lambda x, y: (x, y, 1, 0, 192, 16, 16, 6),
-    "Aligator": lambda x, y: (x, y, 1, 0, 208, 16, 16, 7),
-    "Abomination": lambda x, y: (x, y, 1, 0, 224, 16, 16, 7),
-    "Mommies": lambda x, y: (x, y, 1, 0, 240, 16, 16, 7),
-    "Loup": lambda x, y: (x, y, 1, 32, 0, 16, 16, 7),
-    "Fox": lambda x, y: (x, y, 1, 32, 16, 16, 16, 7),
-    "BlobEau": lambda x, y: (x, y, 1, 32, 32, 16, 16, 7),
-    "Witch": lambda x, y: (x, y, 1, 32, 48, 16, 16, 7),
-    "BabyDragon": lambda x, y: (x, y, 1, 32, 64, 16, 16, 7),
-}
-
-
 # Text
 
-TEXTS = {
+texts = {
     "touches": "[Touches]\n"
                "\t - Z,Q,S,D -> Déplacements\n"
                "\t - A -> Attaquer\n"
@@ -196,8 +174,7 @@ TEXTS = {
                "\t - Flèches -> Diriger la visée\n"
                "\t - F -> Echanger d'armes\n"
                "\t - W -> Skip la salle de loot\n"
-               "\t - TAB -> Ouvrir/Fermer les menus\n"
-               "\t - X -> Ouvrir le Bestiaire",
+               "\t - TAB -> Ouvrir/Fermer les menus",
     "test": "[HISTOIRE]\n"
             "   testtesttesttesttesttesttesttesttestt\n"
             "testtesttesttesttesttesttesttesttesttest\n"
@@ -223,26 +200,5 @@ TEXTS = {
             "testtesttesttesttesttesttesttesttesttest\n"
             "testtesttesttesttesttesttesttesttesttest\n"
             "testtesttesttesttesttesttesttesttesttest\n"
-            "testtesttesttesttesttesttesttesttesttest\n",
-    "Zombie": "Voilà le Zombie, un mort vivant enfin je vous refais pas\n"
-              "toute l'histoire quoi vous voyez ...",
-    "Squelette": "Le Squelette, En char et en os... Enfin surtout \n"
-                 "en os puisque c'est un squelette.",
-    "Demon": "je ne sais pas mais voilà",
-    "Bat": "I'M BATMAN",
-    "Ghost": "je ne sais pas mais voilà",
-    "Golem": "je ne sais pas mais voilà",
-    "Spider": "CHUIS SPIDERMAN FDP",
-    "Diablotin": "je ne sais pas mais voilà",
-    "Vampire": "je ne sais pas mais voilà",
-    "BlobFeu": "je ne sais pas mais voilà",
-    "Necromancien": "je ne sais pas mais voilà",
-    "Aligator": "je ne sais pas mais voilà",
-    "Abomination": "je ne sais pas mais voilà",
-    "Mommies": "je ne sais pas mais voilà",
-    "Loup": "je ne sais pas mais voilà",
-    "Fox": "je ne sais pas mais voilà",
-    "BlobEau": "je ne sais pas mais voilà",
-    "Witch": "je ne sais pas mais voilà",
-    "BabyDragon": "je ne sais pas mais voilà",
+            "testtesttesttesttesttesttesttesttesttest\n"
 }
