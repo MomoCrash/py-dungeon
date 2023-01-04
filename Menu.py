@@ -9,16 +9,10 @@ class Box:
         self.bgc = bg
         self.element = []
         for e in elem:
-            if issubclass(e[0], Text):
-                self.element.append(e[0](self, e[1], e[2], e[3]))
-            if e[0] == Button:
-                self.element.append(Button(self, e[1], e[2], e[3], e[4], e[5], e[6]))
-            if e[0] == Bloc:
-                self.element.append(Bloc(e[1], e[2], e[3]))
-            if e[0] == Canevas:
-                self.element.append(Canevas(*[e[i] for i in range(1, len(e))]))
-            if e[0] == Iframe:
-                self.element.append(Iframe(self, e[1], e[2], e[3]))
+            type = e[0]
+            args = [e[i] for i in range(1, len(e))]
+            args.insert(0, self)
+            self.element.append(type(*args))
         try:
             func = exit[5]
         except (IndexError, TypeError):
@@ -46,7 +40,8 @@ class Box:
 
 
 class Bloc:
-    def __init__(self, xy, wh, c):
+    def __init__(self, root, xy, wh, c):
+        self.root = root
         self.x, self.y = xy
         self.w, self.h = wh
         self.c = c
@@ -59,7 +54,8 @@ class Bloc:
 
 
 class Canevas:
-    def __init__(self, *imgs):
+    def __init__(self, root,  *imgs):
+        self.root = root
         self.imgs = list(imgs)
 
     def blit(self):
