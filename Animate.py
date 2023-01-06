@@ -1,4 +1,6 @@
-import pyxel as py
+"""
+De Quoi définir simplement des Animations et les actualisers
+"""
 
 
 class Animation:

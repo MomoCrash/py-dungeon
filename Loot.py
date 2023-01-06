@@ -1,6 +1,10 @@
 from Equipment import *
 from random import random
 
+"""
+Les Loots au sol, des fonctions pour les récupérers et les dessiner
+"""
+
 
 class Loot:
     """classe qui représente un loot particulier, qui peut être aléatoire ou prédéfini"""
@@ -20,7 +24,7 @@ class Loot:
         "Bow": 1,
         "Hallebarde": 0.6,
         "Axe": 1.2,
-        "Life": 1.3
+        "Life": 2
     }
     
     def __init__(self, niveau, x, y, forced=(False, )):

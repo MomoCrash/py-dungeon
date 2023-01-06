@@ -24,6 +24,7 @@ private :
 
 Other files :
     - assets.pyxres -> fichier avec tout les graphismes modifié avec la librairie Pyxel
+    (Data.txt -> récapitulatif des infos du projects + lien utiles)
 
 Content :
 contient la classe principal du jeu, qui est relié à n'importe quel élément et chaque élément est relié à elle.

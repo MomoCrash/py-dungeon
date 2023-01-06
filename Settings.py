@@ -1,4 +1,20 @@
-from Menu import *
+
+"""
+Contient Presque toute les varaibles global et les constantes néccéssaire
+C'est un stock énorme ou on y retrouve :
+- l'image de la sortie des étages ouverte/fermée (sont vecteur)
+- la classification des tuiles selon si elle sont des murs, des demis murs etc ...
+- les limites des cartes dessinée pour l'instant (à modifier en cas de rajout)
+- une fonction qui prends l'entier entre 1 et 4 qui représente la direction et qui renvoie le tuple qui défini le mouvmement de 1 vers cette même direction.
+- Image des entite (1)
+- Image de l'équipment (2)
+- les images dans l'inventaire de tout ce qui est ramassable
+- la table des efficacité (efficacite[dest][source])
+- equivalence des orientation : int to str
+- fonctions de param (x ; y) qui renvoient un gros tuples avec tout ce qu'il faut pour définir une image
+- MONSTER_IMG : dictionnaire qui lie le nom d'un monstre à sa fonction de param (x ; y) pour pouvoir le dessiner
+- TEXTS : tout les dialogs, les texts à mettre dans les menu etc ...
+"""
 
 IMAGE_PORTE_FERMEE = (32, 0)
 IMAGE_PORTE_OUVERTE = (48, 0)
@@ -246,3 +262,13 @@ TEXTS = {
     "Witch": "je ne sais pas mais voila",
     "BabyDragon": "je ne sais pas mais voila",
 }
+
+song = [
+    "end",
+    "catacomb theme",
+    "damage",
+    "desert",
+    "item",
+    "hell",
+
+]
