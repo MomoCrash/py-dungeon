@@ -70,7 +70,7 @@ class Weapon:
         """attaque avec l'arme"""
         touched = self.get_ennemi_in_range()
         for e in touched:
-            e.damage(self.owner.weapon.dmg, self.element, self.owner)
+            e.damage(self.dmg + self.owner.stats["attaque"], self.element, self.owner)
 
     def blit(self, decalY=0) -> None:
         """

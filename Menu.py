@@ -1,4 +1,5 @@
 import pyxel as py
+from Settings import BOUTON_ADD, BOUTON_SUB
 
 
 class Box:
@@ -129,7 +130,7 @@ class Text:
         self.col = col
 
     def set_text(self, txt):
-        self.text = txt
+        self.text = str(txt)
 
     def blit(self):
         py.text(self.x, self.y, self.text, self.col)
@@ -143,4 +144,54 @@ class ScoreText(Text):
         super().__init__(root, xy, f"Votre score est de : {score}", col)
 
 
+class StatText(Box):
+    def __init__(self, root, xy, col, player):
+        self.p = player
+        super().__init__(xy,
+                         (Text, xy, f"[ STATS ] | POINTS : {self.p.stats['points']}", col),
+                         (Text, (xy[0], xy[1]+13), "Sante : ", col),
+                         (Iframe, BOUTON_SUB(xy[0] + 32, xy[1] + 9), None, self.sub_to_sante),
+                         (Text, (xy[0] + 50, xy[1]+13), str(self.p.stats["sante"]), col),
+                         (Iframe, BOUTON_ADD(xy[0] + 70, xy[1] + 9), None, self.add_to_sante),
+                         (Text, (xy[0], xy[1] + 29), "Attaque : ", col),
+                         (Iframe, BOUTON_SUB(xy[0] + 32, xy[1] + 26), None, self.sub_to_attaque),
+                         (Text, (xy[0] + 50, xy[1] + 30), str(self.p.stats["attaque"]), col),
+                         (Iframe, BOUTON_ADD(xy[0] + 70, xy[1] + 26), None, self.add_to_attaque),
+                         wh=(0, 0), bg=0, root=root
+                         )
+
+    def actu_points(self):
+        self.element[0].set_text(f"[ STATS ] | POINTS : {self.p.stats['points']}")
+
+    def add_to_sante(self):
+        if self.p.stats["points"] > 0:
+            self.p.stats["points"] -= 1
+            self.p.stats["sante"] += 1
+            self.p.maxhp = 100 + self.p.stats["sante"] * 5
+            self.element[3].set_text(self.p.stats["sante"])
+            self.element[0].set_text(f"[ STATS ] | POINTS : {self.p.stats['points']}")
+
+    def sub_to_sante(self):
+        if self.p.stats["sante"] > 0:
+            self.p.stats["points"] += 1
+            self.p.stats["sante"] -= 1
+            self.p.maxhp = 100 + self.p.stats["sante"] * 5
+            if self.p.maxhp < self.p.hp:
+                self.p.hp = self.p.maxhp
+            self.element[3].set_text(self.p.stats["sante"])
+            self.element[0].set_text(f"[ STATS ] | POINTS : {self.p.stats['points']}")
+
+    def add_to_attaque(self):
+        if self.p.stats["points"] > 0:
+            self.p.stats["points"] -= 1
+            self.p.stats["attaque"] += 1
+            self.element[7].set_text(self.p.stats["attaque"])
+            self.element[0].set_text(f"[ STATS ] | POINTS : {self.p.stats['points']}")
+
+    def sub_to_attaque(self):
+        if self.p.stats["attaque"] > 0:
+            self.p.stats["points"] += 1
+            self.p.stats["attaque"] -= 1
+            self.element[7].set_text(self.p.stats["attaque"])
+            self.element[0].set_text(f"[ STATS ] | POINTS : {self.p.stats['points']}")
 

@@ -178,6 +178,8 @@ KATANA2 = lambda x, y: (x, y, 2, 48, 184, 16, 32, 0)
 DRAGON_SCAlE_ARMOR = lambda x, y: (x, y, 2, 48, 224, 16, 32, 0)
 DEAFEAT_FIRST_PART = lambda x, y: (x, y, 2, 0, 240, 32, 16, 7)
 DEAFEAT_SECOND_PART = lambda x, y: (x, y, 2, 16, 224, 16, 16, 7)
+BOUTON_ADD = lambda x, y: (x, y, 1, 240, 240, 16, 16, 0)
+BOUTON_SUB = lambda x, y: (x, y, 1, 224, 240, 16, 16, 0)
 
 MONSTER_IMG = {
     "Zombie": lambda x, y: (x, y, 1, 0, 16, 16, 16, 7),
@@ -212,8 +214,7 @@ TEXTS = {
                "\t - Flèches -> Diriger la visée\n"
                "\t - F -> Echanger d'armes\n"
                "\t - W -> Skip la salle de loot\n"
-               "\t - TAB -> Ouvrir/Fermer les menus\n"
-               "\t - X -> Ouvrir le Bestiaire",
+               "\t - TAB -> Ouvrir/Fermer les menus\n",
     "test": "[HISTOIRE]\n"
             "   testtesttesttesttesttesttesttesttestt\n"
             "testtesttesttesttesttesttesttesttesttest\n"
@@ -270,5 +271,4 @@ song = [
     "desert",
     "item",
     "hell",
-
 ]

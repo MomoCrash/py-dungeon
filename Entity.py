@@ -199,6 +199,25 @@ class Player(Entity):
         self.weapon = RustySword(self)
         self.secondary_weapon = RustySword(self)
         self.armor = NakedArmor(self)
+        self.stats = {
+            "points": 0,
+            "sante": 0,
+            "attaque": 0
+        }
+        self.lvl = 0
+
+    def reset_stats(self):
+        self.weapon = RustySword(self)
+        self.secondary_weapon = RustySword(self)
+        self.armor = NakedArmor(self)
+        self.stats = {
+            "points": 0,
+            "sante": 0,
+            "attaque": 0
+        }
+        self.lvl = 0
+        self.hp = 100
+        self.maxhp = 100
 
     def blit_life_bar(self) -> None:
         """affiche la bar de vie du joueur en bas de l'écran"""
@@ -334,6 +353,10 @@ class Ennemies(Entity):
             self.game.ennemi.remove(self)
             if self.loot:
                 self.game.score += self.value
+                while self.game.next_lvl < self.game.score:
+                    self.game.player.stats["points"] += 1
+                    self.game.player.lvl += 1
+                    self.game.next_lvl += self.game.player.lvl * 2
                 if bool(randint(0, 1)):
                     self.game.loots.append(Loot(self.lvl, self.x, self.y))
 

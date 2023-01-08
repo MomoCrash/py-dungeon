@@ -57,18 +57,22 @@ class Game:
         self.animation_list = []
         self.animation_layer = []
         self.score = 0
+        self.next_lvl = 2
         self.all_menus = {
             "TAB": Box((0, 0),
                        (Bloc, (0, 0), (288, 25), 1),
                        (Text, (119, 7), "MENU", 7),
-                       (Text, (35, 26), TEXTS["touches"], 0),
+                       (Text, (35, 30), TEXTS["touches"], 0),
                        (Bloc, (5, 46), (16, 40), 14),
                        (Bloc, (5, 96), (16, 40), 14),
                        (Bloc, (5, 146), (16, 40), 14),
                        (Bloc, (5, 196), (16, 40), 14),
                        (Canevas, KATANA0(5, 50), KATANA2(5, 100), KATANA1(5, 150), KATANA2(5, 200)),
                        (Text, (30, 82), TEXTS["test"], 0),
-                       wh=(288, 272), bg=10, root=self, exit=((109, 240), (70, 20), "EXIT", 1, 6)),
+                       (Button, (246, 33), (60, 16), "Menu      >>", 1, 7, self.open_tab),
+                       (Button, (230, 50), (60, 16), "Bestiaire >>", 1, 7, self.open_header),
+                       (Button, (230, 67), (60, 16), "Niveau    >>", 1, 7, self.open_stats),
+                       wh=(288, 272), bg=10, root=self, exit=((0, 252), (288, 20), "QUIT", 15, 8)),
             "START": Box((0, 0),
                          (Bloc, (0, 0), (288, 25), 1),
                          (Text, (110, 7), "-| Py-Dungeon |-", 7),
@@ -80,12 +84,31 @@ class Game:
                          (Canevas, KATANA0(5, 50), KATANA2(5, 100), KATANA1(5, 150), KATANA2(5, 200)),
                          (Text, (30, 82), TEXTS["test"], 0),
                          wh=(288, 272), bg=10, root=self, exit=((109, 240), (70, 20), "START !", 1, 6, self.start)),
+            "STATS": Box((0, 0),
+                         (Bloc, (0, 0), (288, 25), 1),
+                         (Text, (119, 7), "NIVEAU", 7),
+                         (StatText, (35, 30), 5, self.player),
+                         (Bloc, (5, 46), (16, 40), 14),
+                         (Bloc, (5, 96), (16, 40), 14),
+                         (Bloc, (5, 146), (16, 40), 14),
+                         (Bloc, (5, 196), (16, 40), 14),
+                         (Canevas, KATANA0(5, 50), KATANA2(5, 100), KATANA1(5, 150), KATANA2(5, 200)),
+                         #(Text, (30, 82), TEXTS["test"], 0),
+                         (Button, (230, 33), (60, 16), "Menu      >>", 1, 7, self.open_tab),
+                         (Button, (230, 50), (60, 16), "Bestiaire >>", 1, 7, self.open_header),
+                         (Button, (246, 67), (60, 16), "Niveau    >>", 1, 7, self.open_stats),
+                         wh=(288, 272), bg=10, root=self, exit=((0, 252), (288, 20), "QUIT", 15, 8)),
         }
 
         self.bestiaire = {
             "HEADER": Box((0, 0),
-                          (Bloc, (0, 0), (288, 25), 10),
-                          (Text, (115, 10), "BESTIAIRE", 1),
+                          (Bloc, (0, 0), (288, 25), 1),
+                          (Text, (115, 10), "BESTIAIRE", 7),
+                          (Bloc, (5, 46), (16, 40), 14),
+                          (Bloc, (5, 96), (16, 40), 14),
+                          (Bloc, (5, 146), (16, 40), 14),
+                          (Bloc, (5, 196), (16, 40), 14),
+                          (Canevas, KATANA0(5, 50), KATANA2(5, 100), KATANA1(5, 150), KATANA2(5, 200)),
                           (Iframe, MONSTER_IMG["Zombie"](41, 40), 0, self.open_Zombie),
                           (Iframe, MONSTER_IMG["Squelette"](75, 40), 0, self.open_Squelette),
                           (Iframe, MONSTER_IMG["Demon"](109, 40), 1, self.open_Demon),
@@ -106,7 +129,10 @@ class Game:
                           (Iframe, MONSTER_IMG["Witch"](210, 108), 0, self.open_Witch),
                           (Iframe, MONSTER_IMG["BabyDragon"](41, 141), 0, self.open_BabyDragon),
                           (Iframe, MONSTER_IMG["Abomination"](75, 141), 0, self.open_Abomination),
-                          wh=(288, 272), bg=0, root=self, exit=((0, 252), (288, 20), "QUIT", 7, 8)),
+                          (Button, (230, 33), (60, 16), "Menu      >>", 1, 7, self.open_tab),
+                          (Button, (246, 50), (60, 16), "Bestiaire >>", 1, 7, self.open_header),
+                          (Button, (230, 67), (60, 16), "Niveau    >>", 1, 7, self.open_stats),
+                          wh=(288, 272), bg=10, root=self, exit=((0, 252), (288, 20), "QUIT", 15, 8)),
             "Zombie": Box((0, 0),
                           (Bloc, (0, 0), (288, 25), 10),
                           (Text, (115, 10), "ZOMBIE", 1),
@@ -124,7 +150,7 @@ class Game:
                          (Text, (115, 10), "DEMON", 1),
                          (Iframe, MONSTER_IMG["Demon"](109, 40), 1, self.open_header),
                          (Text, (125, 40), TEXTS["Demon"], 7),
-                         wh=(288, 272), bg=1, root=self, exit=((0, 252), (288, 20), "QUIT", 7, 8)),
+                         wh=(288, 272), bg=0, root=self, exit=((0, 252), (288, 20), "QUIT", 7, 8)),
             "Bat": Box((0, 0),
                        (Bloc, (0, 0), (288, 25), 10),
                        (Text, (115, 10), "BAT", 1),
@@ -136,7 +162,7 @@ class Game:
                          (Text, (115, 10), "GHOST", 1),
                          (Iframe, MONSTER_IMG["Ghost"](176, 40), 1, self.open_header),
                          (Text, (192, 40), TEXTS["Ghost"], 7),
-                         wh=(288, 272), bg=1, root=self, exit=((0, 252), (288, 20), "QUIT", 7, 8)),
+                         wh=(288, 272), bg=0, root=self, exit=((0, 252), (288, 20), "QUIT", 7, 8)),
             "Golem": Box((0, 0),
                          (Bloc, (0, 0), (288, 25), 10),
                          (Text, (115, 10), "GOLEM", 1),
@@ -158,7 +184,7 @@ class Game:
             "Vampire": Box((0, 0),
                            (Bloc, (0, 0), (288, 25), 10),
                            (Text, (115, 10), "VAMPIRE", 1),
-                           (Iframe, MONSTER_IMG["Vampire"](109, 74), 0, self.open_header),
+                           (Iframe, MONSTER_IMG["Vampire"](109, 74), 1, self.open_header),
                            (Text, (125, 74), TEXTS["Vampire"], 7),
                            wh=(288, 272), bg=0, root=self, exit=((0, 252), (288, 20), "QUIT", 7, 8)),
             "BlobFeu": Box((0, 0),
@@ -229,7 +255,7 @@ class Game:
         """remet à zéro tout le jeu"""
         py.load("assets.pyxres")
         self.carte = Carte(self)
-        self.player = Player(self, 0, 0)
+        self.player.reset_stats()
         self.ennemi = []
         self.loots = []
         self.looting = True
@@ -238,6 +264,7 @@ class Game:
         self.animation_layer = []
         self.menu = None
         self.score = 0
+        self.next_lvl = 2
 
     def loose(self):
         self.menu = Box((0, 0),
@@ -250,6 +277,10 @@ class Game:
 
     def open_tab(self):
         self.menu = self.all_menus["TAB"]
+
+    def open_stats(self):
+        self.all_menus["STATS"].element[2].actu_points()
+        self.menu = self.all_menus["STATS"]
 
     def open_header(self):
         self.menu = self.bestiaire["HEADER"]
@@ -394,8 +425,6 @@ class Game:
             if py.btnp(py.KEY_TAB, hold=60):
                 """Affiche le Menu"""
                 self.menu = self.all_menus["TAB"]
-            if py.btnp(py.KEY_X, hold=30):
-                self.menu = self.bestiaire['HEADER']
         else:
             py.mouse(True)
             self.menu.update()
