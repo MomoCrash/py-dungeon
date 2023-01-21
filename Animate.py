@@ -2,6 +2,7 @@
 De Quoi définir simplement des Animations et les actualisers
 """
 
+
 class Animation:
     def __init__(self, game, type, origine):
         """

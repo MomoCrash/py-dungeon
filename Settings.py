@@ -1,4 +1,3 @@
-
 """
 Contient Presque toute les varaibles global et les constantes néccéssaire
 C'est un stock énorme ou on y retrouve :
@@ -95,6 +94,8 @@ EQUIVALANCE = {
         (30, 4), (31, 4), (30, 5), (31, 5),  # eau
         (4, 6), (5, 6), (4, 7), (5, 7),  # eau
         (10, 6), (11, 6), (10, 7), (11, 7),  # eau
+        (0, 30), (1, 30), (0, 31), (1, 31),  # nuage en rond
+        (12, 28), (13, 28), (12, 29), (13, 29),  # nuage plein
     ],
     "left-side": [
         (22, 16), (23, 16), (22, 17), (23, 17),  # wall (top left corner)
@@ -102,6 +103,14 @@ EQUIVALANCE = {
         (30, 16), (31, 16), (30, 17), (31, 17),  # wall (left)
         (14, 14), (15, 14), (14, 15), (15, 15),  # trap wall (left)
         (18, 14), (19, 14), (18, 15), (19, 15),  # laser wall (left)
+        (14, 26), (15, 26), (14, 27), (15, 27),  # nuage left 1
+        (14, 28), (15, 28), (14, 29), (15, 29),  # nuage left 2
+        (6, 30), (7, 30), (6, 31), (7, 31),  # nuage bottom left 1
+        (18, 26), (19, 26), (18, 27), (19, 27),  # nuage bottom left 2
+        (8, 30), (9, 30), (8, 31), (9, 31),  # nuage top left 1
+        (18, 28), (19, 28), (18, 29), (19, 29),  # nuage top left 2
+        (22, 26), (23, 26), (22, 27), (23, 27),  # passerelle vertical
+        (22, 30), (23, 30), (22, 31), (23, 31),  # nuage + passerelle bas
     ],
     "right-side": [
         (24, 16), (25, 16), (24, 17), (25, 17),  # wall (bottom right corner)
@@ -109,6 +118,14 @@ EQUIVALANCE = {
         (30, 14), (31, 14), (30, 15), (31, 15),  # wall (right)
         (16, 14), (17, 14), (16, 15), (17, 15),  # trap wall (right)
         (20, 14), (21, 14), (20, 15), (21, 15),  # laser wall (right)
+        (16, 26), (17, 26), (16, 27), (17, 27),  # nuage right 1
+        (16, 28), (17, 28), (16, 29), (17, 29),  # nuage right 2
+        (10, 30), (11, 30), (10, 31), (11, 31),  # nuage top right 1
+        (20, 26), (21, 26), (20, 27), (21, 27),  # nuage top right 2
+        (4, 30), (5, 30), (4, 31), (5, 31),  # nuage bottom right 1
+        (20, 28), (21, 28), (20, 29), (21, 29),  # nuage bottom right 2
+        (22, 26), (23, 26), (22, 27), (23, 27),  # passerelle vertical
+        (26, 30), (27, 30), (26, 31), (27, 31),  # nuage + passerelle bas
     ],
     "top-side": [
         (22, 16), (23, 16), (22, 17), (23, 17),  # wall (top left corner)
@@ -116,6 +133,16 @@ EQUIVALANCE = {
         (26, 14), (27, 14), (26, 15), (27, 15),  # wall (top)
         (10, 14), (11, 14), (10, 15), (11, 15),  # trap wall (top)
         (24, 14), (25, 14), (24, 15), (25, 15),  # laser wall (top)
+        (4, 28), (5, 28), (4, 29), (5, 29),  # nuage haut 1
+        (6, 28), (7, 28), (6, 29), (7, 29),  # nuage haut 2
+        (8, 28), (9, 28), (8, 29), (9, 29),  # nuage haut + buisson
+        (8, 30), (9, 30), (8, 31), (9, 31),  # nuage top left 1
+        (18, 28), (19, 28), (18, 29), (19, 29),  # nuage top left 2
+        (10, 30), (11, 30), (10, 31), (11, 31),  # nuage top right 1
+        (20, 26), (21, 26), (20, 27), (21, 27),  # nuage top right 2
+        (14, 30), (15, 30), (14, 31), (15, 31),  # nuage + passerelle droite
+        (16, 30), (17, 30), (16, 31), (17, 31),  # nuage + passerelle gauche
+        (22, 28), (23, 28), (22, 29), (23, 29),  # passerelle horizontal
     ],
     "bottom-side": [
         (24, 16), (25, 16), (24, 17), (25, 17),  # wall (bottom right corner)
@@ -123,6 +150,14 @@ EQUIVALANCE = {
         (28, 14), (29, 14), (28, 15), (29, 15),  # wall (bottom)
         (12, 14), (13, 14), (12, 15), (13, 15),  # trap wall (bottom)
         (22, 14), (23, 14), (22, 15), (23, 15),  # laser wall (bottom)
+        (4, 26), (5, 26), (4, 27), (5, 27),  # nuage bas 1
+        (6, 26), (7, 26), (6, 27), (7, 27),  # nuage bas 2
+        (8, 26), (9, 26), (8, 27), (9, 27),  # nuage bas + buisson
+        (4, 30), (5, 30), (4, 31), (5, 31),  # nuage bottom right 1
+        (20, 28), (21, 28), (20, 29), (21, 29),  # nuage bottom right 2
+        (6, 30), (7, 30), (6, 31), (7, 31),  # nuage bottom left 1
+        (18, 26), (19, 26), (18, 27), (19, 27),  # nuage bottom left 2
+        (22, 28), (23, 28), (22, 29), (23, 29),  # passerelle horizontal
     ],
     "event": [  # déclancheur d'évênement
         (5, 2), (6, 2), (5, 3), (6, 3),  # piège éclaté
@@ -132,15 +167,16 @@ EQUIVALANCE = {
 
 # position des biomes
 LIMITE = {
-    "Cave": (0, 3, 2),
-    "Grass": (1, 3, 2),
-    'Desert': (2, 3, 2),
-    "Catacombes": (3, 3, 2),
+    "Cave": (0, 0, 3, 2),
+    "Grass": (0, 3, 3, 2),
+    'Desert': (0, 6, 3, 2),
+    "Catacombes": (0, 9, 3, 2),
+    "Paradis": (9, 0, 2, 2)
 }
 
 # math pour transformer le int de l'orientation en coordonné
-f = lambda x: round((2/3)*x**3 - (7/2)*x**2 + (29/6)*x - 1)
-g = lambda x: round((2/3)*x**3 - (5/2)*x**2 + (11/6)*x)
+f = lambda x: round((2 / 3) * x ** 3 - (7 / 2) * x ** 2 + (29 / 6) * x - 1)
+g = lambda x: round((2 / 3) * x ** 3 - (5 / 2) * x ** 2 + (11 / 6) * x)
 
 orient_to_coor = lambda orient: (f(orient), g(orient))
 
@@ -164,7 +200,8 @@ LOOT_IMAGE = {
     "Axe": (16, 96),
 }
 
-EFFICACITE = ((1, 1, 1, 1, 1, 1), (1, 0.9, 0.5, 2, 0.7, 0.7), (1, 2, 0.9, 0.5, 0.7, 0.7), (1, 0.5, 2, 0.9, 0.7, 0.7), (1, 1, 1, 1, 0, 3), (1, 1, 1, 1, 3, 0))
+EFFICACITE = ((1, 1, 1, 1, 1, 1), (1, 0.9, 0.5, 2, 0.7, 0.7), (1, 2, 0.9, 0.5, 0.7, 0.7), (1, 0.5, 2, 0.9, 0.7, 0.7),
+              (1, 1, 1, 1, 0, 3), (1, 1, 1, 1, 3, 0))
 
 ORIENT_EQ = ["left", "right", "top", "bottom"]
 
@@ -200,47 +237,75 @@ MONSTER_IMG = {
     "Fox": lambda x, y: (x, y, 1, 32, 16, 16, 16, 7),
     "BlobEau": lambda x, y: (x, y, 1, 32, 32, 16, 16, 7),
     "Witch": lambda x, y: (x, y, 1, 32, 48, 16, 16, 7),
-    "BabyDragon": lambda x, y: (x, y, 1, 32, 64, 16, 16, 7),
+    "DragonFeu": lambda x, y: (x, y, 1, 32, 64, 16, 16, 7),
+    "Snake": lambda x, y: (x, y, 1, 32, 80, 16, 16, 7),
+    "Creeper": lambda x, y: (x, y, 1, 32, 96, 16, 16, 7),
+    "Rampant": lambda x, y: (x, y, 1, 32, 112, 16, 16, 7),
+    "Notch": lambda x, y: (x, y, 1, 32, 128, 16, 16, 7),
+    "Angel": lambda x, y: (x, y, 1, 32, 144, 16, 16, 6),
+    "Arcangel": lambda x, y: (x, y, 1, 32, 160, 16, 16, 6),
+    "DragonLight": lambda x, y: (x, y, 1, 32, 176, 16, 16, 6),
+    "BlobPlant": lambda x, y: (x, y, 1, 32, 192, 16, 16, 6),
+    "DragonDark": lambda x, y: (x, y, 1, 32, 208, 16, 16, 6),
+    "DragonEau": lambda x, y: (x, y, 1, 32, 224, 16, 16, 7),
+    "DragonPlant": lambda x, y: (x, y, 1, 32, 240, 16, 16, 7),
 }
-
 
 # Text
 
 TEXTS = {
     "touches": "[Touches]\n"
-               "\t - Z,Q,S,D -> Déplacements\n"
+               "\t - Z,Q,S,D -> Deplacements\n"
                "\t - A -> Attaquer\n"
                "\t - E -> Interagir/Ramasser\n"
                "\t - Flèches -> Diriger la visée\n"
                "\t - F -> Echanger d'armes\n"
                "\t - W -> Skip la salle de loot\n"
                "\t - TAB -> Ouvrir/Fermer les menus\n",
-    "test": "[HISTOIRE]\n"
-            "   testtesttesttesttesttesttesttesttestt\n"
-            "testtesttesttesttesttesttesttesttesttest\n"
-            "testtesttesttesttesttesttesttesttesttest\n"
-            "testtesttesttesttesttesttesttesttesttest\n"
-            "testtesttesttesttesttesttesttesttesttest\n"
-            "testtesttesttesttesttesttesttesttesttest\n"
-            "testtesttesttesttesttesttesttesttesttest\n"
-            "testtesttesttesttesttesttesttesttesttest\n"
-            "testtesttesttesttesttesttesttesttesttest\n"
-            "testtesttesttesttesttesttesttesttesttest\n"
-            "testtesttesttesttesttesttesttesttesttest\n"
-            "testtesttesttesttesttesttesttesttesttest\n"
-            "testtesttesttesttesttesttesttesttesttest\n"
-            "testtesttesttesttesttesttesttesttesttest\n"
-            "testtesttesttesttesttesttesttesttesttest\n"
-            "testtesttesttesttesttesttesttesttesttest\n"
-            "testtesttesttesttesttesttesttesttesttest\n"
-            "testtesttesttesttesttesttesttesttesttest\n"
-            "testtesttesttesttesttesttesttesttesttest\n"
-            "testtesttesttesttesttesttesttesttesttest\n"
-            "testtesttesttesttesttesttesttesttesttest\n"
-            "testtesttesttesttesttesttesttesttesttest\n"
-            "testtesttesttesttesttesttesttesttesttest\n"
-            "testtesttesttesttesttesttesttesttesttest\n"
-            "testtesttesttesttesttesttesttesttesttest\n",
+    "resumé": "[RESUME]\n"
+              "Vous controlerez un jeune aventurier qui, en quete \n"
+              "de puissance, alla dans la grotte dimensionnelle \n"
+              "pour augmenter sa puissance sans savoir qu'il \n"
+              "allait y rester tant que la guerre entre Le \n"
+              "Paradis et Les Enfers n'est pas terminee et que \n"
+              "le sorcier qui la controle n'est pas mort. Vous \n"
+              "allez devoir gravir les etages un a un et trouver \n"
+              "du stuff pour vaincre le magicien tout en evitant \n"
+              "la mort.",
+    "histoire": "[HISTOIRE]\n"
+                "Un jeune chevalier trouva une admiration pour la \n"
+                "magie et la sorcellerie.Mais malheureusement \n"
+                "malgre beaucoup d'efforts pendant plusieurs \n"
+                "annees, il n'arrivait pas à manier  la magie et \n"
+                "se faisait harceler par des aventuriers, tous \n"
+                "types de sorciers et meme par certains \n"
+                "villageois. Un jour, il entendit parler d'une \n"
+                "grotte avec une personne pouvant realiser un voeu \n"
+                "en echange d'une contrepartie. Un jour, il alla \n"
+                "dans cette fameuse grotte pour augmenter sa \n"
+                "puissance et pouvoir enfin manier la magie. Une \n"
+                "fois au bout du tunnel, le sorcier entra dans \n"
+                "une piece sombre avec un feu de bois au milieu \n"
+                "et un demon assis à côté de celui-ci. Une fois \n"
+                "devant le demon, il demanda de faire un pacte \n"
+                "avec celui-ci et le demon accepta en echange \n"
+                "de sa force physique. Le demon lui passa un \n"
+                "pouvoir egal à celui du sorcier suprême et \n"
+                "lui offrir aussi un livre de sorcellerie pour\n"
+                " preparer diverses concoctions. Le sorcier, \n"
+                "tellement puissant, fit de la simple grotte du \n"
+                "demon une grotte dimensionnelle pour y accueillir \n"
+                "une faune riche et variée pour être maître de \n"
+                "son propre monde et aussi implémenter les enfers \n"
+                "à l'interieur comme cadeau au demon. Mais quand \n"
+                "le Paradis a appris que les Enfers ne sont plus \n"
+                "a leurs endroits habituelle, ils ont décide \n"
+                "d'enqueter et on trouver la fameuse grotte du \n"
+                "demon. Ils entrerent à l'interieur et trouverent \n"
+                "un passage dimensionnel et decouvrirent un monde \n"
+                "entier dans cette grotte. Le Paradis installa \n"
+                "leur base principale dans cette grotte pour y \n"
+                "combattre leurs ennemies de toujours Les Enfers.",
     "Zombie": "Voilà le Zombie, un mort vivant enfin je vous refais pas\n"
               "toute l'histoire quoi vous voyez ...",
     "Squelette": "Le Squelette, En char et en os... Enfin surtout \n"
@@ -261,7 +326,7 @@ TEXTS = {
     "Fox": "je ne sais pas mais voila",
     "BlobEau": "je ne sais pas mais voila",
     "Witch": "je ne sais pas mais voila",
-    "BabyDragon": "je ne sais pas mais voila",
+    "DragonFeu": "je ne sais pas mais voila",
 }
 
 song = [

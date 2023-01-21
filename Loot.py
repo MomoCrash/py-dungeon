@@ -108,8 +108,3 @@ class Loot:
                 if i % 4 == 3:
                     chaine += "\n"
             py.text(272, 160, "lvl: \n"+chaine, 7)
-
-
-
-
-

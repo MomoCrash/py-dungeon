@@ -5,14 +5,15 @@ from Settings import EQUIVALANCE, IMAGE_PORTE_FERMEE, IMAGE_PORTE_OUVERTE, LIMIT
 # variable globals -----------------------------------------------------------------------------------------------------
 
 CARTE_SPAWN = {
-    "Cave": [(Zombie, 1), (Squelette, 1), (Demon, 1), (Golem, 1), (Ghost, 1), (Bat, 1)],
-    "Grass": [(Loup, 1), (Fox, 1), (Zombie, 1), (BabyDragon, 1), (BlobEau, 1), (BlobFeu, 1)],
-    "Desert": [(Aligator, 1), (Golem, 1), (Mommies, 1), (Squelette, 1), (Zombie, 1)],
-    "Catacombes": [(Zombie, 1), (Necromancien, 2), (Vampire, 2)],
+    "Cave": [(Zombie, 1), (Squelette, 1), (Diablotin, 1), (Golem, 1), (Ghost, 1), (Bat, 1), (Witch, 1), (DragonFeu, 1), (DragonDark, 1), (BlobDark, 1), (Creeper, 1)],
+    "Grass": [(Spider, 1), (Loup, 1), (Fox, 1), (BlobFeu, 1), (BlobEau, 1), (DragonFeu, 1), (BlobPlant, 1), (BlobLight, 1), (BlobDark, 1), (DragonPlant, 1)],
+    "Desert": [(Aligator, 1), (Golem, 1), (Mommies, 1), (Squelette, 1), (Mommies, 1), (Snake, 1), (DragonEau, 1)],
+    "Catacombes": [(Zombie, 1), (Squelette, 1), (Vampire, 1), (Necromancien, 1), (Rampant, 1)],
+    "Paradis": [(Angel, 1), (Arcangel, 1), (DragonLight, 1), (BlobLight, 1)],
 }
 
 CARTE_BOSS = {
-    "Cave": (),
+    "Cave": ({"class": Abomination, "hp": 10, "attack": 2}, {"class": Notch, "hp": 10, "attack": 2}, {"class": Demon, "hp": 10, "attack": 2}),
     "Grass": (),
     "Desert": (),
     "Catacombes": ()
@@ -81,14 +82,14 @@ class Carte:
         :param forced: si renseigné créé une map en particulier (non random)
         """
         if loot:
-            self.map_dim = [(0, LIMITE[self.biome][0] * 3) for _ in range(4)]
+            self.map_dim = [(LIMITE[self.biome][0], LIMITE[self.biome][1]) for _ in range(4)]
         elif forced is not None:
             self.map_dim = forced
         else:
             self.biome = choice(list(LIMITE.keys()))
-            self.map_dim = [(randint(0, LIMITE[self.biome][1]),
-                             randint(LIMITE[self.biome][0] * 3, LIMITE[self.biome][2] + LIMITE[self.biome][0] * 3)) for
-                            _ in range(4)]
+            self.map_dim = [(randint(LIMITE[self.biome][0], LIMITE[self.biome][0] + LIMITE[self.biome][2]),  # X
+                             randint(LIMITE[self.biome][1], LIMITE[self.biome][3] + LIMITE[self.biome][1]))  # Y
+                            for _ in range(4)]
         self.grille = []
         temp = []
         for i in range(4):
@@ -136,8 +137,7 @@ class Carte:
         while spawned < n:
             x = randint(local_section[0], local_section[0] + local_section[2])
             y = randint(local_section[1], local_section[1] + local_section[3])
-            if "obst" not in self.grille[x][y].types and "ground" not in self.grille[x][
-                y].types and not self.game.check_full_tile(x, y):
+            if "obst" not in self.grille[x][y].types and "ground" not in self.grille[x][y].types and not self.game.check_full_tile(x, y):
                 total = 0
                 for monster in specifique_biome:
                     total += monster[1]

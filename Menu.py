@@ -3,7 +3,7 @@ from Settings import BOUTON_ADD, BOUTON_SUB
 
 
 class Box:
-    def __init__(self, xy, *elem, wh=None, bg=None, root=None, exit=None):
+    def __init__(self, xy, *elem, wh=None, bg=None, root=None, but_exit=None):
         self.root = root
         self.x, self.y = xy
         self.w, self.h = wh if wh is not None else (-1, -1)
@@ -15,10 +15,10 @@ class Box:
             args.insert(0, self)
             self.element.append(type(*args))
         try:
-            func = exit[5]
+            func = but_exit[5]
         except (IndexError, TypeError):
             func = None
-        self.exit = Button(self, exit[0], exit[1], exit[2], exit[3], exit[4], func) if exit is not None else None
+        self.exit = Button(self, but_exit[0], but_exit[1], but_exit[2], but_exit[3], but_exit[4], func) if but_exit is not None else None
 
     def blit(self):
         if self.bgc is not None:
@@ -82,7 +82,7 @@ class Button(Box):
         if size[1] > 1:
             size[0] = wh[0]
         size[1] *= 8
-        x_text, y_text = xy[0] +  (wh[0]-size[0])/2, xy[1] + (wh[1]-size[1])/2 -2
+        x_text, y_text = xy[0] + (wh[0]-size[0])/2, xy[1] + (wh[1]-size[1])/2 - 2
         super().__init__(xy, (Text, (x_text, y_text), format_text, col), wh=wh, bg=bcol, root=root)
         self.cmd = cmd
         self.cooldown = 15
@@ -160,8 +160,10 @@ class StatText(Box):
                          wh=(0, 0), bg=0, root=root
                          )
 
-    def actu_points(self):
+    def actu(self):
         self.element[0].set_text(f"[ STATS ] | POINTS : {self.p.stats['points']}")
+        self.element[3].set_text(self.p.stats["sante"])
+        self.element[7].set_text(self.p.stats["attaque"])
 
     def add_to_sante(self):
         if self.p.stats["points"] > 0:
@@ -194,4 +196,3 @@ class StatText(Box):
             self.p.stats["attaque"] -= 1
             self.element[7].set_text(self.p.stats["attaque"])
             self.element[0].set_text(f"[ STATS ] | POINTS : {self.p.stats['points']}")
-

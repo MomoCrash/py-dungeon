@@ -15,3 +15,4 @@ W -> skip la salle de loot (pour ne pas avoir a traverser toute le map)
 
 23/12/2022 : 1597 lines | 62289 char | ~39 char/line | >line="Entity.py":649 | >char="Entity.py":25438
 04/01/2023 : 1749 lines | 72650 char | ~42 char/line | >line="Entity.py":666 | >char="Entity.py":26329
+21/01/2023 : 2584 lines | 108879 char | ~42 char/line | >line="Entity.py":923 | >char="Entity.py":36623

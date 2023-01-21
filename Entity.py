@@ -105,7 +105,7 @@ class Entity:
         c2 = not self.game.check_full_tile(self.x, self.y - 1)
         c3 = "ground" not in self.game.carte.grille[self.x][self.y - 1].types
         c4 = "top-side" not in self.game.carte.grille[self.x][self.y].types
-        c5 = "bottom-side" not in self.game.carte.grille[self.x][self.y-1].types
+        c5 = "bottom-side" not in self.game.carte.grille[self.x][self.y - 1].types
         if c1 and c2 and c3 and c4 and c5:
             self.y -= 1
             self.game.animation_list.insert(0, Move(self.game, self, 2))
@@ -182,6 +182,9 @@ class Entity:
                 return 3
 
 
+# Player ---------------------------------------------------------------------------------------------------------------
+
+
 class Player(Entity):
     """
     classe Player hérité de Entité.
@@ -249,11 +252,14 @@ class Player(Entity):
         self.weapon, self.secondary_weapon = self.secondary_weapon, self.weapon
 
 
+# Ennemi ---------------------------------------------------------------------------------------------------------------
+
+
 class Ennemies(Entity):
     """classe des Ennemies hérité de Entité"""
 
     def __init__(self, game, x: int, y: int, img: tuple, size: tuple, hp: int, lvl: int, dmg: int, loot: bool = True,
-                 colkey: int = 0, value: int=10):
+                 colkey: int = 0, value: int = 10):
         """
                 :param game: Game                   | accès au jeu entier
         :param x: int                       | position x (en tuiles)
@@ -468,7 +474,7 @@ class Ghost(Ennemies):
         super().damage(amount, el, source)
 
 
-class BabyDragon(Ennemies):
+class DragonFeu(Ennemies):
     def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
         super().__init__(game, x, y, (32, 64), (16, 16), 35, lvl, 15, loot=loot, colkey=7, value=15)
         self.patern = {"left": [[(-1, 0), (-2, 0), (-3, 0)]],
@@ -510,7 +516,7 @@ class Demon(Ennemies):
     """héritage de Ennemi avec des valeurs prédéfini"""
 
     def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
-        super().__init__(game, x, y, (0, 48), (16, 16), 10, lvl, 30, loot=loot, colkey=7, value=12)
+        super().__init__(game, x, y, (0, 48), (16, 16), 40, lvl, 100, loot=loot, colkey=7, value=12)
         self.speed = 1
         self.element = 2
         self.patern = {"left": [[(-1, 0), (-2, 0)]],
@@ -582,6 +588,48 @@ class BlobEau(Ennemies):
         super().damage(amount, el, source)
 
 
+class BlobPlant(Ennemies):
+    """héritage de Ennemi avec des valeurs prédéfini"""
+
+    def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
+        super().__init__(game, x, y, (32, 192), (16, 16), 15, lvl, 15, loot=loot, colkey=7, value=5)
+        self.speed = 1
+        self.element = 3
+
+    def damage(self, amount, el, source):
+        if el == 1:
+            amount *= 0
+        super().damage(amount, el, source)
+
+
+class BlobLight(Ennemies):
+    """héritage de Ennemi avec des valeurs prédéfini"""
+
+    def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
+        super().__init__(game, x, y, (64, 0), (16, 16), 15, lvl, 15, loot=loot, colkey=6, value=5)
+        self.speed = 1
+        self.element = 4
+
+    def damage(self, amount, el, source):
+        if el == 4:
+            amount *= 0
+        super().damage(amount, el, source)
+
+
+class BlobDark(Ennemies):
+    """héritage de Ennemi avec des valeurs prédéfini"""
+
+    def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
+        super().__init__(game, x, y, (64, 16), (16, 16), 15, lvl, 15, loot=loot, colkey=7, value=5)
+        self.speed = 1
+        self.element = 5
+
+    def damage(self, amount, el, source):
+        if el == 5:
+            amount *= 0
+        super().damage(amount, el, source)
+
+
 class Necromancien(Ennemies):
     """héritage de Ennemi avec des valeurs prédéfini"""
 
@@ -600,10 +648,14 @@ class Necromancien(Ennemies):
             if self.timer_invocation <= 0 and len(self.game.ennemi) < 10:
                 self.timer_invocation = randint(12, 20)
                 arround = [self.x - 3, self.y - 3, 7, 7]
-                if arround[0] < 0: arround[0] = 0
-                if arround[1] < 0: arround[1] = 0
-                if arround[0] + arround[2] > 15: arround[2] = 15 - arround[0]
-                if arround[1] + arround[3] > 15: arround[3] = 15 - arround[1]
+                if arround[0] < 0:
+                    arround[0] = 0
+                if arround[1] < 0:
+                    arround[1] = 0
+                if arround[0] + arround[2] > 15:
+                    arround[2] = 15 - arround[0]
+                if arround[1] + arround[3] > 15:
+                    arround[3] = 15 - arround[1]
                 self.game.carte.rand_spawns(randint(1, 2), loot=False, specifique_biome=[(Zombie, 1)],
                                             local_section=arround)
             if self.get_if_player_touched():
@@ -648,7 +700,7 @@ class Abomination(Ennemies):
     """héritage de Ennemi avec des valeurs prédéfini"""
 
     def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
-        super().__init__(game, x, y, (0, 224), (16, 16), 75, lvl, 50, loot=loot, colkey=7, value=25)
+        super().__init__(game, x, y, (0, 224), (16, 16), 70, lvl, 70, loot=loot, colkey=7, value=25)
         self.speed = 1
         self.element = 0
 
@@ -687,3 +739,185 @@ class Witch(Ennemies):
         super().__init__(game, x, y, (32, 48), (16, 16), 10, lvl, 10, loot=loot, colkey=7, value=10)
         self.speed = 1
         self.element = 0
+
+
+class Snake(Ennemies):
+    """héritage de Ennemi avec des valeurs prédéfini"""
+
+    def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
+        super().__init__(game, x, y, (32, 80), (16, 16), 7, lvl, 12, loot=loot, colkey=7, value=5)
+        self.speed = 1
+        self.element = 0
+
+
+class Creeper(Ennemies):
+    """héritage de Ennemi avec des valeurs prédéfini"""
+
+    def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
+        super().__init__(game, x, y, (32, 96), (16, 16), 12, lvl, 40, loot=loot, colkey=7, value=10)
+        self.speed = 1
+        self.element = 0
+        self.patern = {
+            "left": [[(-1, 0), (-2, 0)], [(-1, -1)], [(-1, 1)], [(0, 1), (0, 2)], [(0, -1), (0, -2)], [(1, 0), (0, 2)],
+                     [(1, 1)], [(1, -1)]],
+            "right": [[(-1, 0), (-2, 0)], [(-1, -1)], [(-1, 1)], [(0, 1), (0, 2)], [(0, -1), (0, -2)], [(1, 0), (0, 2)],
+                      [(1, 1)], [(1, -1)]],
+            "top": [[(-1, 0), (-2, 0)], [(-1, -1)], [(-1, 1)], [(0, 1), (0, 2)], [(0, -1), (0, -2)], [(1, 0), (0, 2)],
+                    [(1, 1)], [(1, -1)]],
+            "bottom": [[(-1, 0), (-2, 0)], [(-1, -1)], [(-1, 1)], [(0, 1), (0, 2)], [(0, -1), (0, -2)],
+                       [(1, 0), (0, 2)], [(1, 1)], [(1, -1)]],
+            }
+
+
+class Rampant(Ennemies):
+    """héritage de Ennemi avec des valeurs prédéfini"""
+
+    def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
+        super().__init__(game, x, y, (32, 112), (16, 16), 7, lvl, 7, loot=loot, colkey=7, value=5)
+        self.speed = 1
+        self.element = 0
+
+
+class Notch(Ennemies):
+    """héritage de Ennemi avec des valeurs prédéfini"""
+
+    def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
+        super().__init__(game, x, y, (32, 128), (16, 16), 100, lvl, 40, loot=loot, colkey=7, value=50)
+        self.speed = 1
+        self.element = 0
+
+
+class Angel(Ennemies):
+    """héritage de Ennemi avec des valeurs prédéfini"""
+
+    def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
+        super().__init__(game, x, y, (32, 144), (16, 16), 12, lvl, 12, loot=loot, colkey=6, value=7)
+        self.speed = 1
+        self.element = 4
+
+
+class Arcangel(Ennemies):
+    """héritage de Ennemi avec des valeurs prédéfini"""
+
+    def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
+        super().__init__(game, x, y, (32, 160), (16, 16), 20, lvl, 20, loot=loot, colkey=6, value=14)
+        self.speed = 1
+        self.element = 4
+
+
+class DragonLight(Ennemies):
+    """héritage de Ennemi avec des valeurs prédéfini"""
+
+    def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
+        super().__init__(game, x, y, (32, 176), (16, 16), 35, lvl, 15, loot=loot, colkey=6, value=20)
+        self.speed = 1
+        self.element = 4
+        self.patern = {"left": [[(-1, 0), (-2, 0), (-3, 0)]],
+                       "right": [[(1, 0), (2, 0), (3, 0)]],
+                       "top": [[(0, -1), (0, -2), (0, -3)]],
+                       "bottom": [[(0, 1), (0, 2), (0, 3)]]
+                       }
+
+
+class DragonDark(Ennemies):
+    """héritage de Ennemi avec des valeurs prédéfini"""
+
+    def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
+        super().__init__(game, x, y, (32, 208), (16, 16), 35, lvl, 15, loot=loot, colkey=6, value=20)
+        self.speed = 1
+        self.element = 5
+        self.patern = {"left": [[(-1, 0), (-2, 0), (-3, 0)]],
+                       "right": [[(1, 0), (2, 0), (3, 0)]],
+                       "top": [[(0, -1), (0, -2), (0, -3)]],
+                       "bottom": [[(0, 1), (0, 2), (0, 3)]]
+                       }
+
+
+class DragonEau(Ennemies):
+    """héritage de Ennemi avec des valeurs prédéfini"""
+
+    def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
+        super().__init__(game, x, y, (32, 224), (16, 16), 35, lvl, 15, loot=loot, colkey=7, value=20)
+        self.speed = 1
+        self.element = 1
+        self.patern = {"left": [[(-1, 0), (-2, 0), (-3, 0)]],
+                       "right": [[(1, 0), (2, 0), (3, 0)]],
+                       "top": [[(0, -1), (0, -2), (0, -3)]],
+                       "bottom": [[(0, 1), (0, 2), (0, 3)]]
+                       }
+
+
+class DragonPlant(Ennemies):
+    """héritage de Ennemi avec des valeurs prédéfini"""
+
+    def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
+        super().__init__(game, x, y, (32, 240), (16, 16), 35, lvl, 15, loot=loot, colkey=7, value=20)
+        self.speed = 1
+        self.element = 3
+        self.patern = {"left": [[(-1, 0), (-2, 0), (-3, 0)]],
+                       "right": [[(1, 0), (2, 0), (3, 0)]],
+                       "top": [[(0, -1), (0, -2), (0, -3)]],
+                       "bottom": [[(0, 1), (0, 2), (0, 3)]]
+                       }
+
+
+# Boss -----------------------------------------------------------------------------------------------------------------
+
+class BossNotch(Notch):
+    def __init__(self, game, x, y, lvl):
+        super().__init__(game, x, y, lvl, loot=True)
+        self.cur_phase = 0  # phase du boss (de 0 à +inf)
+        self.cur_attack = "base"  # prochaine attaque
+        self.all_attacks = ["base", "heavy"]  # possible attaque
+        self.attack_order = {"base": ["base", "heavy"], "heavy": [
+            "base"]}  # ordre des attaque (après tel attaque qu'est ce qu'il peut faire ensuite)
+        self.patern = [
+            {"base": [[(-1, 0)], [(1, 0)], [(0, 1)], [(0, -1)]],  # phase 0
+             "heavy": [[(-2, 0), (-1, 0)], [(2, 0), (1, 0)], [(0, 1), (0, 2)], [(0, -1), (0, -2)]]},  # phase 0
+            {"base": [[(-2, 0), (-1, 0)], [(2, 0), (1, 0)], [(0, 1), (0, 2)], [(0, -1), (0, -2)]],  # phase 1
+             "heavy": [[(-2, 0), (-1, 0)], [(2, 0), (1, 0)], [(0, 1), (0, 2)], [(0, -1), (0, -2)], [(1, 1)], [(-1, 1)],
+                       [(-1, -1)], [(1, -1)]]}  # phase 1
+        ]
+
+    def action(self, forced=None):
+        pass
+
+
+class BossAbomination(Abomination):
+    def __init__(self, game, x, y, lvl):
+        super().__init__(game, x, y, lvl, loot=True)
+        self.cur_phase = 0  # phase du boss (de 0 à +inf)
+        self.cur_attack = "base"  # prochaine attaque
+        self.all_attacks = ["base", "heavy"]  # possible attaque
+        self.attack_order = {"base": ["base", "heavy"], "heavy": [
+            "base"]}  # ordre des attaque (après tel attaque qu'est ce qu'il peut faire ensuite)
+        self.patern = [
+            {"base": [[(-1, 0)], [(1, 0)], [(0, 1)], [(0, -1)]],  # phase 0
+             "heavy": [[(-2, 0), (-1, 0)], [(2, 0), (1, 0)], [(0, 1), (0, 2)], [(0, -1), (0, -2)]]},  # phase 0
+            {"base": [[(-2, 0), (-1, 0)], [(2, 0), (1, 0)], [(0, 1), (0, 2)], [(0, -1), (0, -2)]],  # phase 1
+             "heavy": [[(-2, 0), (-1, 0)], [(2, 0), (1, 0)], [(0, 1), (0, 2)], [(0, -1), (0, -2)], [(1, 1)], [(-1, 1)],
+                       [(-1, -1)], [(1, -1)]]}  # phase 1
+        ]
+
+    def action(self, forced=None):
+        pass
+
+
+class BossDemon(Demon):
+    def __init__(self, game, x, y, lvl):
+        super().__init__(game, x, y, lvl, loot=True)
+        self.cur_phase = 0  # phase du boss (de 0 à +inf)
+        self.cur_attack = "base"  # prochaine attaque
+        self.all_attacks = ["base", "heavy"]  # possible attaque
+        self.attack_order = {"base": ["base", "heavy"], "heavy": [
+            "base"]}  # ordre des attaque (après tel attaque qu'est ce qu'il peut faire ensuite)
+        self.patern = [
+            {"base": [[(-1, 0)], [(1, 0)], [(0, 1)], [(0, -1)]],  # phase 0
+             "heavy": [[(-2, 0), (-1, 0)], [(2, 0), (1, 0)], [(0, 1), (0, 2)], [(0, -1), (0, -2)]]},  # phase 0
+            {"base": [[(-2, 0), (-1, 0)], [(2, 0), (1, 0)], [(0, 1), (0, 2)], [(0, -1), (0, -2)]],  # phase 1
+             "heavy": [[(-2, 0), (-1, 0)], [(2, 0), (1, 0)], [(0, 1), (0, 2)], [(0, -1), (0, -2)], [(1, 1)], [(-1, 1)],
+                       [(-1, -1)], [(1, -1)]]}  # phase 1
+        ]
+
+    def action(self, forced=None):
+        pass
