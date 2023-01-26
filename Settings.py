@@ -96,6 +96,9 @@ EQUIVALANCE = {
         (10, 6), (11, 6), (10, 7), (11, 7),  # eau
         (0, 30), (1, 30), (0, 31), (1, 31),  # nuage en rond
         (12, 28), (13, 28), (12, 29), (13, 29),  # nuage plein
+        (8, 28), (9, 28), (8, 29), (9, 29),  # nuage haut + buisson
+        (8, 26), (9, 26), (8, 27), (9, 27),  # nuage bas + buisson
+        (2, 20), (3, 20), (2, 21), (3, 21),  # lave
     ],
     "left-side": [
         (22, 16), (23, 16), (22, 17), (23, 17),  # wall (top left corner)
@@ -109,8 +112,11 @@ EQUIVALANCE = {
         (18, 26), (19, 26), (18, 27), (19, 27),  # nuage bottom left 2
         (8, 30), (9, 30), (8, 31), (9, 31),  # nuage top left 1
         (18, 28), (19, 28), (18, 29), (19, 29),  # nuage top left 2
-        (22, 26), (23, 26), (22, 27), (23, 27),  # passerelle vertical
         (22, 30), (23, 30), (22, 31), (23, 31),  # nuage + passerelle bas
+        (8, 20), (9, 20), (8, 21), (9, 21),  # lave bas-gauche
+        (10, 20), (11, 20), (10, 21), (11, 21),  # lave haut-gauche
+        (8, 22), (9, 22), (8, 23), (9, 23),  # lave left 1
+        (10, 22), (11, 22), (10, 23), (11, 23),  # lave left 2
     ],
     "right-side": [
         (24, 16), (25, 16), (24, 17), (25, 17),  # wall (bottom right corner)
@@ -124,8 +130,11 @@ EQUIVALANCE = {
         (20, 26), (21, 26), (20, 27), (21, 27),  # nuage top right 2
         (4, 30), (5, 30), (4, 31), (5, 31),  # nuage bottom right 1
         (20, 28), (21, 28), (20, 29), (21, 29),  # nuage bottom right 2
-        (22, 26), (23, 26), (22, 27), (23, 27),  # passerelle vertical
         (26, 30), (27, 30), (26, 31), (27, 31),  # nuage + passerelle bas
+        (0, 22), (1, 22), (0, 23), (1, 23),  # lave bas-droite
+        (2, 22), (3, 22), (2, 23), (3, 23),  # lave haut-droite
+        (4, 22), (5, 22), (4, 23), (5, 23),  # lave right 1
+        (6, 22), (7, 22), (6, 23), (7, 23),  # lave right 2
     ],
     "top-side": [
         (22, 16), (23, 16), (22, 17), (23, 17),  # wall (top left corner)
@@ -135,14 +144,16 @@ EQUIVALANCE = {
         (24, 14), (25, 14), (24, 15), (25, 15),  # laser wall (top)
         (4, 28), (5, 28), (4, 29), (5, 29),  # nuage haut 1
         (6, 28), (7, 28), (6, 29), (7, 29),  # nuage haut 2
-        (8, 28), (9, 28), (8, 29), (9, 29),  # nuage haut + buisson
         (8, 30), (9, 30), (8, 31), (9, 31),  # nuage top left 1
         (18, 28), (19, 28), (18, 29), (19, 29),  # nuage top left 2
         (10, 30), (11, 30), (10, 31), (11, 31),  # nuage top right 1
         (20, 26), (21, 26), (20, 27), (21, 27),  # nuage top right 2
         (14, 30), (15, 30), (14, 31), (15, 31),  # nuage + passerelle droite
         (16, 30), (17, 30), (16, 31), (17, 31),  # nuage + passerelle gauche
-        (22, 28), (23, 28), (22, 29), (23, 29),  # passerelle horizontal
+        (2, 22), (3, 22), (2, 23), (3, 23),  # lave haut-droite
+        (6, 20), (7, 20), (6, 21), (7, 21),  # lave haut 1
+        (10, 20), (11, 20), (10, 21), (11, 21),  # lave haut-gauche
+
     ],
     "bottom-side": [
         (24, 16), (25, 16), (24, 17), (25, 17),  # wall (bottom right corner)
@@ -152,12 +163,13 @@ EQUIVALANCE = {
         (22, 14), (23, 14), (22, 15), (23, 15),  # laser wall (bottom)
         (4, 26), (5, 26), (4, 27), (5, 27),  # nuage bas 1
         (6, 26), (7, 26), (6, 27), (7, 27),  # nuage bas 2
-        (8, 26), (9, 26), (8, 27), (9, 27),  # nuage bas + buisson
         (4, 30), (5, 30), (4, 31), (5, 31),  # nuage bottom right 1
         (20, 28), (21, 28), (20, 29), (21, 29),  # nuage bottom right 2
         (6, 30), (7, 30), (6, 31), (7, 31),  # nuage bottom left 1
         (18, 26), (19, 26), (18, 27), (19, 27),  # nuage bottom left 2
-        (22, 28), (23, 28), (22, 29), (23, 29),  # passerelle horizontal
+        (0, 22), (1, 22), (0, 23), (1, 23),  # lave bas-droite
+        (4, 20), (5, 20), (4, 21), (5, 21),  # lave bas 1
+        (8, 20), (9, 20), (8, 21), (9, 21),  # lave bas-gauche
     ],
     "event": [  # déclancheur d'évênement
         (5, 2), (6, 2), (5, 3), (6, 3),  # piège éclaté
@@ -171,7 +183,9 @@ LIMITE = {
     "Grass": (0, 3, 3, 2),
     'Desert': (0, 6, 3, 2),
     "Catacombes": (0, 9, 3, 2),
-    "Paradis": (9, 0, 2, 2)
+    "Enfer": (0, 13, 3, 1),
+    "Paradis": (9, 0, 2, 2),
+
 }
 
 # math pour transformer le int de l'orientation en coordonné

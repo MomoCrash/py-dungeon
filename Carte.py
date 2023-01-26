@@ -10,6 +10,7 @@ CARTE_SPAWN = {
     "Desert": [(Aligator, 1), (Golem, 1), (Mommies, 1), (Squelette, 1), (Mommies, 1), (Snake, 1), (DragonEau, 1)],
     "Catacombes": [(Zombie, 1), (Squelette, 1), (Vampire, 1), (Necromancien, 1), (Rampant, 1)],
     "Paradis": [(Angel, 1), (Arcangel, 1), (DragonLight, 1), (BlobLight, 1)],
+    "Enfer": [(Diablotin, 1)]
 }
 
 CARTE_BOSS = {
@@ -87,6 +88,7 @@ class Carte:
             self.map_dim = forced
         else:
             self.biome = choice(list(LIMITE.keys()))
+            self.biome = "Enfer"
             self.map_dim = [(randint(LIMITE[self.biome][0], LIMITE[self.biome][0] + LIMITE[self.biome][2]),  # X
                              randint(LIMITE[self.biome][1], LIMITE[self.biome][3] + LIMITE[self.biome][1]))  # Y
                             for _ in range(4)]
