@@ -88,7 +88,6 @@ class Carte:
             self.map_dim = forced
         else:
             self.biome = choice(list(LIMITE.keys()))
-            self.biome = "Enfer"
             self.map_dim = [(randint(LIMITE[self.biome][0], LIMITE[self.biome][0] + LIMITE[self.biome][2]),  # X
                              randint(LIMITE[self.biome][1], LIMITE[self.biome][3] + LIMITE[self.biome][1]))  # Y
                             for _ in range(4)]

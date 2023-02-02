@@ -40,6 +40,7 @@ EQUIVALANCE = {
         (4, 16), (5, 16), (4, 17), (5, 17),  # bones
         (6, 16), (7, 16), (6, 17), (7, 17),  # bones
         (8, 16), (9, 16), (8, 17), (9, 17),  # bones
+        (14, 16), (15, 16), (14, 17), (15, 17),  # siege
     ],
     "ground": [  # Tuiles qui bloque le déplacement mais pas les attaques
         (16, 6), (17, 6), (16, 7), (17, 7),  # eau
@@ -94,6 +95,7 @@ EQUIVALANCE = {
         (30, 4), (31, 4), (30, 5), (31, 5),  # eau
         (4, 6), (5, 6), (4, 7), (5, 7),  # eau
         (10, 6), (11, 6), (10, 7), (11, 7),  # eau
+        (30, 10), (31, 10), (30, 11), (31, 11),  # eau
         (0, 30), (1, 30), (0, 31), (1, 31),  # nuage en rond
         (12, 28), (13, 28), (12, 29), (13, 29),  # nuage plein
         (8, 28), (9, 28), (8, 29), (9, 29),  # nuage haut + buisson
@@ -263,6 +265,8 @@ MONSTER_IMG = {
     "DragonDark": lambda x, y: (x, y, 1, 32, 208, 16, 16, 6),
     "DragonEau": lambda x, y: (x, y, 1, 32, 224, 16, 16, 7),
     "DragonPlant": lambda x, y: (x, y, 1, 32, 240, 16, 16, 7),
+    "BlobLight": lambda x, y: (x, y, 1, 64, 0, 16, 16, 6),
+    "BlobDark": lambda x, y: (x, y, 1, 64, 16, 16, 16, 6),
 }
 
 # Text
@@ -272,7 +276,7 @@ TEXTS = {
                "\t - Z,Q,S,D -> Deplacements\n"
                "\t - A -> Attaquer\n"
                "\t - E -> Interagir/Ramasser\n"
-               "\t - Flèches -> Diriger la visée\n"
+               "\t - Fleches -> Diriger la visée\n"
                "\t - F -> Echanger d'armes\n"
                "\t - W -> Skip la salle de loot\n"
                "\t - TAB -> Ouvrir/Fermer les menus\n",
@@ -341,6 +345,19 @@ TEXTS = {
     "BlobEau": "je ne sais pas mais voila",
     "Witch": "je ne sais pas mais voila",
     "DragonFeu": "je ne sais pas mais voila",
+    "Snake": "je ne sais pas mais voila",
+    "Creeper": "je ne sais pas mais voila",
+    "Rampant": "je ne sais pas mais voila",
+    "Notch": "je ne sais pas mais voila",
+    "Angel": "je ne sais pas mais voila",
+    "Arcangel": "je ne sais pas mais voila",
+    "DragonLight": "je ne sais pas mais voila",
+    "BlobPlant": "je ne sais pas mais voila",
+    "DragonDark": "je ne sais pas mais voila",
+    "DragonEau": "je ne sais pas mais voila",
+    "DragonPlant": "je ne sais pas mais voila",
+    "BlobLight": "je ne sais pas mais voila",
+    "BlobDark": "je ne sais pas mais voila",
 }
 
 song = [
