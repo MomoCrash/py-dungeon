@@ -1,3 +1,6 @@
+import pygame
+import pyxel
+
 from Entity import *
 from Carte import Carte
 from Menu import *
@@ -520,7 +523,7 @@ class Game:
                 self.animation_list[0].animate()
         elif self.menu is None:
             py.mouse(False)
-            if py.btn(py.KEY_A):
+            if py.btn(py.KEY_A) or pyxel.btn(pygame.CONTROLLER_BUTTON_A):
                 """attaquer"""
                 for e in self.ennemi:
                     e.action()
@@ -535,21 +538,25 @@ class Game:
                 for e in self.ennemi:
                     e.action()
                 self.player.left()
+                self.player.weapon.update()
             if py.btnp(py.KEY_D, hold=20):
                 """aller à droite"""
                 for e in self.ennemi:
                     e.action()
                 self.player.right()
+                self.player.weapon.update()
             if py.btnp(py.KEY_Z, hold=20):
                 """aller à haut"""
                 for e in self.ennemi:
                     e.action()
                 self.player.top()
+                self.player.weapon.update()
             if py.btnp(py.KEY_S, hold=20):
                 """aller à bas"""
                 for e in self.ennemi:
                     e.action()
                 self.player.bottom()
+                self.player.weapon.update()
 
             if py.btn(py.KEY_LEFT):
                 """regarger gauche"""
@@ -564,9 +571,9 @@ class Game:
                 """regarger bas"""
                 self.player.watch_bottom()
 
-            if py.btn(py.KEY_W):
+            if py.btnp(py.KEY_W, hold=1):
                 """skip on looting zone"""
-                if self.looting:
+                if self.carte.etage_completed:
                     self.carte.new_stage()
             if py.btn(py.KEY_R):
                 """spawn"""

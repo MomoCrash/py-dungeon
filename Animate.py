@@ -54,7 +54,7 @@ class Attaque(Animation):
     def animate(self):
         self.frame -= 1
         for coor in self.tiles_coors:
-            self.game.animation_layer.append((coor[0], coor[1], 0, 32+(4-self.frame)*16, 32, 16, 16, 0))
+            self.game.animation_layer.append((coor[0], coor[1], 0, 32, 32, 16, 16, 0))
         if self.frame <= 0:
             self.origine.attaque()
             self.delete()
