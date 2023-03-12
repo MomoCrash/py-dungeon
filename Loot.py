@@ -24,7 +24,8 @@ class Loot:
         "Bow": 1,
         "Hallebarde": 0.6,
         "Axe": 1.2,
-        "Life": 2
+        "Katana": 20,
+        "Life": 2,
     }
     
     def __init__(self, niveau, x, y, forced=(False, )):

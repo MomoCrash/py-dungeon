@@ -1,3 +1,6 @@
+import pygame
+import pyxel
+
 from Entity import *
 from Carte import Carte
 from Menu import *
@@ -58,6 +61,7 @@ class Game:
         self.animation_layer = []
         self.score = 0
         self.next_lvl = 2
+        self.is_loose = False
         self.all_menus = {
             "TAB": Box((0, 0),
                        (Bloc, (0, 0), (288, 25), 1),
@@ -135,7 +139,7 @@ class Game:
                           (Iframe, MONSTER_IMG["Vampire"](109, 74), 1, self.open_Vampire),
                           (Iframe, MONSTER_IMG["BlobFeu"](142, 74), 0, self.open_BlobFeu),
                           (Iframe, MONSTER_IMG["BlobEau"](176, 74), 0, self.open_BlobEau),
-                          (Bloc, (210, 75), (16, 16), 11),  # BlobPlant
+                          (Iframe, MONSTER_IMG["BlobPlant"](210, 74), 0, self.open_BlobPlant),
                           (Iframe, MONSTER_IMG["Aligator"](41, 108), 0, self.open_Aligator),
                           (Iframe, MONSTER_IMG["Mommies"](75, 108), 0, self.open_Mommies),
                           (Iframe, MONSTER_IMG["Loup"](109, 108), 0, self.open_Loup),
@@ -144,6 +148,19 @@ class Game:
                           (Iframe, MONSTER_IMG["Witch"](210, 108), 0, self.open_Witch),
                           (Iframe, MONSTER_IMG["DragonFeu"](41, 141), 0, self.open_BabyDragon),
                           (Iframe, MONSTER_IMG["Abomination"](75, 141), 0, self.open_Abomination),
+                          (Iframe, MONSTER_IMG["Snake"](109, 141), 0, self.open_Snake),
+                          (Iframe, MONSTER_IMG["Creeper"](142, 141), 1, self.open_Creeper),
+                          (Iframe, MONSTER_IMG["Rampant"](176, 141), 7, self.open_Rampant),
+                          (Iframe, MONSTER_IMG["Notch"](210, 141), 1, self.open_Notch),
+                          (Iframe, MONSTER_IMG["Angel"](41, 175), 0, self.open_Angel),
+                          (Iframe, MONSTER_IMG["Arcangel"](75, 175), 0, self.open_Arcangel),
+                          (Iframe, MONSTER_IMG["DragonLight"](109, 175), 1, self.open_DragonLight),
+                          (Iframe, MONSTER_IMG["DragonDark"](142, 175), 1, self.open_DragonDark),
+                          (Iframe, MONSTER_IMG["DragonEau"](176, 175), 0, self.open_DragonEau),
+                          (Iframe, MONSTER_IMG["DragonPlant"](210, 175), 0, self.open_DragonPlant),
+                          (Iframe, MONSTER_IMG["BlobLight"](41, 209), 0, self.open_BlobLight),
+                          (Iframe, MONSTER_IMG["BlobDark"](75, 209), 7, self.open_BlobDark),
+
                           (Button, (230, 33), (60, 16), "Menu      >>", 1, 7, self.open_tab),
                           (Button, (246, 50), (60, 16), "Bestiaire >>", 1, 7, self.open_header),
                           (Button, (230, 67), (60, 16), "Niveau    >>", 1, 7, self.open_stats),
@@ -252,17 +269,95 @@ class Game:
                          (Text, (226, 108), TEXTS["Witch"], 7),
                          wh=(288, 272), bg=0, root=self, but_exit=((0, 252), (288, 20), "QUIT", 7, 8)),
             "DragonFeu": Box((0, 0),
-                              (Bloc, (0, 0), (288, 25), 10),
-                              (Text, (115, 10), "DRAGON DE FEU", 1),
-                              (Iframe, MONSTER_IMG["DragonFeu"](41, 141), 0, self.open_header),
-                              (Text, (57, 141), TEXTS["DragonFeu"], 7),
-                              wh=(288, 272), bg=0, root=self, but_exit=((0, 252), (288, 20), "QUIT", 7, 8)),
+                             (Bloc, (0, 0), (288, 25), 10),
+                             (Text, (115, 10), "DRAGON DE FEU", 1),
+                             (Iframe, MONSTER_IMG["DragonFeu"](41, 141), 0, self.open_header),
+                             (Text, (57, 141), TEXTS["DragonFeu"], 7),
+                             wh=(288, 272), bg=0, root=self, but_exit=((0, 252), (288, 20), "QUIT", 7, 8)),
             "Abomination": Box((0, 0),
                                (Bloc, (0, 0), (288, 25), 10),
                                (Text, (115, 10), "ABOMINATION", 1),
                                (Iframe, MONSTER_IMG["Abomination"](75, 141), 0, self.open_header),
                                (Text, (91, 141), TEXTS["Abomination"], 7),
                                wh=(288, 272), bg=0, root=self, but_exit=((0, 252), (288, 20), "QUIT", 7, 8)),
+            "Snake": Box((0, 0),
+                         (Bloc, (0, 0), (288, 25), 10),
+                         (Text, (115, 10), "SNAKE", 1),
+                         (Iframe, MONSTER_IMG["Snake"](109, 141), 0, self.open_header),
+                         (Text, (91, 141), TEXTS["Snake"], 7),
+                         wh=(288, 272), bg=0, root=self, but_exit=((0, 252), (288, 20), "QUIT", 7, 8)),
+            "Creeper": Box((0, 0),
+                           (Bloc, (0, 0), (288, 25), 10),
+                           (Text, (115, 10), "CREEPER", 1),
+                           (Iframe, MONSTER_IMG["Creeper"](142, 141), 1, self.open_header),
+                           (Text, (91, 141), TEXTS["Creeper"], 7),
+                           wh=(288, 272), bg=0, root=self, but_exit=((0, 252), (288, 20), "QUIT", 7, 8)),
+            "Rampant": Box((0, 0),
+                           (Bloc, (0, 0), (288, 25), 10),
+                           (Text, (115, 10), "RAMPANT", 1),
+                           (Iframe, MONSTER_IMG["Rampant"](176, 141), 7, self.open_header),
+                           (Text, (91, 141), TEXTS["Rampant"], 7),
+                           wh=(288, 272), bg=0, root=self, but_exit=((0, 252), (288, 20), "QUIT", 7, 8)),
+            "Notch": Box((0, 0),
+                         (Bloc, (0, 0), (288, 25), 10),
+                         (Text, (115, 10), "NOTCH", 1),
+                         (Iframe, MONSTER_IMG["Notch"](210, 141), 1, self.open_header),
+                         (Text, (91, 141), TEXTS["Notch"], 7),
+                         wh=(288, 272), bg=0, root=self, but_exit=((0, 252), (288, 20), "QUIT", 7, 8)),
+            "Angel": Box((0, 0),
+                         (Bloc, (0, 0), (288, 25), 10),
+                         (Text, (115, 10), "ANGEL", 1),
+                         (Iframe, MONSTER_IMG["Angel"](41, 175), 0, self.open_header),
+                         (Text, (91, 141), TEXTS["Angel"], 7),
+                         wh=(288, 272), bg=0, root=self, but_exit=((0, 252), (288, 20), "QUIT", 7, 8)),
+            "Arcangel": Box((0, 0),
+                            (Bloc, (0, 0), (288, 25), 10),
+                            (Text, (115, 10), "ARC ANGEL", 1),
+                            (Iframe, MONSTER_IMG["Arcangel"](75, 175), 0, self.open_header),
+                            (Text, (91, 141), TEXTS["Arcangel"], 7),
+                            wh=(288, 272), bg=0, root=self, but_exit=((0, 252), (288, 20), "QUIT", 7, 8)),
+            "DragonLight": Box((0, 0),
+                               (Bloc, (0, 0), (288, 25), 10),
+                               (Text, (115, 10), "DRAGON LUMIERE", 1),
+                               (Iframe, MONSTER_IMG["DragonLight"](109, 175), 1, self.open_header),
+                               (Text, (91, 141), TEXTS["DragonLight"], 7),
+                               wh=(288, 272), bg=0, root=self, but_exit=((0, 252), (288, 20), "QUIT", 7, 8)),
+            "BlobPlant": Box((0, 0),
+                             (Bloc, (0, 0), (288, 25), 10),
+                             (Text, (115, 10), "BLOB DE PLANTE", 1),
+                             (Iframe, MONSTER_IMG["BlobPlant"](210, 74), 0, self.open_header),
+                             (Text, (91, 141), TEXTS["BlobPlant"], 7),
+                             wh=(288, 272), bg=0, root=self, but_exit=((0, 252), (288, 20), "QUIT", 7, 8)),
+            "DragonDark": Box((0, 0),
+                              (Bloc, (0, 0), (288, 25), 10),
+                              (Text, (115, 10), "DRAGON DE TENEBRE", 1),
+                              (Iframe, MONSTER_IMG["DragonDark"](142, 175), 1, self.open_header),
+                              (Text, (91, 141), TEXTS["DragonDark"], 7),
+                              wh=(288, 272), bg=0, root=self, but_exit=((0, 252), (288, 20), "QUIT", 7, 8)),
+            "DragonEau": Box((0, 0),
+                             (Bloc, (0, 0), (288, 25), 10),
+                             (Text, (115, 10), "DRAGON-EAU", 1),
+                             (Iframe, MONSTER_IMG["DragonEau"](176, 175), 0, self.open_header),
+                             (Text, (91, 141), TEXTS["DragonEau"], 7),
+                             wh=(288, 272), bg=0, root=self, but_exit=((0, 252), (288, 20), "QUIT", 7, 8)),
+            "DragonPlant": Box((0, 0),
+                               (Bloc, (0, 0), (288, 25), 10),
+                               (Text, (115, 10), "DRAGON DE PLANTE", 1),
+                               (Iframe, MONSTER_IMG["DragonPlant"](210, 175), 0, self.open_header),
+                               (Text, (91, 141), TEXTS["DragonPlant"], 7),
+                               wh=(288, 272), bg=0, root=self, but_exit=((0, 252), (288, 20), "QUIT", 7, 8)),
+            "BlobLight": Box((0, 0),
+                             (Bloc, (0, 0), (288, 25), 10),
+                             (Text, (115, 10), "BLOB DE LUMIERE", 1),
+                             (Iframe, MONSTER_IMG["BlobLight"](41, 209), 0, self.open_header),
+                             (Text, (91, 141), TEXTS["BlobLight"], 7),
+                             wh=(288, 272), bg=0, root=self, but_exit=((0, 252), (288, 20), "QUIT", 7, 8)),
+            "BlobDark": Box((0, 0),
+                            (Bloc, (0, 0), (288, 25), 10),
+                            (Text, (115, 10), "BLOB DE TENEBRE", 1),
+                            (Iframe, MONSTER_IMG["BlobDark"](75, 209), 7, self.open_header),
+                            (Text, (91, 141), TEXTS["BlobDark"], 7),
+                            wh=(288, 272), bg=0, root=self, but_exit=((0, 252), (288, 20), "QUIT", 7, 8)),
         }
         self.menu = None
         self.open_start()
@@ -278,15 +373,17 @@ class Game:
         self.carte.new_stage()
         self.animation_list = []
         self.animation_layer = []
-        self.menu = self.all_menus["START"]
+        self.menu = None
         self.score = 0
         self.next_lvl = 2
+        self.is_loose = False
 
     def loose(self):
         self.menu = Box((0, 0),
                         (Canevas, DEAFEAT_FIRST_PART(110, 50), DEAFEAT_SECOND_PART(142, 50)),
                         (ScoreText, (70, 70), self.score, 0),
                         wh=(288, 272), bg=8, root=self, but_exit=((0, 250), (288, 22), "RESTART !", 0, 7, self.start))
+        self.is_loose = True
 
     def open_start(self):
         self.menu = self.all_menus["START"]
@@ -361,6 +458,45 @@ class Game:
     def open_BabyDragon(self):
         self.menu = self.bestiaire["BabyDragon"]
 
+    def open_DragonLight(self):
+        self.menu = self.bestiaire["DragonLight"]
+
+    def open_DragonDark(self):
+        self.menu = self.bestiaire["DragonDark"]
+
+    def open_DragonEau(self):
+        self.menu = self.bestiaire["DragonEau"]
+
+    def open_DragonPlant(self):
+        self.menu = self.bestiaire["DragonPlant"]
+
+    def open_BlobPlant(self):
+        self.menu = self.bestiaire["BlobPlant"]
+
+    def open_BlobLight(self):
+        self.menu = self.bestiaire["BlobLight"]
+
+    def open_BlobDark(self):
+        self.menu = self.bestiaire["BlobDark"]
+
+    def open_Snake(self):
+        self.menu = self.bestiaire["Snake"]
+
+    def open_Creeper(self):
+        self.menu = self.bestiaire["Creeper"]
+
+    def open_Rampant(self):
+        self.menu = self.bestiaire["Rampant"]
+
+    def open_Notch(self):
+        self.menu = self.bestiaire["Notch"]
+
+    def open_Angel(self):
+        self.menu = self.bestiaire["Angel"]
+
+    def open_Arcangel(self):
+        self.menu = self.bestiaire["Arcangel"]
+
     def check_full_tile(self, x: int, y: int) -> bool:
         """
         vérifie si la case est remplie par une entité
@@ -387,7 +523,7 @@ class Game:
                 self.animation_list[0].animate()
         elif self.menu is None:
             py.mouse(False)
-            if py.btn(py.KEY_A):
+            if py.btn(py.KEY_A) or pyxel.btn(pygame.CONTROLLER_BUTTON_A):
                 """attaquer"""
                 for e in self.ennemi:
                     e.action()
@@ -402,21 +538,25 @@ class Game:
                 for e in self.ennemi:
                     e.action()
                 self.player.left()
+                self.player.weapon.update()
             if py.btnp(py.KEY_D, hold=20):
                 """aller à droite"""
                 for e in self.ennemi:
                     e.action()
                 self.player.right()
+                self.player.weapon.update()
             if py.btnp(py.KEY_Z, hold=20):
                 """aller à haut"""
                 for e in self.ennemi:
                     e.action()
                 self.player.top()
+                self.player.weapon.update()
             if py.btnp(py.KEY_S, hold=20):
                 """aller à bas"""
                 for e in self.ennemi:
                     e.action()
                 self.player.bottom()
+                self.player.weapon.update()
 
             if py.btn(py.KEY_LEFT):
                 """regarger gauche"""
@@ -431,9 +571,9 @@ class Game:
                 """regarger bas"""
                 self.player.watch_bottom()
 
-            if py.btn(py.KEY_W):
+            if py.btnp(py.KEY_W, hold=1):
                 """skip on looting zone"""
-                if self.looting:
+                if self.carte.etage_completed:
                     self.carte.new_stage()
             if py.btn(py.KEY_R):
                 """spawn"""
@@ -447,9 +587,10 @@ class Game:
         else:
             py.mouse(True)
             self.menu.update()
-            if py.btnp(py.KEY_TAB, hold=60):
+            if py.btnp(py.KEY_TAB, hold=60) and not self.is_loose:
                 """changer d'arme"""
                 self.menu = None
+                self.is_loose = False
 
     def draw(self) -> None:
         """methode appelée à chaque actualisation de l'écran : dessine toute les images à l'écran"""

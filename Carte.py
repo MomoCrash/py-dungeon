@@ -10,6 +10,7 @@ CARTE_SPAWN = {
     "Desert": [(Aligator, 1), (Golem, 1), (Mommies, 1), (Squelette, 1), (Mommies, 1), (Snake, 1), (DragonEau, 1)],
     "Catacombes": [(Zombie, 1), (Squelette, 1), (Vampire, 1), (Necromancien, 1), (Rampant, 1)],
     "Paradis": [(Angel, 1), (Arcangel, 1), (DragonLight, 1), (BlobLight, 1)],
+    "Enfer": [(Diablotin, 1)]
 }
 
 CARTE_BOSS = {
