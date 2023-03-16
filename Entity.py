@@ -222,6 +222,10 @@ class Player(Entity):
         self.hp = 100
         self.maxhp = 100
 
+    def blit_entity(self) -> None:
+        if self.game.carte.biome == "enfer":
+            py.blt(self.reel_x, self.reel_y, IMAGE_ENTITE, 96, 32, 16, 16, self.colkey)
+
     def blit_life_bar(self) -> None:
         """affiche la bar de vie du joueur en bas de l'écran"""
         py.rect(0, 256, 256, 16, 8)

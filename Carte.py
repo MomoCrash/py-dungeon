@@ -7,6 +7,7 @@ from Settings import EQUIVALANCE, IMAGE_PORTE_FERMEE, IMAGE_PORTE_OUVERTE, LIMIT
 CARTE_SPAWN = {
     "Cave": [(Zombie, 1), (Squelette, 1), (Diablotin, 1), (Golem, 1), (Ghost, 1), (Bat, 1), (Witch, 1), (DragonFeu, 1), (DragonDark, 1), (BlobDark, 1), (Creeper, 1)],
     "Grass": [(Spider, 1), (Loup, 1), (Fox, 1), (BlobFeu, 1), (BlobEau, 1), (DragonFeu, 1), (BlobPlant, 1), (BlobLight, 1), (BlobDark, 1), (DragonPlant, 1)],
+    "Grass2": [(Zombie, 1)],
     "Desert": [(Aligator, 1), (Golem, 1), (Mommies, 1), (Squelette, 1), (Mommies, 1), (Snake, 1), (DragonEau, 1)],
     "Catacombes": [(Zombie, 1), (Squelette, 1), (Vampire, 1), (Necromancien, 1), (Rampant, 1)],
     "Paradis": [(Angel, 1), (Arcangel, 1), (DragonLight, 1), (BlobLight, 1)],

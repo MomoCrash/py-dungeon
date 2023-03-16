@@ -1,6 +1,6 @@
 cd C:\Users\trist\PycharmProjects\Dungeon
 
-C:\Users\trist\AppData\Local\Programs\Python\Python310\Scripts\pyxel edit assets.pyxres
+C:\Users\trist\AppData\Local\Programs\Python\Python310\Scripts\pyxel edit C:\Users\trist\PycharmProjects\Dungeon\assets.pyxres
 
 C:\Users\trist\AppData\Local\Programs\Python\Python310\Scripts\auto-py-to-exe
 
