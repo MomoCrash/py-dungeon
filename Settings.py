@@ -15,6 +15,11 @@ C'est un stock énorme ou on y retrouve :
 - TEXTS : tout les dialogs, les texts à mettre dans les menu etc ...
 """
 
+LARGEUR = 4
+WIN_W = LARGEUR*128 + 33 - 1
+WIN_H = LARGEUR*128 + 17 - 1
+
+
 IMAGE_PORTE_FERMEE = (32, 0)
 IMAGE_PORTE_OUVERTE = (48, 0)
 
@@ -213,7 +218,7 @@ LOOT_IMAGE = {
     "Sword": (16, 0),
     "Spear": (16, 32),
     "Hammer": (16, 128),
-    "Bow": (16, 152),
+    "Bow": (128, 184),
     "Hallebarde": (16, 64),
     "Axe": (16, 96),
     "Katana": (16, 184)
@@ -379,3 +384,6 @@ song = [
     "item",
     "hell",
 ]
+
+# milieu d'un mot en pixels :
+MILIEUMOT = lambda n_lettre: (n_lettre*4-1)/2 - 1

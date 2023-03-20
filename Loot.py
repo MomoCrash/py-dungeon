@@ -24,8 +24,8 @@ class Loot:
         "Bow": 1,
         "Hallebarde": 0.6,
         "Axe": 1.2,
-        "Katana": 20,
-        "Life": 2,
+        "Katana": 1.4,
+        "Life": 3,
     }
     
     def __init__(self, niveau, x, y, forced=(False, )):
@@ -83,7 +83,7 @@ class Loot:
                     for classe in all_armor_loot:
                         if self.type == classe.__name__:
                             getter.game.loots.insert(0, Loot(0, getter.x, getter.y, (True, getter.armor)))
-                            getter.set_armor(classe(getter))
+                            getter.set_armor(classe(getter, self.niveau))
                             getter.game.loots.remove(self)
 
     def blit(self):
@@ -93,12 +93,12 @@ class Loot:
     def blit_inv(self):
         """affiche l'objet dans l'inventaire à l'emplacement pour voir ce qui est au sol"""
         if self.forced[0]:
-            self.forced[1].blit(decalY=160 if type(self.forced[1]) in Weapon.__subclasses__() else 160)
+            self.forced[1].blit(decalY=180 if type(self.forced[1]) in Weapon.__subclasses__() else 160)
         elif self.type == "Life":
-            py.blt(256, 160, IMAGE_EQUIPMENT, 0, 48, 16, 32, 7)
+            py.blt(WIN_W-32, 180, IMAGE_EQUIPMENT, 0, 48, 16, 32, 7)
         else:
             img = LOOT_IMAGE[self.type]
-            py.blt(256, 160, IMAGE_EQUIPMENT, img[0], img[1], 16, 32, 0 if self.type != "MagmaArmor" else 7)
+            py.blt(WIN_W-32, 180, IMAGE_EQUIPMENT, img[0], img[1], 16, 32, 0 if self.type != "MagmaArmor" else 7)
             temp = str(self.niveau)
             chaine = ""
             for i in range(len(temp)):
@@ -108,4 +108,4 @@ class Loot:
                 chaine += temp[i]
                 if i % 4 == 3:
                     chaine += "\n"
-            py.text(272, 160, "lvl: \n"+chaine, 7)
+            py.text(WIN_W-16, 180, "lvl: \n"+chaine, 7)

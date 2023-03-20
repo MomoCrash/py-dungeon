@@ -1,6 +1,6 @@
 import pyxel as py
 from random import randint
-from Settings import IMAGE_EQUIPMENT, LOOT_IMAGE, ORIENT_EQ
+from Settings import IMAGE_EQUIPMENT, LOOT_IMAGE, ORIENT_EQ, WIN_W, WIN_H
 
 
 class Weapon:
@@ -93,9 +93,9 @@ class Weapon:
             chaine += temp[i]
             if i % 4 == 3:
                 chaine += "\n"
-        py.blt(256, decalY, IMAGE_EQUIPMENT, self.image[0], self.image[1], 16, 32,
+        py.blt(WIN_W-32, decalY, IMAGE_EQUIPMENT, self.image[0], self.image[1], 16, 32,
                self.image[3] if len(self.image) == 3 else 0)
-        py.text(272, decalY, chaine, 7)
+        py.text(WIN_W-16, decalY, chaine, 7)
 
 
 class RustySword(Weapon):
@@ -233,15 +233,22 @@ class Katana(Weapon):
             self.dash = True
 
     def attaque(self) -> None:
-        super().attaque()
         if self.dash:
             if self.owner.orient == 0:
                 self.owner.left()
+                super().attaque()
+                self.owner.left()
             elif self.owner.orient == 1:
+                self.owner.right()
+                super().attaque()
                 self.owner.right()
             elif self.owner.orient == 2:
                 self.owner.top()
+                super().attaque()
+                self.owner.top()
             elif self.owner.orient == 3:
+                self.owner.bottom()
+                super().attaque()
                 self.owner.bottom()
             self.dash = False
 
@@ -250,7 +257,7 @@ class Katana(Weapon):
 
 
 class Armor:
-    def __init__(self, owner, name, defence_p, image, element):
+    def __init__(self, owner, name, defence_p, image, element, lvl, durabilite):
         """
         :param owner: Joueur qui porte l'armure
         :param name: nom de l'armure
@@ -258,80 +265,106 @@ class Armor:
         :param image: image de l'armure
         """
         self.owner = owner
-        self.defence_coef = 1 - defence_p / 100
-        self.defence_percent = defence_p
+        self.lvl = lvl
+        self.defence_negation = int((defence_p-self.lvl) * (self.lvl+1))
         self.name = name
         self.image = image
         self.colkey = 0
         self.element = element
+        self.durabilite = durabilite
 
     def defence(self) -> float:
         """renvoie un coeficient de défense"""
-        return 1 / self.defence_coef
+        return self.defence_negation
+
+    def damage_armor(self, dmg=1):
+        if type(self.durabilite) is not str:
+            self.durabilite -= dmg
+        if type(self.durabilite) is not str and self.durabilite <= 0:
+            self.owner.armor = NakedArmor(self.owner)
 
     def blit(self, decalY=0) -> None:
         """
         affiche l'armure dans l'inventaire.
         :param decalY: int | décale verticalement (en pixels)
         """
-        temp = str(self.defence_percent) + "%"
+        temp = "-" + str(self.defence_negation)
         chaine = ""
+        too_big = False
         for i in range(len(temp)):
-            if i == 17:
-                chaine += "..."
+            if i == 13:
+                chaine += "\ndmg"
+                too_big = True
                 break
             chaine += temp[i]
             if i % 4 == 3:
                 chaine += "\n"
-        py.blt(256, decalY, IMAGE_EQUIPMENT, self.image[0], self.image[1], 16, 32, self.colkey)
-        py.text(272, decalY, chaine, 7)
+        if not too_big:
+            chaine += "\ndmg"
+        py.blt(WIN_W-32, decalY, IMAGE_EQUIPMENT, self.image[0], self.image[1], 16, 32, self.colkey)
+        py.text(WIN_W-16, decalY, chaine, 7)
+        chaine = "duration:\n"
+        temp = str(self.durabilite)
+        print(len(temp))
+        if len(temp) == 7:
+            chaine += temp
+            chaine += "."
+        elif len(temp) > 6:
+            for i in range(6):
+                chaine += temp[i]
+            chaine += ".."
+        else:
+            chaine += temp
+
+        py.text(WIN_W - 32, decalY+32, chaine, 7)
 
 
 class NakedArmor(Armor):
     """héritage de Armor avec des charactéristique défini"""
 
-    def __init__(self, owner):
-        super().__init__(owner, "Tout nu", 0, LOOT_IMAGE["NakedArmor"], 0)
+    def __init__(self, owner, lvl):
+        super().__init__(owner, "Tout nu", 0, LOOT_IMAGE["NakedArmor"], 0, lvl, "infini")
+        self.defence_negation = 0
 
 
 class LeatherArmor(Armor):
     """héritage de Armor avec des charactéristique défini"""
 
-    def __init__(self, owner):
-        super().__init__(owner, "Armure en Cuir", 2.5, LOOT_IMAGE["LeatherArmor"], 0)
+    def __init__(self, owner, lvl):
+        super().__init__(owner, "Armure en Cuir", 2.5, LOOT_IMAGE["LeatherArmor"], 0, lvl, 15)
 
 
 class IronArmor(Armor):
     """héritage de Armor avec des charactéristique défini"""
 
-    def __init__(self, owner):
-        super().__init__(owner, "Armure en Fer", 5, LOOT_IMAGE["IronArmor"], 0)
+    def __init__(self, owner, lvl):
+        super().__init__(owner, "Armure en Fer", 5, LOOT_IMAGE["IronArmor"], 0, lvl, 25)
 
 
 class GoldArmor(Armor):
     """héritage de Armor avec des charactéristique défini"""
 
-    def __init__(self, owner):
-        super().__init__(owner, "Armure en Or", 10, LOOT_IMAGE["GoldArmor"], 0)
+    def __init__(self, owner, lvl):
+        super().__init__(owner, "Armure en Or", 10, LOOT_IMAGE["GoldArmor"], 0, lvl, 20)
 
 
 class DiamondArmor(Armor):
     """héritage de Armor avec des charactéristique défini"""
 
-    def __init__(self, owner):
-        super().__init__(owner, "Armure en Diamants", 15, LOOT_IMAGE["DiamondArmor"], 0)
+    def __init__(self, owner, lvl):
+        super().__init__(owner, "Armure en Diamants", 15, LOOT_IMAGE["DiamondArmor"], 0, lvl, 35)
 
 
 class MagmaArmor(Armor):
     """héritage de Armor avec des charactéristique défini"""
 
-    def __init__(self, owner):
-        super().__init__(owner, "Armure en Magma", 25, LOOT_IMAGE["MagmaArmor"], 2)
+    def __init__(self, owner, lvl):
+        super().__init__(owner, "Armure en Magma", 25, LOOT_IMAGE["MagmaArmor"], 2, lvl, 45)
         self.colkey = 7
 
 
 class DragonScaleArmor(Armor):
     """héritage de Armor avec des charactéristique défini"""
 
-    def __init__(self, owner):
-        super().__init__(owner, "Armure en Ecaille", 35, LOOT_IMAGE["DragonScaleArmor"], 2)
+    def __init__(self, owner, lvl):
+        super().__init__(owner, "Armure en Ecaille", 35, LOOT_IMAGE["DragonScaleArmor"], 2, lvl, 60)
