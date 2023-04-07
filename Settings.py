@@ -15,7 +15,7 @@ C'est un stock énorme ou on y retrouve :
 - TEXTS : tout les dialogs, les texts à mettre dans les menu etc ...
 """
 
-LARGEUR = 4
+LARGEUR = 3
 WIN_W = LARGEUR*128 + 33 - 1
 WIN_H = LARGEUR*128 + 17 - 1
 
