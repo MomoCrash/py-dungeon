@@ -67,7 +67,7 @@ Armes implémenté (aucune armes de boss):
     - hallebarde
     - hache
     - marteau
-    - arc
+    - arc (!!! certain model son bugé)
     - katana
 
 Armures implémenté (aucune armure 'spécial'):
