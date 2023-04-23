@@ -281,13 +281,14 @@ MONSTER_IMG = {
 
 TEXTS = {
     "touches": "[Touches]\n"
-               "\t - Z,Q,S,D -> Deplacements\n"
-               "\t - A -> Attaquer\n"
-               "\t - E -> Interagir/Ramasser\n"
-               "\t - Fleches -> Diriger la visée\n"
-               "\t - F -> Echanger d'armes\n"
-               "\t - W -> Skip la salle de loot\n"
-               "\t - TAB -> Ouvrir/Fermer les menus\n",
+               " - Z,Q,S,D -> Deplacements\n"
+               " - A -> Attaquer\n"
+               " - E -> Interagir/Ramasser\n"
+               " - Fleches -> Diriger la visée\n"
+               " - F -> Echanger d'armes\n"
+               " - W -> Skip la salle de loot\n"
+               " - TAB -> Ouvrir/Fermer les menus\n"
+               " - F1 -> Fullscreen le jeu\n",
     "resumé": "[RESUME]\n"
               "Vous controlerez un jeune aventurier qui, en quete \n"
               "de puissance, alla dans la grotte dimensionnelle \n"
@@ -332,6 +333,7 @@ TEXTS = {
                 "entier dans cette grotte. Le Paradis installa \n"
                 "leur base principale dans cette grotte pour y \n"
                 "combattre leurs ennemies de toujours Les Enfers.",
+
     "Zombie": "Voila le Zombie, un mort vivant enfin je vous refais pas\n"
               "toute l'histoire quoi vous voyez ...",
     "Squelette": "Le Squelette, En char et en os... Enfin surtout \n"

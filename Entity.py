@@ -677,6 +677,7 @@ class Necromancien(Ennemies):
                 distances = self.distance(self.game.player)
                 if abs(distances[0]) + abs(distances[1]) > 10:
                     side = self.low_distance_side(self.game.player)
+                    print(side)
                     if side == 0:
                         self.top()
                     elif side == 1:
@@ -688,6 +689,7 @@ class Necromancien(Ennemies):
                     left_action -= 1
                 else:
                     rand = random.randint(0, 3)
+                    print(rand)
                     if rand == 0:
                         self.top()
                     elif rand == 1:

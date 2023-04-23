@@ -46,7 +46,7 @@ class Game:
         """
         py.init(WIN_W, WIN_H, fps=60, quit_key=py.KEY_ESCAPE)
         py.load("assets.pyxres")
-        py.fullscreen(True)
+        py.fullscreen(False)
         self.carte = Carte(self)
         self.player = Player(self, 0, 0)
         self.ennemi = []
@@ -628,6 +628,12 @@ class Game:
                 """changer d'arme"""
                 self.menu = None
                 self.is_loose = False
+            if py.btnp(py.KEY_F1):
+                """full screen the game"""
+                if py.is_fullscreen:
+                    py.fullscreen(False)
+                else:
+                    py.fullscreen(True)
 
     def draw(self) -> None:
         """methode appelée à chaque actualisation de l'écran : dessine toute les images à l'écran"""

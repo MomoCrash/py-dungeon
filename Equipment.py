@@ -314,7 +314,7 @@ class Armor:
         py.text(WIN_W-16, decalY, chaine, 7)
         chaine = "duration:\n"
         temp = str(self.durabilite)
-        print(len(temp))
+        # print(len(temp))
         if len(temp) == 7:
             chaine += temp
             chaine += "."
