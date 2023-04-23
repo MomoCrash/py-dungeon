@@ -551,6 +551,13 @@ class Game:
         """methode appelée à chaque actualisation de l'écran : fait toute les opérations et gère les inputs"""
         self.carte.actualisation()
 
+        if py.btnp(py.KEY_F1):
+            """full screen the game"""
+            if py.is_fullscreen:
+                py.fullscreen(False)
+            else:
+                py.fullscreen(True)
+
         if len(self.animation_list) != 0:
             if self.animation_list[0].origine in self.ennemi:
                 for anime in self.animation_list:
@@ -628,12 +635,6 @@ class Game:
                 """changer d'arme"""
                 self.menu = None
                 self.is_loose = False
-            if py.btnp(py.KEY_F1):
-                """full screen the game"""
-                if py.is_fullscreen:
-                    py.fullscreen(False)
-                else:
-                    py.fullscreen(True)
 
     def draw(self) -> None:
         """methode appelée à chaque actualisation de l'écran : dessine toute les images à l'écran"""
