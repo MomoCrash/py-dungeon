@@ -1,12 +1,13 @@
 from random import choice, random
 from Entity import *
-from Settings import EQUIVALANCE, IMAGE_PORTE_FERMEE, IMAGE_PORTE_OUVERTE, LIMITE
+from Settings import EQUIVALANCE, IMAGE_PORTE_FERMEE, IMAGE_PORTE_OUVERTE, LIMITE, WIN_W, WIN_H
 
 # variable globals -----------------------------------------------------------------------------------------------------
 
 CARTE_SPAWN = {
     "Cave": [(Zombie, 1), (Squelette, 1), (Diablotin, 1), (Golem, 1), (Ghost, 1), (Bat, 1), (Witch, 1), (DragonFeu, 1), (DragonDark, 1), (BlobDark, 1), (Creeper, 1)],
     "Grass": [(Spider, 1), (Loup, 1), (Fox, 1), (BlobFeu, 1), (BlobEau, 1), (DragonFeu, 1), (BlobPlant, 1), (BlobLight, 1), (BlobDark, 1), (DragonPlant, 1)],
+    "Grass2": [(Zombie, 1)],
     "Desert": [(Aligator, 1), (Golem, 1), (Mommies, 1), (Squelette, 1), (Mommies, 1), (Snake, 1), (DragonEau, 1)],
     "Catacombes": [(Zombie, 1), (Squelette, 1), (Vampire, 1), (Necromancien, 1), (Rampant, 1)],
     "Paradis": [(Angel, 1), (Arcangel, 1), (DragonLight, 1), (BlobLight, 1)],
@@ -31,7 +32,7 @@ class Tile:
         """
         :param x: int                           | position en x (en pixels)
         :param y: int                           | position en y (en pixels)
-        :var self.tiles: list(tuple(int, int)) | images des 4 petite tuiles dans le carré de 16x16
+        :var self.tiles: list(tuple(int, int))  | images des 4 petite tuiles dans le carré de 16x16
         :var self.types: list(str)              | pour les 4 petites tuiles, avec la variable _equivalance je peux savoir si c'est un mur, un piège ou autre ou rien
 
         """
@@ -64,6 +65,7 @@ class Carte:
         :var self.stage: int | niveau actuel
         """
         self.game = game
+        self.wh = round((WIN_W-33)/128)
         # map basique de taille : 16 par 16
         self.map_dim = [()]
         self.grille = []
@@ -83,26 +85,29 @@ class Carte:
         :param forced: si renseigné créé une map en particulier (non random)
         """
         if loot:
-            self.map_dim = [(LIMITE[self.biome][0], LIMITE[self.biome][1]) for _ in range(4)]
+            self.map_dim = [(LIMITE[self.biome][0], LIMITE[self.biome][1]) for _ in range(self.wh**2)]
         elif forced is not None:
             self.map_dim = forced
         else:
             self.biome = choice(list(LIMITE.keys()))
             self.map_dim = [(randint(LIMITE[self.biome][0], LIMITE[self.biome][0] + LIMITE[self.biome][2]),  # X
                              randint(LIMITE[self.biome][1], LIMITE[self.biome][3] + LIMITE[self.biome][1]))  # Y
-                            for _ in range(4)]
+                            for _ in range(WIN_W**2)]
         self.grille = []
         temp = []
-        for i in range(4):
+        for i in range(self.wh**2):
             temp.append([])
             for x in range(8):
                 temp[i].append([])
                 for y in range(8):
                     temp[i][x].append(Tile(self.map_dim[i][0] * 128 + x * 16, self.map_dim[i][1] * 128 + y * 16))
-        for i in range(2):
+        for i in range(self.wh):
             for iColumn in range(8):
-                self.grille.append(temp[i * 2][iColumn] + temp[i * 2 + 1][iColumn])
-        self.grille[15][15].types.append("end")
+                colonne = []
+                for j in range(self.wh):
+                    colonne += temp[i * self.wh + j][iColumn]
+                self.grille.append(colonne)
+        self.grille[self.wh*8-1][self.wh*8-1].types.append("end")
 
     def new_stage(self, forced: list = None) -> None:
         """créé un nouveau stage en fonction de la situation du personnage."""
@@ -110,7 +115,7 @@ class Carte:
             self.new_map(forced=forced)
             self.game.player.place(0, 0)
             self.game.loots.clear()
-            self.rand_spawns(randint(2, 5), specifique_biome=CARTE_SPAWN[self.biome], local_section=(8, 8, 7, 7))
+            self.rand_spawns(randint(self.wh*2, self.wh*5), specifique_biome=CARTE_SPAWN[self.biome], local_section=(8, 8, self.wh*8-9, self.wh*8-9))
             self.etage_completed = False
             self.stage += 1
             self.game.looting = not self.game.looting
@@ -159,13 +164,13 @@ class Carte:
 
     def blit(self) -> None:
         """affichage du layer de la map et du stage où on se trouve."""
-        for y in range(2):
-            for x in range(2):
-                py.bltm(x * 128, y * 128, 0, self.map_dim[int(f"{x}{y}", 2)][0] * 128,
-                        self.map_dim[int(f"{x}{y}", 2)][1] * 128, 128, 128, 0)
+        for x in range(self.wh):
+            for y in range(self.wh):
+                py.bltm(x * 128, y * 128, 0, self.map_dim[x*self.wh + y][0] * 128,
+                        self.map_dim[x*self.wh + y][1] * 128, 128, 128, 0)
         if self.etage_completed:
-            py.blt(240, 240, 0, IMAGE_PORTE_OUVERTE[0], IMAGE_PORTE_OUVERTE[1], 16, 16, 7)
+            py.blt(WIN_W-48, WIN_H-32, 0, IMAGE_PORTE_OUVERTE[0], IMAGE_PORTE_OUVERTE[1], 16, 16, 7)
         else:
-            py.blt(240, 240, 0, IMAGE_PORTE_FERMEE[0], IMAGE_PORTE_FERMEE[1], 16, 16, 7)
+            py.blt(WIN_W-48, WIN_H-32, 0, IMAGE_PORTE_FERMEE[0], IMAGE_PORTE_FERMEE[1], 16, 16, 7)
 
-        py.text(256, 240, f" stage: \n {self.stage if self.stage < 999 else '999+'}", 7)
+        py.text(WIN_W-32, 240, f" stage: \n {self.stage if self.stage < 999 else '999+'}", 7)

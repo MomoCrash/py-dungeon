@@ -2,7 +2,7 @@ from Equipment import *
 from Loot import Loot
 from Animate import *
 import random
-from Settings import IMAGE_ENTITE, EFFICACITE
+from Settings import IMAGE_ENTITE, EFFICACITE, MILIEUMOT, WIN_W, WIN_H, LARGEUR
 
 
 class Entity:
@@ -19,7 +19,7 @@ class Entity:
         :param size: tuple(w: int, h: int)  | taille (toujours 16 par 16 normalement)
         :param hp: int                      | point de vies
         :param colkey: int                  | couleur à retirer dans l'affichage
-        :var self.orient: str               | défini l'orientation du personnage
+        :var self.orient: int               | défini l'orientation du personnage
         :var self.imgY: tuple(int, int)     | image a utiliser pour haut, bas
         :var self.imgX: tuple(int, int)     | image a utiliser pour gauche droite
         :var self.debuff: list()            | liste de tout les debuffs actifs
@@ -201,7 +201,7 @@ class Player(Entity):
         super().__init__(game, x, y, (0, 0), (16, 16), 100)
         self.weapon = RustySword(self)
         self.secondary_weapon = RustySword(self)
-        self.armor = NakedArmor(self)
+        self.armor = NakedArmor(self, 0)
         self.stats = {
             "points": 0,
             "sante": 0,
@@ -212,7 +212,7 @@ class Player(Entity):
     def reset_stats(self):
         self.weapon = RustySword(self)
         self.secondary_weapon = RustySword(self)
-        self.armor = NakedArmor(self)
+        self.armor = NakedArmor(self, 0)
         self.stats = {
             "points": 0,
             "sante": 0,
@@ -222,16 +222,29 @@ class Player(Entity):
         self.hp = 100
         self.maxhp = 100
 
+    def blit_entity(self) -> None:
+        if self.game.carte.biome == "Enfer":
+            if self.orient == 0 or self.orient == 1:
+                py.blt(self.reel_x, self.reel_y, IMAGE_ENTITE, 96, 32, 16, 16, self.colkey)
+            else:
+                py.blt(self.reel_x, self.reel_y, IMAGE_ENTITE, 112, 32, 16, 16, self.colkey)
+
+        else:
+            super().blit_entity()
+
     def blit_life_bar(self) -> None:
         """affiche la bar de vie du joueur en bas de l'écran"""
-        py.rect(0, 256, 256, 16, 8)
-        py.rect(0, 256, (self.hp / self.maxhp) * 256, 16, 11)
-        py.text(90, 264, f"{round(self.hp)}/{self.maxhp}", 7)
+        py.rect(0, WIN_H-16, WIN_W-33, 16, 8)
+        py.rect(0, WIN_H-16, (self.hp / self.maxhp) * (WIN_W-33), 16, 11)
+        py.text((WIN_W-33-MILIEUMOT(7))//2, WIN_H-8, f"{round(self.hp)}/{self.maxhp}", 7)
 
     def damage(self, amount, el, source) -> None:
         """applique une quantité de dégâts, et défend grâce à l'armure, en cas de mort le Player est reset"""
-        total = amount * self.armor.defence() * EFFICACITE[0][el]
+        total = (amount - self.armor.defence()) * EFFICACITE[0][el]
+        if total < 0:
+            total = 0
         self.hp -= total
+        self.armor.damage_armor(1)
         if self.hp <= 0:
             self.game.loose()
 
@@ -358,7 +371,7 @@ class Ennemies(Entity):
         if self.hp <= 0:
             self.game.ennemi.remove(self)
             if self.loot:
-                self.game.score += self.value
+                self.game.score += int(self.value*2/LARGEUR)
                 while self.game.next_lvl < self.game.score:
                     self.game.player.stats["points"] += 1
                     self.game.player.lvl += 1
@@ -645,19 +658,18 @@ class Necromancien(Ennemies):
         left_action = self.speed
         while left_action > 0:
             self.timer_invocation -= 1
-            if self.timer_invocation <= 0 and len(self.game.ennemi) < 10:
+            if self.timer_invocation <= 0 and len(self.game.ennemi) < 5*LARGEUR:
                 self.timer_invocation = randint(12, 20)
                 arround = [self.x - 3, self.y - 3, 7, 7]
                 if arround[0] < 0:
                     arround[0] = 0
                 if arround[1] < 0:
                     arround[1] = 0
-                if arround[0] + arround[2] > 15:
-                    arround[2] = 15 - arround[0]
-                if arround[1] + arround[3] > 15:
-                    arround[3] = 15 - arround[1]
-                self.game.carte.rand_spawns(randint(1, 2), loot=False, specifique_biome=[(Zombie, 1)],
-                                            local_section=arround)
+                if arround[0] + arround[2] > LARGEUR*8 - 1:
+                    arround[2] = LARGEUR*8 - arround[0] - 1
+                if arround[1] + arround[3] > LARGEUR*8 - 1:
+                    arround[3] = LARGEUR*8 - arround[1] - 1
+                self.game.carte.rand_spawns(randint(1, 2), loot=False, specifique_biome=[(Zombie, 1)], local_section=arround)
             if self.get_if_player_touched():
                 self.game.animation_list.append(Attaque(self.game, self))
                 left_action -= 1

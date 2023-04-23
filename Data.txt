@@ -1,6 +1,6 @@
 cd C:\Users\trist\PycharmProjects\Dungeon
 
-C:\Users\trist\AppData\Local\Programs\Python\Python310\Scripts\pyxel edit assets.pyxres
+C:\Users\trist\AppData\Local\Programs\Python\Python310\Scripts\pyxel edit C:\Users\trist\PycharmProjects\Dungeon\assets.pyxres
 
 C:\Users\trist\AppData\Local\Programs\Python\Python310\Scripts\auto-py-to-exe
 
@@ -13,6 +13,69 @@ E -> interagir
 W -> skip la salle de loot (pour ne pas avoir a traverser toute le map)
 (R -> restart (étage 1 sans armes etc...) )
 
-23/12/2022 : 1597 lines | 62289 char | ~39 char/line | >line="Entity.py":649 | >char="Entity.py":25438
-04/01/2023 : 1749 lines | 72650 char | ~42 char/line | >line="Entity.py":666 | >char="Entity.py":26329
-21/01/2023 : 2584 lines | 108879 char | ~42 char/line | >line="Entity.py":923 | >char="Entity.py":36623
+Lien vers le site : https://mysticalspread.github.io/dungeon-tales/
+
+Map implémenté :
+    - Cave
+    - plaine
+    - forêt
+    - desert
+    - catacombes
+    - enfer (1 seul monstre !!!)
+    - paradis
+
+Monstre implémenté :
+    - Zombie
+    - Squelette
+    - Demon (introuvable en jeu)
+    - chave souris
+    - fantome
+    - golem
+    - araignée
+    - diablotin
+    - vampire
+    - necromencien
+    - aligator
+    - abomination (introuvable en jeu)
+    - mommies
+    - loup
+    - renard
+    - sorcière
+    - serpent
+    - creeper/kamikaze
+    - rampant
+    - Notch (introuvable en jeu)
+    - ange
+    - arcange
+
+    - Dragon d'eau
+    - Dragon de feu
+    - Dragon de plante
+    - Dragon de lumière
+    - Dragon de tenebre
+
+    - blob d'eau
+    - blob de feu
+    - blob de plante
+    - blob de lumière
+    - blob de tenebre
+
+Armes implémenté (aucune armes de boss):
+    - épée rouillé
+    - épée simple
+    - lance
+    - hallebarde
+    - hache
+    - marteau
+    - arc (!!! certain model son bugé)
+    - katana
+
+Armures implémenté (aucune armure 'spécial'):
+    - vetement simple (nu)
+    - cuir
+    - fer
+    - or
+    - diamand
+    - magma (résistant au feu et plant mais vulnérable a l'eau)
+    - peau de Dragon de feu (résistant au feu et plant mais vulnérable a l'eau)
+

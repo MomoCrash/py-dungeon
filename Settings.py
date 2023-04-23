@@ -15,6 +15,11 @@ C'est un stock énorme ou on y retrouve :
 - TEXTS : tout les dialogs, les texts à mettre dans les menu etc ...
 """
 
+LARGEUR = 3
+WIN_W = LARGEUR*128 + 33 - 1
+WIN_H = LARGEUR*128 + 17 - 1
+
+
 IMAGE_PORTE_FERMEE = (32, 0)
 IMAGE_PORTE_OUVERTE = (48, 0)
 
@@ -41,6 +46,7 @@ EQUIVALANCE = {
         (6, 16), (7, 16), (6, 17), (7, 17),  # bones
         (8, 16), (9, 16), (8, 17), (9, 17),  # bones
         (14, 16), (15, 16), (14, 17), (15, 17),  # siege
+        (20, 2), (21, 2), (20, 3), (21, 3),  # buisson
     ],
     "ground": [  # Tuiles qui bloque le déplacement mais pas les attaques
         (16, 6), (17, 6), (16, 7), (17, 7),  # eau
@@ -181,11 +187,12 @@ EQUIVALANCE = {
 
 # position des biomes
 LIMITE = {
-    "Cave": (0, 0, 3, 2),
-    "Grass": (0, 3, 3, 2),
+    "Cave": (0, 0, 2, 2),
+    "Grass": (0, 3, 8, 2),
+    "Grass2": (9, 3, 2, 2),
     'Desert': (0, 6, 3, 2),
     "Catacombes": (0, 9, 3, 2),
-    "Enfer": (0, 13, 3, 1),
+    "Enfer": (0, 13, 8, 2),
     "Paradis": (9, 0, 2, 2),
 
 }
@@ -211,7 +218,7 @@ LOOT_IMAGE = {
     "Sword": (16, 0),
     "Spear": (16, 32),
     "Hammer": (16, 128),
-    "Bow": (16, 152),
+    "Bow": (128, 184),
     "Hallebarde": (16, 64),
     "Axe": (16, 96),
     "Katana": (16, 184)
@@ -325,40 +332,48 @@ TEXTS = {
                 "entier dans cette grotte. Le Paradis installa \n"
                 "leur base principale dans cette grotte pour y \n"
                 "combattre leurs ennemies de toujours Les Enfers.",
-    "Zombie": "Voilà le Zombie, un mort vivant enfin je vous refais pas\n"
+    "Zombie": "Voila le Zombie, un mort vivant enfin je vous refais pas\n"
               "toute l'histoire quoi vous voyez ...",
     "Squelette": "Le Squelette, En char et en os... Enfin surtout \n"
                  "en os puisque c'est un squelette.",
-    "Demon": "je ne sais pas mais voila",
+    "Demon": "Je suis un mechant tres mechant vraiment pas gentil.",
     "Bat": "I'M BATMAN",
-    "Ghost": "je ne sais pas mais voila",
-    "Golem": "je ne sais pas mais voila",
+    "Ghost": "GHOST BUSTER !!! Alors t as peur ?",
+    "Golem": "Racaillou C'est toi ? ",
     "Spider": "CHUIS SPIDERMAN FDP",
-    "Diablotin": "je ne sais pas mais voila",
-    "Vampire": "je ne sais pas mais voila",
-    "BlobFeu": "je ne sais pas mais voila",
-    "Necromancien": "je ne sais pas mais voila",
-    "Aligator": "je ne sais pas mais voila",
-    "Abomination": "je ne sais pas mais voila",
-    "Mommies": "je ne sais pas mais voila",
-    "Loup": "je ne sais pas mais voila",
-    "Fox": "je ne sais pas mais voila",
-    "BlobEau": "je ne sais pas mais voila",
-    "Witch": "je ne sais pas mais voila",
-    "DragonFeu": "je ne sais pas mais voila",
-    "Snake": "je ne sais pas mais voila",
-    "Creeper": "je ne sais pas mais voila",
-    "Rampant": "je ne sais pas mais voila",
-    "Notch": "je ne sais pas mais voila",
-    "Angel": "je ne sais pas mais voila",
-    "Arcangel": "je ne sais pas mais voila",
-    "DragonLight": "je ne sais pas mais voila",
-    "BlobPlant": "je ne sais pas mais voila",
-    "DragonDark": "je ne sais pas mais voila",
-    "DragonEau": "je ne sais pas mais voila",
-    "DragonPlant": "je ne sais pas mais voila",
-    "BlobLight": "je ne sais pas mais voila",
-    "BlobDark": "je ne sais pas mais voila",
+    "Diablotin": "je suis un mechant (sans sucre, sans aditif, \n"
+                 "sans charisme)",
+    "Vampire": "J adore sucer... le sang je veux dire",
+    "BlobFeu": "Blblblbl",
+    "Necromancien": "INVOCATION !!!!!!!!!!",
+    "Aligator": "Lacoste Tn ouaiiiiiis",
+    "Abomination": "beuuuuuuuuuuuuuuh",
+    "Mommies": "wsh Ramses II ?",
+    "Loup": "Le Village se reveile ..",
+    "Fox": "Goupil, rien de plus.",
+    "BlobEau": "bllbllbllbllbll",
+    "Witch": "Cette personne est extremement enquiquinante sur le \n"
+             "jeu nommee Mincraft.",
+    "DragonFeu": "Bien avec L ane de Shrek, votre relation se passe bien ?",
+    "Snake": "sssssssssssssssssssssssssssssssssssssssssssssssssssssssssss\n"
+             "ssssssssssssssssssssssssssssssssssalopessssssssssssssssssss\n"
+             "sssssssssssssssssssssssssssssssssssssssssssssssssssssssssss\n"
+             "ss",
+    "Creeper": "tsssssssssss ... BOOOOOOOOOOOOOOOOOOOOOOOOOOOM",
+    "Rampant": "Discret tel la musaraigne",
+    "Notch": "vous connaissez son jeu, moi je l aime bien il est style",
+    "Angel": "vous savez se qu on dis, il ne faut pas tuer l habit du moine\n"
+             "avant d avoir chasser la pierre qui roule et voir la goutte d'eau\n"
+             "sonner a sa porte.",
+    "Arcangel": "Wsh Tyrael depuis qu on a battue Diablo, ca se passe bien ?",
+    "DragonLight": "FLASHBANG !!!",
+    "BlobPlant": "bbllbbllbbllbbll",
+    "DragonDark": "LE TEMOIN VOUS OBSERVE .. sa forme final approche, mais n ayez crainte\n"
+                  "les gardiens sont la.",
+    "DragonEau": "Plouf",
+    "DragonPlant": "le papier ca coupe.",
+    "BlobLight": "bblbblbbl",
+    "BlobDark": "lblblblblb",
 }
 
 song = [
@@ -369,3 +384,6 @@ song = [
     "item",
     "hell",
 ]
+
+# milieu d'un mot en pixels :
+MILIEUMOT = lambda n_lettre: (n_lettre*4-1)/2 - 1
