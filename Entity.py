@@ -172,14 +172,14 @@ class Entity:
         distances = self.distance(other_entity)
         if abs(distances[0]) > abs(distances[1]):
             if distances[0] > 0:
-                return 0
-            else:
-                return 1
-        else:
-            if distances[1] > 0:
                 return 2
             else:
                 return 3
+        else:
+            if distances[1] > 0:
+                return 0
+            else:
+                return 1
 
 
 # Player ---------------------------------------------------------------------------------------------------------------
@@ -310,7 +310,9 @@ class Ennemies(Entity):
     def action(self, forced=None):
         """effectue une action"""
         left_action = self.speed
+        print(" - -- - - - - - - - ")
         while left_action > 0:
+            # If entity has a contraint to move or attack
             if forced is not None:
                 if forced == "Attaque":
                     self.game.animation_list.append(Attaque(self.game, self))
@@ -340,13 +342,16 @@ class Ennemies(Entity):
                             self.right()
                         left_action -= 1
 
+            # Attack the player if is in range
             if self.get_if_player_touched():
                 self.game.animation_list.append(Attaque(self.game, self))
                 left_action -= 1
             if left_action > 0:
                 distances = self.distance(self.game.player)
-                if abs(distances[0]) + abs(distances[1]) > 10:
+                print("Distance", distances)
+                if (abs(distances[0]) + abs(distances[1])) < 10:
                     side = self.low_distance_side(self.game.player)
+                    print("Side oriented", side)
                     if side == 0:
                         self.top()
                     elif side == 1:
@@ -358,6 +363,7 @@ class Ennemies(Entity):
                     left_action -= 1
                 else:
                     rand = random.randint(0, 3)
+                    print("Random", rand)
                     if rand == 0:
                         self.top()
                     elif rand == 1:
