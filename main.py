@@ -37,7 +37,7 @@ class Game:
     """
     def __init__(self):
         """
-        Initialise la librarie Pyxel et créé des conteneur pour chaque élément du jeu.
+        Initialise la librarie Pyxel et créé des conteneurs pour chaque élément du jeu.
         conteneurs :
             - carte Carte -> carte sur laquel le personnage évolue
             - player Player -> le joueur contrôlé
