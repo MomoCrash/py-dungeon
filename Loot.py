@@ -63,7 +63,7 @@ class Loot:
                     getter.game.loots.insert(0, Loot(0, getter.x, getter.y, (True, getter.weapon)))
                     getter.set_weapon(self.forced[1])
                     getter.game.loots.remove(self)
-                if type(self.forced[1]) is str:
+                elif type(self.forced[1]) is str:
                     getter.hp += self.niveau * TAUX_PV
                     if getter.hp > getter.maxhp:
                         getter.hp = getter.maxhp
@@ -101,14 +101,14 @@ class Loot:
         """affiche l'objet dans l'inventaire à l'emplacement pour voir ce qui est au sol"""
         if self.forced[0]:
             if self.forced[1] == "Life":
-                py.blt(WIN_W-32, 180, IMAGE_EQUIPMENT, 0, 48, 16, 32, 7)
+                py.blt(WIN_W-32, 195, IMAGE_EQUIPMENT, 0, 48, 16, 32, 7)
             else:
-                self.forced[1].blit(decalY=180 if type(self.forced[1]) in Weapon.__subclasses__() else 160)
+                self.forced[1].blit(decalY=195 if type(self.forced[1]) in Weapon.__subclasses__() else 175)
         elif self.type == "Life":
             py.blt(WIN_W-32, 180, IMAGE_EQUIPMENT, 0, 48, 16, 32, 7)
         else:
             img = LOOT_IMAGE[self.type]
-            py.blt(WIN_W-32, 180, IMAGE_EQUIPMENT, img[0], img[1], 16, 32, 0 if self.type != "MagmaArmor" else 7)
+            py.blt(WIN_W-32, 195, IMAGE_EQUIPMENT, img[0], img[1], 16, 32, 0 if self.type != "MagmaArmor" else 7)
             temp = str(self.niveau)
             chaine = ""
             for i in range(len(temp)):
@@ -118,4 +118,4 @@ class Loot:
                 chaine += temp[i]
                 if i % 4 == 3:
                     chaine += "\n"
-            py.text(WIN_W-16, 180, "lvl: \n"+chaine, 7)
+            py.text(WIN_W-16, 195, "lvl: \n"+chaine, 7)

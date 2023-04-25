@@ -575,7 +575,7 @@ class Game:
             if py.btnp(py.KEY_E, hold=60):
                 """interact"""
                 for loot in self.loots:
-                    if loot.x == self.player.x and loot.y == self.player.y and (self.looting or (not loot.forced[0] and loot.type == "Life") or loot.forced[0] and loot.type == "Life"):
+                    if loot.x == self.player.x and loot.y == self.player.y and (self.looting or loot.type == "Life"):
                         loot.get_loot(self.player)
             if py.btnp(py.KEY_Q, hold=20):
                 """aller à gauche"""
@@ -628,6 +628,10 @@ class Game:
             if py.btnp(py.KEY_TAB, hold=60):
                 """Affiche le Menu"""
                 self.menu = self.all_menus["TAB"]
+            if py.btnp(py.KEY_X, hold=60):
+                for _ in range(LARGEUR*10):
+                    for enn in self.ennemi:
+                        enn.damage(10000, 0, self.player)
         else:
             py.mouse(True)
             self.menu.update()
@@ -641,7 +645,7 @@ class Game:
         py.cls(0)
         self.carte.blit()
         for loot in self.loots:
-            if self.looting or (loot.forced[0] and loot.type == "Life"):
+            if self.looting or loot.type == "Life":
                 loot.blit()
         for e in self.ennemi:
             e.blit_entity()
@@ -660,9 +664,9 @@ class Game:
         py.rect(WIN_W-32, 165, 32, 2, 7)
         py.text(WIN_W-32, 168, "Au sol :", 7)
         for loot in self.loots:
-            if loot.x == self.player.x and loot.y == self.player.y and (self.looting or (not loot.forced[0] and loot.type == "Life") or loot.forced[0] and loot.type == "Life"):
+            if loot.x == self.player.x and loot.y == self.player.y and (self.looting or loot.type == "Life"):
                 loot.blit_inv()
-        py.rect(WIN_W-32, 215, 32, 2, 7)
+        py.rect(WIN_W-32, 230, 32, 2, 7)
         temp = f"Score :\n{self.score} pts"
         chaine = ""
         for i in range(len(temp)):
@@ -672,7 +676,7 @@ class Game:
             chaine += temp[i]
             if i % 8 == 7:
                 chaine += "\n"
-        py.text(WIN_W-31, 220, chaine, 7)
+        py.text(WIN_W-31, 335, chaine, 7)
         for anime in self.animation_layer:
             py.blt(anime[0], anime[1], anime[2], anime[3], anime[4], anime[5], anime[6], anime[7])
         self.animation_layer.clear()
