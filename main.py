@@ -536,7 +536,7 @@ class Game:
 
     def check_full_tile(self, x: int, y: int) -> bool:
         """
-        vérifie si la case est remplie par une entité
+        Vérifie si la case est remplie par une entité
         :arg x: position x de la case
         :arg y: position y de la case
         """
@@ -548,7 +548,7 @@ class Game:
         return False
 
     def update(self) -> None:
-        """methode appelée à chaque actualisation de l'écran : fait toute les opérations et gère les inputs"""
+        """methode appelée à chaque actualisation de l'écran : fait toutes les opérations et gère les inputs"""
         self.carte.actualisation()
 
         if py.btnp(py.KEY_F1):
