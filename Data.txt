@@ -4,6 +4,11 @@ C:\Users\trist\AppData\Local\Programs\Python\Python310\Scripts\pyxel edit C:\Use
 
 C:\Users\trist\AppData\Local\Programs\Python\Python310\Scripts\auto-py-to-exe
 
+
+git commit -am "mesage" -> point de sauvegarde ?
+git push -> envoyer
+git pull -> update depuis la version Github
+
 Touches :
 Z, Q, S, D -> mouvement
 A -> attaquer

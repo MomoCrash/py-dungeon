@@ -8,7 +8,7 @@ file edit with Python 3.10:
 version du jeu : 2.0
 
 librairy :
-public :
+public :d
     - Pyxel 1.9.6
     - random
 private :
@@ -580,7 +580,7 @@ class Game:
             if py.btnp(py.KEY_E, hold=60):
                 """interact"""
                 for loot in self.loots:
-                    if loot.x == self.player.x and loot.y == self.player.y:
+                    if loot.x == self.player.x and loot.y == self.player.y and (self.looting or (not loot.forced[0] and loot.type == "Life") or loot.forced[0] and loot.type == "Life"):
                         loot.get_loot(self.player)
             if py.btnp(py.KEY_Q, hold=20):
                 """aller à gauche"""
@@ -667,8 +667,8 @@ class Game:
         py.rect(WIN_W-32, 165, 32, 2, 7)
         py.text(WIN_W-32, 168, "Au sol :", 7)
         for loot in self.loots:
-            if loot.x == self.player.x and loot.y == self.player.y and (
-                    self.looting or (not loot.forced[0] and loot.type == "Sante")):
+            if loot.x == self.player.x and loot.y == self.player.y \
+                    and (self.looting or (not loot.forced[0] and loot.type == "Sante")):
                 loot.blit_inv()
         py.rect(WIN_W-32, 215, 32, 2, 7)
         temp = f"Score :\n{self.score} pts"
