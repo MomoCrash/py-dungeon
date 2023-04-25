@@ -2,7 +2,7 @@ from Equipment import *
 from Loot import Loot
 from Animate import *
 import random
-from Settings import IMAGE_ENTITE, EFFICACITE, MILIEUMOT, WIN_W, WIN_H, LARGEUR
+from Settings import IMAGE_ENTITE, EFFICACITE, MILIEUMOT, WIN_W, WIN_H, LARGEUR, TAUX_DROP
 
 
 class Entity:
@@ -224,11 +224,14 @@ class Player(Entity):
 
     def blit_entity(self) -> None:
         if self.game.carte.biome == "Enfer":
-            if self.orient == 0 or self.orient == 1:
-                py.blt(self.reel_x, self.reel_y, IMAGE_ENTITE, 96, 32, 16, 16, self.colkey)
-            else:
-                py.blt(self.reel_x, self.reel_y, IMAGE_ENTITE, 112, 32, 16, 16, self.colkey)
-
+            if ORIENT_EQ[self.orient] == "left":
+                py.blt(self.reel_x, self.reel_y, IMAGE_ENTITE, 64, 32, 16, 16, self.colkey)
+            elif ORIENT_EQ[self.orient] == "right":
+                py.blt(self.reel_x, self.reel_y, IMAGE_ENTITE, 64, 32, -16, 16, self.colkey)
+            elif ORIENT_EQ[self.orient] == "top":
+                py.blt(self.reel_x, self.reel_y, IMAGE_ENTITE, 80, 32, 16, 16, self.colkey)
+            elif ORIENT_EQ[self.orient] == "bottom":
+                py.blt(self.reel_x, self.reel_y, IMAGE_ENTITE, 80, 32, 16, -16, self.colkey)
         else:
             super().blit_entity()
 
@@ -274,7 +277,7 @@ class Ennemies(Entity):
     def __init__(self, game, x: int, y: int, img: tuple, size: tuple, hp: int, lvl: int, dmg: int, loot: bool = True,
                  colkey: int = 0, value: int = 10):
         """
-                :param game: Game                   | accès au jeu entier
+        :param game: Game                   | accès au jeu entier
         :param x: int                       | position x (en tuiles)
         :param y: int                       | position y (en tuiles)
         :param img: tuple(u: int, v: int)   | coordonnés de l'image de l'entité
@@ -326,7 +329,7 @@ class Ennemies(Entity):
                             self.right()
                         left_action -= 1
                     else:
-                        rand = random.randint(0, 3)
+                        rand = randint(0, 3)
                         if rand == 0:
                             self.top()
                         elif rand == 1:
@@ -376,7 +379,7 @@ class Ennemies(Entity):
                     self.game.player.stats["points"] += 1
                     self.game.player.lvl += 1
                     self.game.next_lvl += self.game.player.lvl * 2
-                if bool(randint(0, 1)):
+                if random.random() > TAUX_DROP:
                     self.game.loots.append(Loot(self.lvl, self.x, self.y))
 
     def range_blit(self):
@@ -538,6 +541,11 @@ class Demon(Ennemies):
                        "bottom": [[(0, 1), (0, 2)]],
                        }
 
+    def damage(self, amount, el, source):
+        super().damage(amount, el, source)
+        if self.hp <= 0:
+            self.game.loots.append(Loot(self.lvl, self.x, self.y, forced=(True, "Life")))
+
 
 class Spider(Ennemies):
     """héritage de Ennemi avec des valeurs prédéfini"""
@@ -677,7 +685,6 @@ class Necromancien(Ennemies):
                 distances = self.distance(self.game.player)
                 if abs(distances[0]) + abs(distances[1]) > 10:
                     side = self.low_distance_side(self.game.player)
-                    print(side)
                     if side == 0:
                         self.top()
                     elif side == 1:
@@ -689,7 +696,6 @@ class Necromancien(Ennemies):
                     left_action -= 1
                 else:
                     rand = random.randint(0, 3)
-                    print(rand)
                     if rand == 0:
                         self.top()
                     elif rand == 1:
@@ -717,6 +723,11 @@ class Abomination(Ennemies):
         super().__init__(game, x, y, (0, 224), (16, 16), 70, lvl, 70, loot=loot, colkey=7, value=25)
         self.speed = 1
         self.element = 0
+
+    def damage(self, amount, el, source):
+        super().damage(amount, el, source)
+        if self.hp <= 0:
+            self.game.loots.append(Loot(self.lvl, self.x, self.y, forced=(True, "Life")))
 
 
 class Mommies(Ennemies):
@@ -782,6 +793,7 @@ class Creeper(Ennemies):
         super().attaque()
         self.game.ennemi.remove(self)
 
+
 class Rampant(Ennemies):
     """héritage de Ennemi avec des valeurs prédéfini"""
 
@@ -798,6 +810,11 @@ class Notch(Ennemies):
         super().__init__(game, x, y, (32, 128), (16, 16), 100, lvl, 40, loot=loot, colkey=7, value=50)
         self.speed = 1
         self.element = 0
+
+    def damage(self, amount, el, source):
+        super().damage(amount, el, source)
+        if self.hp <= 0:
+            self.game.loots.append(Loot(self.lvl, self.x, self.y, forced=(True, "Life")))
 
 
 class Angel(Ennemies):

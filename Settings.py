@@ -23,6 +23,9 @@ WIN_H = LARGEUR*128 + 17 - 1
 IMAGE_PORTE_FERMEE = (32, 0)
 IMAGE_PORTE_OUVERTE = (48, 0)
 
+TAUX_DROP = 50 / 100
+TAUX_PV = 20
+
 # définition des murs et des pièges
 EQUIVALANCE = {
     "obst": [  # Tuiles qui bloque le déplacement et les attaques

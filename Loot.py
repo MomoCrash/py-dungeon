@@ -1,6 +1,6 @@
 from Equipment import *
 from random import random
-
+from Settings import TAUX_PV
 """
 Les Loots au sol, des fonctions pour les récupérers et les dessiner
 """
@@ -37,10 +37,12 @@ class Loot:
         :var self.type: str(Class-name)         | défini le type de l'objet par une chaine de charactère (nom de l'Objet ou 'Life')
         """
         self.forced = forced
+        if self.forced[0] and self.forced[1] == "Life":
+            self.type = "Life"
         self.x = x
         self.y = y
+        self.niveau = niveau
         if not forced[0]:
-            self.niveau = niveau
             r = random()
             somme = 0
             for v in self.taux_loot.values():
@@ -61,6 +63,11 @@ class Loot:
                     getter.game.loots.insert(0, Loot(0, getter.x, getter.y, (True, getter.weapon)))
                     getter.set_weapon(self.forced[1])
                     getter.game.loots.remove(self)
+                if type(self.forced[1]) is str:
+                    getter.hp += self.niveau * TAUX_PV
+                    if getter.hp > getter.maxhp:
+                        getter.hp = getter.maxhp
+                    getter.game.loots.remove(self)
                 else:
                     getter.game.loots.insert(0, Loot(0, getter.x, getter.y, (True, getter.armor)))
                     getter.set_armor(self.forced[1])
@@ -69,7 +76,7 @@ class Loot:
                 all_armor_loot = Armor.__subclasses__()
                 all_weapon_loot = Weapon.__subclasses__()
                 if self.type == "Life":
-                    getter.hp += self.niveau*10
+                    getter.hp += self.niveau * TAUX_PV
                     if getter.hp > getter.maxhp:
                         getter.hp = getter.maxhp
                     getter.game.loots.remove(self)
@@ -93,7 +100,10 @@ class Loot:
     def blit_inv(self):
         """affiche l'objet dans l'inventaire à l'emplacement pour voir ce qui est au sol"""
         if self.forced[0]:
-            self.forced[1].blit(decalY=180 if type(self.forced[1]) in Weapon.__subclasses__() else 160)
+            if self.forced[1] == "Life":
+                py.blt(WIN_W-32, 180, IMAGE_EQUIPMENT, 0, 48, 16, 32, 7)
+            else:
+                self.forced[1].blit(decalY=180 if type(self.forced[1]) in Weapon.__subclasses__() else 160)
         elif self.type == "Life":
             py.blt(WIN_W-32, 180, IMAGE_EQUIPMENT, 0, 48, 16, 32, 7)
         else:
