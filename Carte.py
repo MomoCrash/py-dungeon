@@ -32,7 +32,7 @@ class Tile:
         """
         :param x: int                           | position en x (en pixels)
         :param y: int                           | position en y (en pixels)
-        :var self.tiles: list(tuple(int, int))  | images des 4 petite tuiles dans le carré de 16x16
+        :var self.tiles: list(tuple(int, int))  | images des 4 petites tuiles dans le carré de 16x16
         :var self.types: list(str)              | pour les 4 petites tuiles, avec la variable _equivalance je peux savoir si c'est un mur, un piège ou autre ou rien
         """
         self.x = x
@@ -51,7 +51,9 @@ class Tile:
 
 
 class Carte:
-    """classe qui représente la carte formé de plein de grandes tuiles composé de tuiles plus petite"""
+    """
+    Representation de la carte formée de grandes tuiles sous-formée de tuiles petites
+    """
 
     def __init__(self, game):
         """
@@ -109,7 +111,7 @@ class Carte:
         self.grille[self.wh*8-1][self.wh*8-1].types.append("end")
 
     def new_stage(self, forced: list = None) -> None:
-        """créé un nouveau stage en fonction de la situation du personnage."""
+        """Créé un nouveau stage en fonction de la situation du personnage."""
         if self.game.looting:
             self.new_map(forced=forced)
             self.game.player.place(0, 0)

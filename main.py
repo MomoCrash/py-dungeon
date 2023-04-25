@@ -27,7 +27,7 @@ Other files :
 
 Content :
 contient la classe principal du jeu, qui est relié à n'importe quel élément et chaque élément est relié à elle.
-Ainsi, depuis n'importe où on peut accéder à n'importe quoi.
+Ainsi, depuis n'importe où on peut accéder à n'importe quoi. (instance du projet)
 """
 
 
@@ -41,7 +41,7 @@ class Game:
         conteneurs :
             - carte Carte -> carte sur laquel le personnage évolue
             - player Player -> le joueur contrôlé
-            - ennemi list(Ennemies) -> tout les ennemis dans une salle
+            - ennemi list(Ennemies) -> tous les ennemis dans une salle
             - loots list(Loot) -> tout les loots actifs
         """
         py.init(WIN_W, WIN_H, fps=60, quit_key=py.KEY_ESCAPE)
@@ -58,6 +58,7 @@ class Game:
         self.score = 0
         self.next_lvl = 2
         self.is_loose = False
+        # Create list of menu instance for -> TAB menu (e.g bestiare, start, niveau)
         self.all_menus = {
             "TAB": Box((0, 0),
                        (Bloc, (0, 0), (WIN_W, 25), 1),
@@ -396,11 +397,11 @@ class Game:
         self.open_start()
 
     def restart(self):
-        """remet à zéro tout le jeu"""
+        """Reset le jeu"""
         self.menu = self.all_menus["START"]
 
     def start(self):
-        """remet à zéro tout le jeu"""
+        """Relance/Lance le jeu"""
         py.load("assets.pyxres")
         self.carte = Carte(self)
         self.player.reset_stats()
@@ -416,12 +417,14 @@ class Game:
         self.is_loose = False
 
     def loose(self):
+        """ Lose menu """
         self.menu = Box((0, 0),
                         (Canevas, DEAFEAT_FIRST_PART(WIN_W//2-32, WIN_H//2), DEAFEAT_SECOND_PART(WIN_W//2, WIN_H//2)),
                         (ScoreText, (WIN_W//2-32, WIN_H//2+25), self.score, 0),
                         wh=(WIN_W, WIN_H), bg=8, root=self, but_exit=((0, WIN_H-22), (WIN_W, 22), "RESTART !", 0, 7, self.restart))
         self.is_loose = True
 
+    # LES FONCTIONS SUIVANTES SONT REDONDANTES CAR UTILISEES DANS LES MENUS (DONC SANS ARGUMENT)
     def open_start(self):
         self.menu = self.all_menus["START"]
 
@@ -548,7 +551,9 @@ class Game:
         return False
 
     def update(self) -> None:
-        """methode appelée à chaque actualisation de l'écran : fait toutes les opérations et gère les inputs"""
+        """
+        Methode appelée à chaque actualisation de l'écran : fait toutes les opérations et gère les inputs
+        """
         self.carte.actualisation()
 
         if py.btnp(py.KEY_F1):
@@ -641,11 +646,17 @@ class Game:
                 self.is_loose = False
 
     def draw(self) -> None:
-        """methode appelée à chaque actualisation de l'écran : dessine toute les images à l'écran"""
+        """
+        Méthode appelée à chaque actualisation de l'écran : dessine toutes les images à l'écran
+        """
         py.cls(0)
         self.carte.blit()
         for loot in self.loots:
+<<<<<<< HEAD
             if self.looting or loot.type == "Life":
+=======
+            if self.looting or (not loot.forced[0] and loot.type == "Sante"):
+>>>>>>> a6431bad8f05fc8aba975d05031d36c56ab9a42d
                 loot.blit()
         for e in self.ennemi:
             e.blit_entity()
@@ -654,17 +665,22 @@ class Game:
         self.player.blit_entity()
         self.player.weapon.blit_range()
         self.player.blit_life_bar()
-        py.text(WIN_W-30, 0, "Armor :", 7)
+        py.text(WIN_W-30, 0, "Armure :", 7)
         self.player.armor.blit(decalY=8)
         py.rect(WIN_W-32, 60, 32, 2, 7)
-        py.text(WIN_W-30, 65, "weapon \nin hand :", 7)
+        py.text(WIN_W-30, 65, "Arme 1 \n(en main) :", 7)
         self.player.weapon.blit(decalY=79)
-        py.text(WIN_W-30, 115, "weapon \nin bag :", 7)
+        py.text(WIN_W-30, 115, "Arme 2 \n(sac) :", 7)
         self.player.secondary_weapon.blit(decalY=130)
         py.rect(WIN_W-32, 165, 32, 2, 7)
         py.text(WIN_W-32, 168, "Au sol :", 7)
         for loot in self.loots:
+<<<<<<< HEAD
             if loot.x == self.player.x and loot.y == self.player.y and (self.looting or loot.type == "Life"):
+=======
+            if loot.x == self.player.x and loot.y == self.player.y \
+                    and (self.looting or (not loot.forced[0] and loot.type == "Sante")):
+>>>>>>> a6431bad8f05fc8aba975d05031d36c56ab9a42d
                 loot.blit_inv()
         py.rect(WIN_W-32, 230, 32, 2, 7)
         temp = f"Score :\n{self.score} pts"
@@ -683,7 +699,9 @@ class Game:
         self.menu.blit() if self.menu is not None else None
 
     def run(self) -> None:
-        """lance le jeu et sa fenêtre"""
+        """
+        Lance le jeu et ouvre la fenêtre de jeux
+        """
         py.run(self.update, self.draw)
 
 
