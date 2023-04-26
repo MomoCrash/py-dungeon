@@ -199,7 +199,7 @@ class Player(Entity):
         :var self.armor: Equipment.Armor...     | armure du joueur
         """
         super().__init__(game, x, y, (0, 0), (16, 16), 100)
-        self.weapon = Hammer(self, 50)
+        self.weapon = RustySword(self)
         self.secondary_weapon = RustySword(self)
         self.armor = NakedArmor(self, 0)
         self.stats = {
