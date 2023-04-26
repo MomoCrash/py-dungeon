@@ -1,6 +1,6 @@
 from Equipment import *
 from random import random
-
+from Settings import TAUX_PV
 """
 Les Loots au sol, des fonctions pour les récupérers et les dessiner
 """
@@ -18,6 +18,10 @@ class Loot:
         "DiamondArmor": 0.3,
         "MagmaArmor": 0.2,
         "DragonScaleArmor": 0.1,
+        "DragonWaterArmor": 0.1,
+        "DragonPlantArmor": 0.1,
+        "DragonDarkArmor": 0.1,
+        "DragonLightArmor": 0.1,
         "Sword": 1.2,
         "Spear": 1,
         "Hammer": 0.2,
@@ -25,22 +29,23 @@ class Loot:
         "Hallebarde": 0.6,
         "Axe": 1.2,
         "Katana": 1.4,
-        "Life": 3,
+        "Sante": 5,
     }
-    
+
     def __init__(self, niveau, x, y, forced=(False, )):
         """
         :param niveau: int                      | niveau de l'arme, l'arme ou la vie généré
         :param x: int                           | position x (en tuiles) ou le loot se trouve
         :param y: int                           | position y (en tuiles) ou le loot se trouve
         :param forced: tuple(bool, Equipment)   | permet de forcer le loot à avoir des attributs prédéfini (dans ce cas seul x et y seront défini en dehors de forced)
-        :var self.type: str(Class-name)         | défini le type de l'objet par une chaine de charactère (nom de l'Objet ou 'Life')
         """
         self.forced = forced
+        if self.forced[0] and self.forced[1] == "Sante":
+            self.type = "Sante"
         self.x = x
         self.y = y
+        self.niveau = niveau
         if not forced[0]:
-            self.niveau = niveau
             r = random()
             somme = 0
             for v in self.taux_loot.values():
@@ -55,11 +60,16 @@ class Loot:
 
     def get_loot(self, getter):
         """récupère le loot et le donne à getter (Player) en appliquant toute les modifications implicite"""
-        if getter.game.looting or self.type == "Life":
+        if getter.game.looting or self.type == "Sante":
             if self.forced[0]:
                 if type(self.forced[1]) in Weapon.__subclasses__():
                     getter.game.loots.insert(0, Loot(0, getter.x, getter.y, (True, getter.weapon)))
                     getter.set_weapon(self.forced[1])
+                    getter.game.loots.remove(self)
+                elif self.forced[1] == "Sante":
+                    getter.hp += self.niveau * TAUX_PV
+                    if getter.hp > getter.maxhp:
+                        getter.hp = getter.maxhp
                     getter.game.loots.remove(self)
                 else:
                     getter.game.loots.insert(0, Loot(0, getter.x, getter.y, (True, getter.armor)))
@@ -68,8 +78,8 @@ class Loot:
             else:
                 all_armor_loot = Armor.__subclasses__()
                 all_weapon_loot = Weapon.__subclasses__()
-                if self.type == "Life":
-                    getter.hp += self.niveau*10
+                if self.type == "Sante":
+                    getter.hp += self.niveau * TAUX_PV
                     if getter.hp > getter.maxhp:
                         getter.hp = getter.maxhp
                     getter.game.loots.remove(self)
@@ -93,12 +103,15 @@ class Loot:
     def blit_inv(self):
         """affiche l'objet dans l'inventaire à l'emplacement pour voir ce qui est au sol"""
         if self.forced[0]:
-            self.forced[1].blit(decalY=180 if type(self.forced[1]) in Weapon.__subclasses__() else 160)
-        elif self.type == "Life":
-            py.blt(WIN_W-32, 180, IMAGE_EQUIPMENT, 0, 48, 16, 32, 7)
+            if self.forced[1] == "Sante":
+                py.blt(WIN_W-32, 195, IMAGE_EQUIPMENT, 0, 48, 16, 32, 7)
+            else:
+                self.forced[1].blit(decalY=195 if type(self.forced[1]) in Weapon.__subclasses__() else 195)
+        elif self.type == "Sante":
+            py.blt(WIN_W-32, 195, IMAGE_EQUIPMENT, 0, 48, 16, 32, 7)
         else:
             img = LOOT_IMAGE[self.type]
-            py.blt(WIN_W-32, 180, IMAGE_EQUIPMENT, img[0], img[1], 16, 32, 0 if self.type != "MagmaArmor" else 7)
+            py.blt(WIN_W-32, 195, IMAGE_EQUIPMENT, img[0], img[1], 16, 32, 0 if self.type != "MagmaArmor" else 7)
             temp = str(self.niveau)
             chaine = ""
             for i in range(len(temp)):
@@ -108,4 +121,4 @@ class Loot:
                 chaine += temp[i]
                 if i % 4 == 3:
                     chaine += "\n"
-            py.text(WIN_W-16, 180, "lvl: \n"+chaine, 7)
+            py.text(WIN_W-16, 195, "lvl: \n"+chaine, 7)

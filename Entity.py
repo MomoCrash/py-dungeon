@@ -2,7 +2,7 @@ from Equipment import *
 from Loot import Loot
 from Animate import *
 import random
-from Settings import IMAGE_ENTITE, EFFICACITE, MILIEUMOT, WIN_W, WIN_H, LARGEUR
+from Settings import IMAGE_ENTITE, EFFICACITE, MILIEUMOT, WIN_W, WIN_H, LARGEUR, TAUX_DROP, MAX_LOOT
 
 
 class Entity:
@@ -168,18 +168,21 @@ class Entity:
         distance_y = self.y - other_entity.y
         return distance_x, distance_y
 
-    def low_distance_side(self, other_entity) -> str:
+    def low_distance_side(self, other_entity) -> int:
         distances = self.distance(other_entity)
         if abs(distances[0]) > abs(distances[1]):
             if distances[0] > 0:
+                return 2
+            else:
+                return 3
+        elif abs(distances[1]) > abs(distances[0]):
+            if distances[1] > 0:
                 return 0
             else:
                 return 1
         else:
-            if distances[1] > 0:
-                return 2
-            else:
-                return 3
+            print("diago")
+            return randint(0, 3)
 
 
 # Player ---------------------------------------------------------------------------------------------------------------
@@ -224,11 +227,14 @@ class Player(Entity):
 
     def blit_entity(self) -> None:
         if self.game.carte.biome == "Enfer":
-            if self.orient == 0 or self.orient == 1:
-                py.blt(self.reel_x, self.reel_y, IMAGE_ENTITE, 96, 32, 16, 16, self.colkey)
-            else:
-                py.blt(self.reel_x, self.reel_y, IMAGE_ENTITE, 112, 32, 16, 16, self.colkey)
-
+            if ORIENT_EQ[self.orient] == "left":
+                py.blt(self.reel_x, self.reel_y, IMAGE_ENTITE, 64, 32, 16, 16, self.colkey)
+            elif ORIENT_EQ[self.orient] == "right":
+                py.blt(self.reel_x, self.reel_y, IMAGE_ENTITE, 64, 32, -16, 16, self.colkey)
+            elif ORIENT_EQ[self.orient] == "top":
+                py.blt(self.reel_x, self.reel_y, IMAGE_ENTITE, 80, 32, 16, 16, self.colkey)
+            elif ORIENT_EQ[self.orient] == "bottom":
+                py.blt(self.reel_x, self.reel_y, IMAGE_ENTITE, 80, 32, 16, -16, self.colkey)
         else:
             super().blit_entity()
 
@@ -274,7 +280,7 @@ class Ennemies(Entity):
     def __init__(self, game, x: int, y: int, img: tuple, size: tuple, hp: int, lvl: int, dmg: int, loot: bool = True,
                  colkey: int = 0, value: int = 10):
         """
-                :param game: Game                   | accès au jeu entier
+        :param game: Game                   | accès au jeu entier
         :param x: int                       | position x (en tuiles)
         :param y: int                       | position y (en tuiles)
         :param img: tuple(u: int, v: int)   | coordonnés de l'image de l'entité
@@ -298,8 +304,8 @@ class Ennemies(Entity):
         self.attaque_tile = (16, 32)
         self.lvl = lvl
         self.speed = 1
-        self.dmg = (lvl - 1) * dmg + randint(1, dmg - 1)
-        self.hp = (lvl - 1) * hp + randint(1, hp - 1)
+        self.dmg = lvl * dmg + randint(1, dmg - 1)
+        self.hp = lvl * hp + randint(1, hp - 1)
         self.maxhp = self.hp
         self.element = 0
         self.loot = loot
@@ -307,7 +313,9 @@ class Ennemies(Entity):
     def action(self, forced=None):
         """effectue une action"""
         left_action = self.speed
+        print(" - -- - - - - - - - ")
         while left_action > 0:
+            # If entity has a contraint to move or attack
             if forced is not None:
                 if forced == "Attaque":
                     self.game.animation_list.append(Attaque(self.game, self))
@@ -326,7 +334,7 @@ class Ennemies(Entity):
                             self.right()
                         left_action -= 1
                     else:
-                        rand = random.randint(0, 3)
+                        rand = randint(0, 3)
                         if rand == 0:
                             self.top()
                         elif rand == 1:
@@ -337,13 +345,16 @@ class Ennemies(Entity):
                             self.right()
                         left_action -= 1
 
+            # Attack the player if is in range
             if self.get_if_player_touched():
                 self.game.animation_list.append(Attaque(self.game, self))
                 left_action -= 1
             if left_action > 0:
                 distances = self.distance(self.game.player)
-                if abs(distances[0]) + abs(distances[1]) > 10:
+                print("Distance", distances)
+                if (abs(distances[0]) + abs(distances[1])) < 10:
                     side = self.low_distance_side(self.game.player)
+                    print("Side oriented", side)
                     if side == 0:
                         self.top()
                     elif side == 1:
@@ -355,6 +366,7 @@ class Ennemies(Entity):
                     left_action -= 1
                 else:
                     rand = random.randint(0, 3)
+                    print("Random", rand)
                     if rand == 0:
                         self.top()
                     elif rand == 1:
@@ -376,7 +388,9 @@ class Ennemies(Entity):
                     self.game.player.stats["points"] += 1
                     self.game.player.lvl += 1
                     self.game.next_lvl += self.game.player.lvl * 2
-                if bool(randint(0, 1)):
+                loot = 0
+                while random.random() > TAUX_DROP and loot < MAX_LOOT:
+                    loot += 1
                     self.game.loots.append(Loot(self.lvl, self.x, self.y))
 
     def range_blit(self):
@@ -489,7 +503,7 @@ class Ghost(Ennemies):
 
 class DragonFeu(Ennemies):
     def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
-        super().__init__(game, x, y, (32, 64), (16, 16), 35, lvl, 15, loot=loot, colkey=7, value=15)
+        super().__init__(game, x, y, (32, 64), (16, 16), 20, lvl, 40, loot=loot, colkey=7, value=15)
         self.patern = {"left": [[(-1, 0), (-2, 0), (-3, 0)]],
                        "right": [[(1, 0), (2, 0), (3, 0)]],
                        "top": [[(0, -1), (0, -2), (0, -3)]],
@@ -529,7 +543,7 @@ class Demon(Ennemies):
     """héritage de Ennemi avec des valeurs prédéfini"""
 
     def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
-        super().__init__(game, x, y, (0, 48), (16, 16), 40, lvl, 100, loot=loot, colkey=7, value=12)
+        super().__init__(game, x, y, (0, 48), (16, 16), 40, lvl, 100, loot=loot, colkey=7, value=25)
         self.speed = 1
         self.element = 2
         self.patern = {"left": [[(-1, 0), (-2, 0)]],
@@ -537,6 +551,11 @@ class Demon(Ennemies):
                        "top": [[(0, -1), (0, -2)]],
                        "bottom": [[(0, 1), (0, 2)]],
                        }
+
+    def damage(self, amount, el, source):
+        super().damage(amount, el, source)
+        if self.hp <= 0:
+            self.game.loots.append(Loot(self.lvl, self.x, self.y, forced=(True, "Sante")))
 
 
 class Spider(Ennemies):
@@ -712,9 +731,20 @@ class Abomination(Ennemies):
     """héritage de Ennemi avec des valeurs prédéfini"""
 
     def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
-        super().__init__(game, x, y, (0, 224), (16, 16), 70, lvl, 70, loot=loot, colkey=7, value=25)
+        super().__init__(game, x, y, (0, 224), (16, 16), 70, lvl, 30, loot=loot, colkey=7, value=25)
         self.speed = 1
         self.element = 0
+        self.patern = {
+            "left": [[(-1, 0), (-2, 0), (-2, 1)], [(-1, 0), (-2, 0), (-2, -1)]],
+            "right": [[(1, 0), (2, 0), (2, 1)], [(1, 0), (2, 0), (2, -1)]],
+            "top": [[(0, -1), (0, -2), (1, -2)], [(0, -1), (0, -2), (-1, -2)]],
+            "bottom": [[(0, 1), (0, 2), (1, 2)], [(0, 1), (0, 2), (-1, 2)]],
+        }
+
+    def damage(self, amount, el, source):
+        super().damage(amount, el, source)
+        if self.hp <= 0:
+            self.game.loots.append(Loot(self.lvl, self.x, self.y, forced=(True, "Sante")))
 
 
 class Mommies(Ennemies):
@@ -766,7 +796,7 @@ class Creeper(Ennemies):
     """héritage de Ennemi avec des valeurs prédéfini"""
 
     def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
-        super().__init__(game, x, y, (32, 96), (16, 16), 12, lvl, 40, loot=loot, colkey=7, value=10)
+        super().__init__(game, x, y, (32, 96), (16, 16), 12, lvl, 50, loot=loot, colkey=7, value=10)
         self.speed = 1
         self.element = 0
         self.patern = {
@@ -779,6 +809,7 @@ class Creeper(Ennemies):
     def attaque(self):
         super().attaque()
         self.game.ennemi.remove(self)
+
 
 class Rampant(Ennemies):
     """héritage de Ennemi avec des valeurs prédéfini"""
@@ -793,9 +824,20 @@ class Notch(Ennemies):
     """héritage de Ennemi avec des valeurs prédéfini"""
 
     def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
-        super().__init__(game, x, y, (32, 128), (16, 16), 100, lvl, 40, loot=loot, colkey=7, value=50)
+        super().__init__(game, x, y, (32, 128), (16, 16), 100, lvl, 40, loot=loot, colkey=7, value=30)
         self.speed = 1
         self.element = 0
+        self.patern = {
+            "left": [[(1, 0)], [(-1, 0)], [(0, 1)], [(0, -1)]],
+            "right": [[(1, 0)], [(-1, 0)], [(0, 1)], [(0, -1)]],
+            "top": [[(0, -1)], [(-1, 0)], [(0, 1)], [(0, -1)]],
+            "bottom": [[(0, 1)]],
+            }
+
+    def damage(self, amount, el, source):
+        super().damage(amount, el, source)
+        if self.hp <= 0:
+            self.game.loots.append(Loot(self.lvl, self.x, self.y, forced=(True, "Sante")))
 
 
 class Angel(Ennemies):
@@ -820,7 +862,7 @@ class DragonLight(Ennemies):
     """héritage de Ennemi avec des valeurs prédéfini"""
 
     def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
-        super().__init__(game, x, y, (32, 176), (16, 16), 35, lvl, 15, loot=loot, colkey=6, value=20)
+        super().__init__(game, x, y, (32, 176), (16, 16), 40, lvl, 20, loot=loot, colkey=6, value=20)
         self.speed = 1
         self.element = 4
         self.patern = {"left": [[(-1, 0), (-2, 0), (-3, 0)]],
@@ -834,7 +876,7 @@ class DragonDark(Ennemies):
     """héritage de Ennemi avec des valeurs prédéfini"""
 
     def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
-        super().__init__(game, x, y, (32, 208), (16, 16), 35, lvl, 15, loot=loot, colkey=6, value=20)
+        super().__init__(game, x, y, (32, 208), (16, 16), 40, lvl, 20, loot=loot, colkey=6, value=20)
         self.speed = 1
         self.element = 5
         self.patern = {"left": [[(-1, 0), (-2, 0), (-3, 0)]],
@@ -848,7 +890,7 @@ class DragonEau(Ennemies):
     """héritage de Ennemi avec des valeurs prédéfini"""
 
     def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
-        super().__init__(game, x, y, (32, 224), (16, 16), 35, lvl, 15, loot=loot, colkey=7, value=20)
+        super().__init__(game, x, y, (32, 224), (16, 16), 40, lvl, 20, loot=loot, colkey=7, value=20)
         self.speed = 1
         self.element = 1
         self.patern = {"left": [[(-1, 0), (-2, 0), (-3, 0)]],

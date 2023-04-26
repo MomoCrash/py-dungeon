@@ -3,6 +3,29 @@ from random import randint
 from Settings import IMAGE_EQUIPMENT, LOOT_IMAGE, ORIENT_EQ, WIN_W, LARGEUR
 
 
+"""
+Contient toutes les Armes et Armures
+Armes :
+ - RustySword -> Version inferieur de Sword forcément de niveau 1
+ - Sword -> épée basique qui touche sur 1 case
+ - Spear -> touche loin (3 case)
+ - Hammer -> gros dégats, grosse zone d'effet (l'arme par excellence) mais rare
+ - Bow -> touche à l'infini mais dégats faible (uniquement des dégats physiques
+ - Hallebarde -> paterne particulier mais bon dégats (ne peut pas touche devant sois
+ - Axe -> armes simple mais efficaces (3 case devant soit dans le sens de la largeur)
+ - Kantana  -> permet 1 déplacement après la première attaque PUIS pour pouvoir réavoir ce dash, il faut se déplacer
+
+Armures :
+ - NakedArmor
+ - LeatherArmor
+ - IronArmor
+ - GoldArmor
+ - DiamondArmor
+ - MagmaArmor  -> type Feu
+ - DragonScaleArmor  -> type feu
+"""
+
+
 class Weapon:
     """Classe Génériques des armes"""
 
@@ -81,7 +104,7 @@ class Weapon:
 
     def blit(self, decalY=0) -> None:
         """
-        affiche l'arme dans linventaire
+        Affiche l'arme dans l'inventaire
         :param decalY: int décalage pour afficher plus bas dans l'inventaire (objet au sol)
         """
         temp = str(self.dmg)
@@ -172,9 +195,10 @@ class Bow(Weapon):
 
     def __init__(self, owner, lvl):
         strenght = randint(0, 3)
-        super().__init__(owner, LOOT_IMAGE["Bow"], lvl, strenght)
+        super().__init__(owner, LOOT_IMAGE["Bow"], lvl, strenght+1, strenght)
         self.element = 0
         self.dmg += strenght*lvl
+        self.element = 0
         self.patern = {
             "left": [[(-i, 0) for i in range(1, LARGEUR*8 + 1)]],
             "right": [[(i, 0) for i in range(1, LARGEUR*8 + 1)]],
@@ -217,8 +241,8 @@ class Axe(Weapon):
 
 class Katana(Weapon):
     """
-    héritage de Weapon avec des charactéristique défini (Hache)
-    patern : attaque les trois case devant
+    Héritage de Weapon avec des caractéristiques défini (Hache)
+        Paterne: attaque les trois cases devant
     """
 
     def __init__(self, owner, lvl):
@@ -314,7 +338,7 @@ class Armor:
         py.text(WIN_W-16, decalY, chaine, 7)
         chaine = "duration:\n"
         temp = str(self.durabilite)
-        print(len(temp))
+        # print(len(temp))
         if len(temp) == 7:
             chaine += temp
             chaine += "."
@@ -376,4 +400,32 @@ class DragonScaleArmor(Armor):
     """héritage de Armor avec des charactéristique défini"""
 
     def __init__(self, owner, lvl):
-        super().__init__(owner, "Armure en Ecaille", 35, LOOT_IMAGE["DragonScaleArmor"], 2, lvl, 60)
+        super().__init__(owner, "Armure en Ecaille de Feu", 35, LOOT_IMAGE["DragonScaleArmor"], 2, lvl, 60)
+
+
+class DragonWaterArmor(Armor):
+    """héritage de Armor avec des charactéristique défini"""
+
+    def __init__(self, owner, lvl):
+        super().__init__(owner, "Armure en Ecaille d'eau", 35, LOOT_IMAGE["DragonWaterArmor"], 1, lvl, 60)
+
+
+class DragonPlantArmor(Armor):
+    """héritage de Armor avec des charactéristique défini"""
+
+    def __init__(self, owner, lvl):
+        super().__init__(owner, "Armure en Ecaille de plante", 35, LOOT_IMAGE["DragonPlantArmor"], 3, lvl, 60)
+
+
+class DragonDarkArmor(Armor):
+    """héritage de Armor avec des charactéristique défini"""
+
+    def __init__(self, owner, lvl):
+        super().__init__(owner, "Armure en Ecaille ténébreuse", 35, LOOT_IMAGE["DragonDarkArmor"], 4, lvl, 60)
+
+
+class DragonLightArmor(Armor):
+    """héritage de Armor avec des charactéristique défini"""
+
+    def __init__(self, owner, lvl):
+        super().__init__(owner, "Armure en Ecaille lumineuse", 35, LOOT_IMAGE["DragonLightArmor"], 5, lvl, 60)
