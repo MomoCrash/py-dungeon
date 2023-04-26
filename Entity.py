@@ -2,7 +2,7 @@ from Equipment import *
 from Loot import Loot
 from Animate import *
 import random
-from Settings import IMAGE_ENTITE, EFFICACITE, MILIEUMOT, WIN_W, WIN_H, LARGEUR, TAUX_DROP
+from Settings import IMAGE_ENTITE, EFFICACITE, MILIEUMOT, WIN_W, WIN_H, LARGEUR, TAUX_DROP, MAX_LOOT
 
 
 class Entity:
@@ -199,7 +199,7 @@ class Player(Entity):
         :var self.armor: Equipment.Armor...     | armure du joueur
         """
         super().__init__(game, x, y, (0, 0), (16, 16), 100)
-        self.weapon = RustySword(self)
+        self.weapon = Hammer(self, 50)
         self.secondary_weapon = RustySword(self)
         self.armor = NakedArmor(self, 0)
         self.stats = {
@@ -385,7 +385,9 @@ class Ennemies(Entity):
                     self.game.player.stats["points"] += 1
                     self.game.player.lvl += 1
                     self.game.next_lvl += self.game.player.lvl * 2
-                if random.random() > TAUX_DROP:
+                loot = 0
+                while random.random() > TAUX_DROP and loot < MAX_LOOT:
+                    loot += 1
                     self.game.loots.append(Loot(self.lvl, self.x, self.y))
 
     def range_blit(self):
@@ -538,7 +540,7 @@ class Demon(Ennemies):
     """héritage de Ennemi avec des valeurs prédéfini"""
 
     def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
-        super().__init__(game, x, y, (0, 48), (16, 16), 40, lvl, 100, loot=loot, colkey=7, value=12)
+        super().__init__(game, x, y, (0, 48), (16, 16), 40, lvl, 100, loot=loot, colkey=7, value=25)
         self.speed = 1
         self.element = 2
         self.patern = {"left": [[(-1, 0), (-2, 0)]],
@@ -550,7 +552,7 @@ class Demon(Ennemies):
     def damage(self, amount, el, source):
         super().damage(amount, el, source)
         if self.hp <= 0:
-            self.game.loots.append(Loot(self.lvl, self.x, self.y, forced=(True, "Life")))
+            self.game.loots.append(Loot(self.lvl, self.x, self.y, forced=(True, "Sante")))
 
 
 class Spider(Ennemies):
@@ -726,14 +728,20 @@ class Abomination(Ennemies):
     """héritage de Ennemi avec des valeurs prédéfini"""
 
     def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
-        super().__init__(game, x, y, (0, 224), (16, 16), 70, lvl, 70, loot=loot, colkey=7, value=25)
+        super().__init__(game, x, y, (0, 224), (16, 16), 70, lvl, 30, loot=loot, colkey=7, value=25)
         self.speed = 1
         self.element = 0
+        self.patern = {
+            "left": [[(-1, 0), (-2, 0), (-2, 1)], [(-1, 0), (-2, 0), (-2, -1)]],
+            "right": [[(1, 0), (2, 0), (2, 1)], [(1, 0), (2, 0), (2, -1)]],
+            "top": [[(0, -1), (0, -2), (1, -2)], [(0, -1), (0, -2), (-1, -2)]],
+            "bottom": [[(0, 1), (0, 2), (1, 2)], [(0, 1), (0, 2), (-1, 2)]],
+        }
 
     def damage(self, amount, el, source):
         super().damage(amount, el, source)
         if self.hp <= 0:
-            self.game.loots.append(Loot(self.lvl, self.x, self.y, forced=(True, "Life")))
+            self.game.loots.append(Loot(self.lvl, self.x, self.y, forced=(True, "Sante")))
 
 
 class Mommies(Ennemies):
@@ -813,14 +821,20 @@ class Notch(Ennemies):
     """héritage de Ennemi avec des valeurs prédéfini"""
 
     def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
-        super().__init__(game, x, y, (32, 128), (16, 16), 100, lvl, 40, loot=loot, colkey=7, value=50)
+        super().__init__(game, x, y, (32, 128), (16, 16), 100, lvl, 40, loot=loot, colkey=7, value=30)
         self.speed = 1
         self.element = 0
+        self.patern = {
+            "left": [[(1, 0)], [(-1, 0)], [(0, 1)], [(0, -1)]],
+            "right": [[(1, 0)], [(-1, 0)], [(0, 1)], [(0, -1)]],
+            "top": [[(0, -1)], [(-1, 0)], [(0, 1)], [(0, -1)]],
+            "bottom": [[(0, 1)]],
+            }
 
     def damage(self, amount, el, source):
         super().damage(amount, el, source)
         if self.hp <= 0:
-            self.game.loots.append(Loot(self.lvl, self.x, self.y, forced=(True, "Life")))
+            self.game.loots.append(Loot(self.lvl, self.x, self.y, forced=(True, "Sante")))
 
 
 class Angel(Ennemies):

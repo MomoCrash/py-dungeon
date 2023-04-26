@@ -47,6 +47,7 @@ class Game:
         py.init(WIN_W, WIN_H, fps=60, quit_key=py.KEY_ESCAPE)
         py.load("assets.pyxres")
         py.fullscreen(False)
+        py.mouse(True)
         self.carte = Carte(self)
         self.player = Player(self, 0, 0)
         self.ennemi = []
@@ -114,7 +115,8 @@ class Game:
                          (Button, (WIN_W - 58, 50), (60, 16), "Bestiaire >>", 1, 7, self.open_header),
                          (Button, (WIN_W - 42, 67), (60, 16), "Niveau    >>", 1, 7, self.open_stats),
                          (Button, (WIN_W - 58, 84), (60, 16), "Histoire  >>", 1, 7, self.open_histoire),
-                         wh=(WIN_W, WIN_H), bg=10, root=self, but_exit=((0, WIN_H - 20), (WIN_W, 20), "QUIT", 15, 8))
+                         wh=(WIN_W, WIN_H), bg=10, root=self, but_exit=((0, WIN_H - 20), (WIN_W, 20), "QUIT", 15, 8)
+                         )
         }
 
         self.bestiaire = {
@@ -165,232 +167,264 @@ class Game:
                           (Button, (WIN_W - 58, 84), (60, 16), "Histoire  >>", 1, 7, self.open_histoire),
                           wh=(WIN_W, WIN_H), bg=10, root=self, but_exit=((0, WIN_H - 20), (WIN_W, 20), "QUIT", 15, 8)),
             "Zombie": Box((0, 0),
-                          (Bloc, (0, 0), (288, 25), 10),
-                          (Text, (115, 10), "ZOMBIE", 1),
+                          (Bloc, (0, 0), (WIN_W, 25), 10),
+                          (Text, (WIN_W//2 - 29, 10), "ZOMBIE", 1),
                           (Text, (57, 40), "ZOMBIE", 7),
                           (Iframe, MONSTER_IMG["Zombie"](30, 40), 0, self.open_header),
                           (Text, (20, 67), TEXTS["Zombie"], 7),
+                          (Text, (WIN_W-70, 5), "echap : quitter", 1),
                           wh=(WIN_W, WIN_H), bg=0, root=self, but_exit=((0, WIN_H - 20), (WIN_W, 20), "QUIT", 7, 8)),
             "Squelette": Box((0, 0),
-                             (Bloc, (0, 0), (288, 25), 10),
-                             (Text, (115, 10), "SQUELETTE", 1),
+                             (Bloc, (0, 0), (WIN_W, 25), 10),
+                             (Text, (WIN_W//2 - 29, 10), "SQUELETTE", 1),
                              (Text, (57, 40), "SQUELETTE", 7),
                              (Iframe, MONSTER_IMG["Squelette"](30, 40), 0, self.open_header),
                              (Text, (20, 67), TEXTS["Squelette"], 7),
+                             (Text, (WIN_W-70, 5), "echap : quitter", 1),
                              wh=(WIN_W, WIN_H), bg=0, root=self, but_exit=((0, WIN_H - 20), (WIN_W, 20), "QUIT", 7, 8)),
             "Demon": Box((0, 0),
-                         (Bloc, (0, 0), (288, 25), 10),
-                         (Text, (115, 10), "DEMON", 1),
+                         (Bloc, (0, 0), (WIN_W, 25), 10),
+                         (Text, (WIN_W//2 - 29, 10), "DEMON", 1),
                          (Text, (57, 40), "DEMON", 7),
                          (Iframe, MONSTER_IMG["Demon"](30, 40), 1, self.open_header),
                          (Text, (20, 67), TEXTS["Demon"], 7),
+                         (Text, (WIN_W-70, 5), "echap : quitter", 1),
                          wh=(WIN_W, WIN_H), bg=0, root=self, but_exit=((0, WIN_H - 20), (WIN_W, 20), "QUIT", 7, 8)),
             "Bat": Box((0, 0),
-                       (Bloc, (0, 0), (288, 25), 10),
-                       (Text, (115, 10), "BAT", 1),
+                       (Bloc, (0, 0), (WIN_W, 25), 10),
+                       (Text, (WIN_W//2 - 29, 10), "BAT", 1),
                        (Text, (57, 40), "BAT", 7),
                        (Iframe, MONSTER_IMG["Bat"](30, 40), 0, self.open_header),
                        (Text, (20, 67), TEXTS["Bat"], 7),
+                       (Text, (WIN_W-70, 5), "echap : quitter", 1),
                        wh=(WIN_W, WIN_H), bg=0, root=self, but_exit=((0, WIN_H - 20), (WIN_W, 20), "QUIT", 7, 8)),
             "Ghost": Box((0, 0),
-                         (Bloc, (0, 0), (288, 25), 10),
-                         (Text, (115, 10), "GHOST", 1),
+                         (Bloc, (0, 0), (WIN_W, 25), 10),
+                         (Text, (WIN_W//2 - 29, 10), "GHOST", 1),
                          (Text, (57, 40), "GHOST", 7),
                          (Iframe, MONSTER_IMG["Ghost"](30, 40), 1, self.open_header),
                          (Text, (20, 67), TEXTS["Ghost"], 7),
+                         (Text, (WIN_W-70, 5), "echap : quitter", 1),
                          wh=(WIN_W, WIN_H), bg=0, root=self, but_exit=((0, WIN_H - 20), (WIN_W, 20), "QUIT", 7, 8)),
             "Golem": Box((0, 0),
-                         (Bloc, (0, 0), (288, 25), 10),
-                         (Text, (115, 10), "GOLEM", 1),
+                         (Bloc, (0, 0), (WIN_W, 25), 10),
+                         (Text, (WIN_W//2 - 29, 10), "GOLEM", 1),
                          (Text, (57, 40), "GOLEM", 7),
                          (Iframe, MONSTER_IMG["Golem"](30, 40), 1, self.open_header),
                          (Text, (20, 67), TEXTS["Golem"], 7),
+                         (Text, (WIN_W-70, 5), "echap : quitter", 1),
                          wh=(WIN_W, WIN_H), bg=0, root=self, but_exit=((0, WIN_H - 20), (WIN_W, 20), "QUIT", 7, 8)),
             "Spider": Box((0, 0),
-                          (Bloc, (0, 0), (288, 25), 10),
-                          (Text, (115, 10), "SPIDER", 1),
+                          (Bloc, (0, 0), (WIN_W, 25), 10),
+                          (Text, (WIN_W//2 - 29, 10), "SPIDER", 1),
                           (Text, (57, 40), "SPIDER", 7),
                           (Iframe, MONSTER_IMG["Spider"](30, 40), 1, self.open_header),
                           (Text, (20, 67), TEXTS["Spider"], 7),
+                          (Text, (WIN_W-70, 5), "echap : quitter", 1),
                           wh=(WIN_W, WIN_H), bg=0, root=self, but_exit=((0, WIN_H - 20), (WIN_W, 20), "QUIT", 7, 8)),
             "Diablotin": Box((0, 0),
-                             (Bloc, (0, 0), (288, 25), 10),
-                             (Text, (115, 10), "DIABLOTIN", 1),
+                             (Bloc, (0, 0), (WIN_W, 25), 10),
+                             (Text, (WIN_W//2 - 29, 10), "DIABLOTIN", 1),
                              (Text, (57, 40), "DIABLOTIN", 7),
                              (Iframe, MONSTER_IMG["Diablotin"](30, 40), 1, self.open_header),
                              (Text, (20, 67), TEXTS["Diablotin"], 7),
+                             (Text, (WIN_W-70, 5), "echap : quitter", 1),
                              wh=(WIN_W, WIN_H), bg=0, root=self, but_exit=((0, WIN_H - 20), (WIN_W, 20), "QUIT", 7, 8)),
             "Vampire": Box((0, 0),
-                           (Bloc, (0, 0), (288, 25), 10),
-                           (Text, (115, 10), "VAMPIRE", 1),
+                           (Bloc, (0, 0), (WIN_W, 25), 10),
+                           (Text, (WIN_W//2 - 29, 10), "VAMPIRE", 1),
                            (Text, (57, 40), "VAMPIRE", 7),
                            (Iframe, MONSTER_IMG["Vampire"](30, 40), 1, self.open_header),
                            (Text, (20, 67), TEXTS["Vampire"], 7),
+                           (Text, (WIN_W-70, 5), "echap : quitter", 1),
                            wh=(WIN_W, WIN_H), bg=0, root=self, but_exit=((0, WIN_H - 20), (WIN_W, 20), "QUIT", 7, 8)),
             "BlobFeu": Box((0, 0),
-                           (Bloc, (0, 0), (288, 25), 10),
-                           (Text, (115, 10), "BLOB FEU", 1),
+                           (Bloc, (0, 0), (WIN_W, 25), 10),
+                           (Text, (WIN_W//2 - 29, 10), "BLOB FEU", 1),
                            (Text, (57, 40), "BLOB FEU", 7),
                            (Iframe, MONSTER_IMG["BlobFeu"](30, 40), 1, self.open_header),
                            (Text, (20, 67), TEXTS["BlobFeu"], 7),
+                           (Text, (WIN_W-70, 5), "echap : quitter", 1),
                            wh=(WIN_W, WIN_H), bg=0, root=self, but_exit=((0, WIN_H - 20), (WIN_W, 20), "QUIT", 7, 8)),
             "BlobEau": Box((0, 0),
-                           (Bloc, (0, 0), (288, 25), 10),
-                           (Text, (115, 10), "BLOB EAU", 1),
+                           (Bloc, (0, 0), (WIN_W, 25), 10),
+                           (Text, (WIN_W//2 - 29, 10), "BLOB EAU", 1),
                            (Text, (57, 40), "BLOB EAU", 7),
                            (Iframe, MONSTER_IMG["BlobEau"](30, 40), 1, self.open_header),
                            (Text, (20, 67), TEXTS["BlobEau"], 7),
+                           (Text, (WIN_W-70, 5), "echap : quitter", 1),
                            wh=(WIN_W, WIN_H), bg=0, root=self, but_exit=((0, WIN_H - 20), (WIN_W, 20), "QUIT", 7, 8)),
             "Aligator": Box((0, 0),
-                            (Bloc, (0, 0), (288, 25), 10),
-                            (Text, (115, 10), "ALIGATOR", 1),
+                            (Bloc, (0, 0), (WIN_W, 25), 10),
+                            (Text, (WIN_W//2 - 29, 10), "ALIGATOR", 1),
                             (Text, (57, 40), "ALIGATOR", 7),
                             (Iframe, MONSTER_IMG["Aligator"](30, 40), 1, self.open_header),
                             (Text, (20, 67), TEXTS["Aligator"], 7),
+                            (Text, (WIN_W-70, 5), "echap : quitter", 1),
                             wh=(WIN_W, WIN_H), bg=0, root=self, but_exit=((0, WIN_H - 20), (WIN_W, 20), "QUIT", 7, 8)),
             "Mommies": Box((0, 0),
-                           (Bloc, (0, 0), (288, 25), 10),
-                           (Text, (115, 10), "MOMMIES", 1),
+                           (Bloc, (0, 0), (WIN_W, 25), 10),
+                           (Text, (WIN_W//2 - 29, 10), "MOMMIES", 1),
                            (Text, (57, 40), "MOMMIES", 7),
                            (Iframe, MONSTER_IMG["Mommies"](30, 40), 1, self.open_header),
                            (Text, (20, 67), TEXTS["Mommies"], 7),
+                           (Text, (WIN_W-70, 5), "echap : quitter", 1),
                            wh=(WIN_W, WIN_H), bg=0, root=self, but_exit=((0, WIN_H - 20), (WIN_W, 20), "QUIT", 7, 8)),
             "Loup": Box((0, 0),
-                        (Bloc, (0, 0), (288, 25), 10),
-                        (Text, (115, 10), "LOUP", 1),
+                        (Bloc, (0, 0), (WIN_W, 25), 10),
+                        (Text, (WIN_W//2 - 29, 10), "LOUP", 1),
                         (Text, (57, 40), "LOUP", 7),
                         (Iframe, MONSTER_IMG["Loup"](30, 40), 1, self.open_header),
                         (Text, (20, 67), TEXTS["Ghost"], 7),
+                        (Text, (WIN_W-70, 5), "echap : quitter", 1),
                         wh=(WIN_W, WIN_H), bg=0, root=self, but_exit=((0, WIN_H - 20), (WIN_W, 20), "QUIT", 7, 8)),
             "Fox": Box((0, 0),
-                       (Bloc, (0, 0), (288, 25), 10),
-                       (Text, (115, 10), "RENARD", 1),
+                       (Bloc, (0, 0), (WIN_W, 25), 10),
+                       (Text, (WIN_W//2 - 29, 10), "RENARD", 1),
                        (Text, (57, 40), "RENARD", 7),
                        (Iframe, MONSTER_IMG["Fox"](30, 40), 1, self.open_header),
                        (Text, (20, 67), TEXTS["Fox"], 7),
+                       (Text, (WIN_W-70, 5), "echap : quitter", 1),
                        wh=(WIN_W, WIN_H), bg=0, root=self, but_exit=((0, WIN_H - 20), (WIN_W, 20), "QUIT", 7, 8)),
             "Necromancien": Box((0, 0),
-                                (Bloc, (0, 0), (288, 25), 10),
-                                (Text, (115, 10), "NECROMANCIEN", 1),
+                                (Bloc, (0, 0), (WIN_W, 25), 10),
+                                (Text, (WIN_W//2 - 29, 10), "NECROMANCIEN", 1),
                                 (Text, (57, 40), "NECROMANCIEN", 7),
                                 (Iframe, MONSTER_IMG["Necromancien"](30, 40), 1, self.open_header),
                                 (Text, (20, 67), TEXTS["Necromancien"], 7),
+                                (Text, (WIN_W-70, 5), "echap : quitter", 1),
                                 wh=(WIN_W, WIN_H), bg=0, root=self,
                                 but_exit=((0, WIN_H - 20), (WIN_W, 20), "QUIT", 7, 8)),
             "Witch": Box((0, 0),
-                         (Bloc, (0, 0), (288, 25), 10),
-                         (Text, (115, 10), "WITCH", 1),
+                         (Bloc, (0, 0), (WIN_W, 25), 10),
+                         (Text, (WIN_W//2 - 29, 10), "WITCH", 1),
                          (Text, (57, 40), "WITCH", 7),
                          (Iframe, MONSTER_IMG["Witch"](30, 40), 1, self.open_header),
                          (Text, (20, 67), TEXTS["Witch"], 7),
+                         (Text, (WIN_W-70, 5), "echap : quitter", 1),
                          wh=(WIN_W, WIN_H), bg=0, root=self, but_exit=((0, WIN_H - 20), (WIN_W, 20), "QUIT", 7, 8)),
             "DragonFeu": Box((0, 0),
-                             (Bloc, (0, 0), (288, 25), 10),
-                             (Text, (115, 10), "DRAGON FEU", 1),
+                             (Bloc, (0, 0), (WIN_W, 25), 10),
+                             (Text, (WIN_W//2 - 29, 10), "DRAGON FEU", 1),
                              (Text, (57, 40), "DRAGON FEU", 7),
                              (Iframe, MONSTER_IMG["DragonFeu"](30, 40), 1, self.open_header),
                              (Text, (20, 67), TEXTS["DragonFeu"], 7),
+                             (Text, (WIN_W-70, 5), "echap : quitter", 1),
                              wh=(WIN_W, WIN_H), bg=0, root=self, but_exit=((0, WIN_H - 20), (WIN_W, 20), "QUIT", 7, 8)),
             "Abomination": Box((0, 0),
-                               (Bloc, (0, 0), (288, 25), 10),
-                               (Text, (115, 10), "ABOMINATION", 1),
+                               (Bloc, (0, 0), (WIN_W, 25), 10),
+                               (Text, (WIN_W//2 - 29, 10), "ABOMINATION", 1),
                                (Text, (57, 40), "ABOMINATION", 7),
                                (Iframe, MONSTER_IMG["Abomination"](30, 40), 1, self.open_header),
                                (Text, (20, 67), TEXTS["Abomination"], 7),
+                               (Text, (WIN_W-70, 5), "echap : quitter", 1),
                                wh=(WIN_W, WIN_H), bg=0, root=self,
                                but_exit=((0, WIN_H - 20), (WIN_W, 20), "QUIT", 7, 8)),
             "Snake": Box((0, 0),
-                         (Bloc, (0, 0), (288, 25), 10),
-                         (Text, (115, 10), "SNAKE", 1),
+                         (Bloc, (0, 0), (WIN_W, 25), 10),
+                         (Text, (WIN_W//2 - 29, 10), "SNAKE", 1),
                          (Text, (57, 40), "SNAKE", 7),
                          (Iframe, MONSTER_IMG["Snake"](30, 40), 1, self.open_header),
                          (Text, (20, 67), TEXTS["Snake"], 7),
+                         (Text, (WIN_W-70, 5), "echap : quitter", 1),
                          wh=(WIN_W, WIN_H), bg=0, root=self, but_exit=((0, WIN_H - 20), (WIN_W, 20), "QUIT", 7, 8)),
             "Creeper": Box((0, 0),
-                           (Bloc, (0, 0), (288, 25), 10),
-                           (Text, (115, 10), "CREEPER", 1),
+                           (Bloc, (0, 0), (WIN_W, 25), 10),
+                           (Text, (WIN_W//2 - 29, 10), "CREEPER", 1),
                            (Text, (57, 40), "CREEPER", 7),
                            (Iframe, MONSTER_IMG["Creeper"](30, 40), 1, self.open_header),
                            (Text, (20, 67), TEXTS["Creeper"], 7),
+                           (Text, (WIN_W-70, 5), "echap : quitter", 1),
                            wh=(WIN_W, WIN_H), bg=0, root=self, but_exit=((0, WIN_H - 20), (WIN_W, 20), "QUIT", 7, 8)),
             "Rampant": Box((0, 0),
-                           (Bloc, (0, 0), (288, 25), 10),
-                           (Text, (115, 10), "RAMPANT", 1),
+                           (Bloc, (0, 0), (WIN_W, 25), 10),
+                           (Text, (WIN_W//2 - 29, 10), "RAMPANT", 1),
                            (Text, (57, 40), "RAMPANT", 7),
                            (Iframe, MONSTER_IMG["Rampant"](30, 40), 1, self.open_header),
                            (Text, (20, 67), TEXTS["Rampant"], 7),
+                           (Text, (WIN_W-70, 5), "echap : quitter", 1),
                            wh=(WIN_W, WIN_H), bg=0, root=self, but_exit=((0, WIN_H - 20), (WIN_W, 20), "QUIT", 7, 8)),
             "Notch": Box((0, 0),
-                         (Bloc, (0, 0), (288, 25), 10),
-                         (Text, (115, 10), "NOTCH", 1),
+                         (Bloc, (0, 0), (WIN_W, 25), 10),
+                         (Text, (WIN_W//2 - 29, 10), "NOTCH", 1),
                          (Text, (57, 40), "NOTCH", 7),
                          (Iframe, MONSTER_IMG["Notch"](30, 40), 1, self.open_header),
                          (Text, (20, 67), TEXTS["Notch"], 7),
+                         (Text, (WIN_W-70, 5), "echap : quitter", 1),
                          wh=(WIN_W, WIN_H), bg=0, root=self, but_exit=((0, WIN_H - 20), (WIN_W, 20), "QUIT", 7, 8)),
             "Angel": Box((0, 0),
-                         (Bloc, (0, 0), (288, 25), 10),
-                         (Text, (115, 10), "ANGEL", 1),
+                         (Bloc, (0, 0), (WIN_W, 25), 10),
+                         (Text, (WIN_W//2 - 29, 10), "ANGEL", 1),
                          (Text, (57, 40), "ANGEL", 7),
                          (Iframe, MONSTER_IMG["Angel"](30, 40), 1, self.open_header),
                          (Text, (20, 67), TEXTS["Angel"], 7),
+                         (Text, (WIN_W-70, 5), "echap : quitter", 1),
                          wh=(WIN_W, WIN_H), bg=0, root=self, but_exit=((0, WIN_H - 20), (WIN_W, 20), "QUIT", 7, 8)),
             "Arcangel": Box((0, 0),
-                            (Bloc, (0, 0), (288, 25), 10),
-                            (Text, (115, 10), "ARCANGEL", 1),
+                            (Bloc, (0, 0), (WIN_W, 25), 10),
+                            (Text, (WIN_W//2 - 29, 10), "ARCANGEL", 1),
                             (Text, (57, 40), "ARCANGEL", 7),
                             (Iframe, MONSTER_IMG["Arcangel"](30, 40), 1, self.open_header),
                             (Text, (20, 67), TEXTS["Arcangel"], 7),
+                            (Text, (WIN_W-70, 5), "echap : quitter", 1),
                             wh=(WIN_W, WIN_H), bg=0, root=self, but_exit=((0, WIN_H - 20), (WIN_W, 20), "QUIT", 7, 8)),
             "DragonLight": Box((0, 0),
-                               (Bloc, (0, 0), (288, 25), 10),
-                               (Text, (115, 10), "DRAGON LUMIERE", 1),
+                               (Bloc, (0, 0), (WIN_W, 25), 10),
+                               (Text, (WIN_W//2 - 29, 10), "DRAGON LUMIERE", 1),
                                (Text, (57, 40), "DRAGON LUMIERE", 7),
                                (Iframe, MONSTER_IMG["DragonLight"](30, 40), 1, self.open_header),
                                (Text, (20, 67), TEXTS["DragonLight"], 7),
+                               (Text, (WIN_W-70, 5), "echap : quitter", 1),
                                wh=(WIN_W, WIN_H), bg=0, root=self,
                                but_exit=((0, WIN_H - 20), (WIN_W, 20), "QUIT", 7, 8)),
             "BlobPlant": Box((0, 0),
-                             (Bloc, (0, 0), (288, 25), 10),
-                             (Text, (115, 10), "BLOB PLANTE", 1),
+                             (Bloc, (0, 0), (WIN_W, 25), 10),
+                             (Text, (WIN_W//2 - 29, 10), "BLOB PLANTE", 1),
                              (Text, (57, 40), "BLOB PLANTE", 7),
                              (Iframe, MONSTER_IMG["BlobPlant"](30, 40), 1, self.open_header),
                              (Text, (20, 67), TEXTS["BlobPlant"], 7),
+                             (Text, (WIN_W-70, 5), "echap : quitter", 1),
                              wh=(WIN_W, WIN_H), bg=0, root=self, but_exit=((0, WIN_H - 20), (WIN_W, 20), "QUIT", 7, 8)),
             "DragonDark": Box((0, 0),
-                              (Bloc, (0, 0), (288, 25), 10),
-                              (Text, (115, 10), "DRAGON TENEBRE", 1),
+                              (Bloc, (0, 0), (WIN_W, 25), 10),
+                              (Text, (WIN_W//2 - 29, 10), "DRAGON TENEBRE", 1),
                               (Text, (57, 40), "DRAGON TENEBRE", 7),
                               (Iframe, MONSTER_IMG["DragonDark"](30, 40), 1, self.open_header),
                               (Text, (20, 67), TEXTS["DragonDark"], 7),
+                              (Text, (WIN_W-70, 5), "echap : quitter", 1),
                               wh=(WIN_W, WIN_H), bg=0, root=self,
                               but_exit=((0, WIN_H - 20), (WIN_W, 20), "QUIT", 7, 8)),
             "DragonEau": Box((0, 0),
-                             (Bloc, (0, 0), (288, 25), 10),
-                             (Text, (115, 10), "DRAGON EAU", 1),
+                             (Bloc, (0, 0), (WIN_W, 25), 10),
+                             (Text, (WIN_W//2 - 29, 10), "DRAGON EAU", 1),
                              (Text, (57, 40), "DRAGON EAU", 7),
                              (Iframe, MONSTER_IMG["DragonEau"](30, 40), 1, self.open_header),
                              (Text, (20, 67), TEXTS["DragonEau"], 7),
+                             (Text, (WIN_W-70, 5), "echap : quitter", 1),
                              wh=(WIN_W, WIN_H), bg=0, root=self, but_exit=((0, WIN_H - 20), (WIN_W, 20), "QUIT", 7, 8)),
             "DragonPlant": Box((0, 0),
-                               (Bloc, (0, 0), (288, 25), 10),
-                               (Text, (115, 10), "DRAGON PLANTE", 1),
+                               (Bloc, (0, 0), (WIN_W, 25), 10),
+                               (Text, (WIN_W//2 - 29, 10), "DRAGON PLANTE", 1),
                                (Text, (57, 40), "DRAGON PLANTE", 7),
                                (Iframe, MONSTER_IMG["DragonPlant"](30, 40), 1, self.open_header),
                                (Text, (20, 67), TEXTS["DragonPlant"], 7),
+                               (Text, (WIN_W-70, 5), "echap : quitter", 1),
                                wh=(WIN_W, WIN_H), bg=0, root=self, but_exit=((0, WIN_H - 20), (WIN_W, 20), "QUIT", 7, 8)),
             "BlobLight": Box((0, 0),
-                             (Bloc, (0, 0), (288, 25), 10),
-                             (Text, (115, 10), "BLOB LUMIERE", 1),
+                             (Bloc, (0, 0), (WIN_W, 25), 10),
+                             (Text, (WIN_W//2 - 29, 10), "BLOB LUMIERE", 1),
                              (Text, (57, 40), "BLOB LUMIERE", 7),
                              (Iframe, MONSTER_IMG["BlobLight"](30, 40), 1, self.open_header),
                              (Text, (20, 67), TEXTS["BlobLight"], 7),
+                             (Text, (WIN_W-70, 5), "echap : quitter", 1),
                              wh=(WIN_W, WIN_H), bg=0, root=self, but_exit=((0, WIN_H - 20), (WIN_W, 20), "QUIT", 7, 8)),
             "BlobDark": Box((0, 0),
-                            (Bloc, (0, 0), (288, 25), 10),
-                            (Text, (115, 10), "BLOB TENEBRE", 1),
+                            (Bloc, (0, 0), (WIN_W, 25), 10),
+                            (Text, (WIN_W//2 - 29, 10), "BLOB TENEBRE", 1),
                             (Text, (57, 40), "BLOB TENEBRE", 7),
                             (Iframe, MONSTER_IMG["BlobDark"](30, 40), 1, self.open_header),
                             (Text, (20, 67), TEXTS["BlobDark"], 7),
+                            (Text, (WIN_W-70, 5), "echap : quitter", 1),
                             wh=(WIN_W, WIN_H), bg=0, root=self, but_exit=((0, WIN_H - 20), (WIN_W, 20), "QUIT", 7, 8)),
         }
         self.menu = None
@@ -399,6 +433,7 @@ class Game:
     def restart(self):
         """Reset le jeu"""
         self.menu = self.all_menus["START"]
+        self.is_loose = True
 
     def start(self):
         """Relance/Lance le jeu"""
@@ -423,6 +458,18 @@ class Game:
                         (ScoreText, (WIN_W//2-32, WIN_H//2+25), self.score, 0),
                         wh=(WIN_W, WIN_H), bg=8, root=self, but_exit=((0, WIN_H-22), (WIN_W, 22), "RESTART !", 0, 7, self.restart))
         self.is_loose = True
+
+    def close_menu(self):
+        self.menu = None
+
+    def open_menu_restart(self):
+        self.menu = Box((WIN_W//7, 2.5 * WIN_H//7),
+                        (Bloc, (0, 0), (WIN_W, 20), 1),
+                        (Text, (3 * WIN_W//7, 10), "- PAUSE -", 7),
+                        (Text, (2.5 * WIN_W//7, 160), "Voulez vous recommencer ?", 1),
+                        (Iframe, VALID(2.5 * WIN_W//7, 190), 1, self.restart),
+                        (Iframe, CROIX(2.5 * WIN_W//7 + 40, 190), 1, self.close_menu),
+                        wh=(5 * WIN_W//7, 2 * WIN_H//7), bg=10, root=self, but_exit=((0, 0), (0, 0), "", 15, 8))
 
     # LES FONCTIONS SUIVANTES SONT REDONDANTES CAR UTILISEES DANS LES MENUS (DONC SANS ARGUMENT)
     def open_start(self):
@@ -571,7 +618,6 @@ class Game:
             else:
                 self.animation_list[0].animate()
         elif self.menu is None:
-            py.mouse(False)
             if py.btn(py.KEY_A):
                 """attaquer"""
                 for e in self.ennemi:
@@ -617,8 +663,8 @@ class Game:
                 """regarger haut"""
                 self.player.watch_top()
             if py.btn(py.KEY_DOWN):
-                """regarger bas"""
-                self.player.watch_bottom()
+                    """regarger bas"""
+                    self.player.watch_bottom()
 
             if py.btnp(py.KEY_W, hold=1):
                 """skip on looting zone"""
@@ -626,19 +672,23 @@ class Game:
                     self.carte.new_stage()
             if py.btn(py.KEY_R):
                 """spawn"""
-                self.start()
+                self.open_menu_restart()
             if py.btnp(py.KEY_F, hold=60):
                 """changer d'arme"""
                 self.player.swap_weapon()
             if py.btnp(py.KEY_TAB, hold=60):
                 """Affiche le Menu"""
                 self.menu = self.all_menus["TAB"]
-            if py.btnp(py.KEY_X, hold=60):
+            if py.btnp(py.KEY_X, hold=60):  # tue tout les mobs de la map (leurs inflige +200 000 de dégats)
                 for _ in range(LARGEUR*10):
                     for enn in self.ennemi:
                         enn.damage(10000, 0, self.player)
+
+            if py.btnp(py.MOUSE_BUTTON_LEFT, hold=60):
+                for e in self.ennemi:
+                    if e.reel_x < py.mouse_x < e.reel_x + abs(e.size[0]) and e.reel_y < py.mouse_y < e.reel_y + abs(e.size[1]):
+                        self.menu = self.bestiaire[type(e).__name__]
         else:
-            py.mouse(True)
             self.menu.update()
             if py.btnp(py.KEY_TAB, hold=60) and not self.is_loose:
                 """changer d'arme"""
@@ -652,11 +702,7 @@ class Game:
         py.cls(0)
         self.carte.blit()
         for loot in self.loots:
-<<<<<<< HEAD
-            if self.looting or loot.type == "Life":
-=======
-            if self.looting or (not loot.forced[0] and loot.type == "Sante"):
->>>>>>> a6431bad8f05fc8aba975d05031d36c56ab9a42d
+            if self.looting or loot.type == "Sante":
                 loot.blit()
         for e in self.ennemi:
             e.blit_entity()
@@ -670,17 +716,12 @@ class Game:
         py.rect(WIN_W-32, 60, 32, 2, 7)
         py.text(WIN_W-30, 65, "Arme 1 \n(en main) :", 7)
         self.player.weapon.blit(decalY=79)
-        py.text(WIN_W-30, 115, "Arme 2 \n(sac) :", 7)
+        py.text(WIN_W-30, WIN_W//2 - 29, "Arme 2 \n(sac) :", 7)
         self.player.secondary_weapon.blit(decalY=130)
         py.rect(WIN_W-32, 165, 32, 2, 7)
         py.text(WIN_W-32, 168, "Au sol :", 7)
         for loot in self.loots:
-<<<<<<< HEAD
-            if loot.x == self.player.x and loot.y == self.player.y and (self.looting or loot.type == "Life"):
-=======
-            if loot.x == self.player.x and loot.y == self.player.y \
-                    and (self.looting or (not loot.forced[0] and loot.type == "Sante")):
->>>>>>> a6431bad8f05fc8aba975d05031d36c56ab9a42d
+            if loot.x == self.player.x and loot.y == self.player.y and (self.looting or loot.type == "Sante"):
                 loot.blit_inv()
         py.rect(WIN_W-32, 230, 32, 2, 7)
         temp = f"Score :\n{self.score} pts"

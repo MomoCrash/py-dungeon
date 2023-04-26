@@ -25,7 +25,7 @@ class Loot:
         "Hallebarde": 0.6,
         "Axe": 1.2,
         "Katana": 1.4,
-        "Life": 3,
+        "Sante": 5,
     }
     
     def __init__(self, niveau, x, y, forced=(False, )):
@@ -34,11 +34,10 @@ class Loot:
         :param x: int                           | position x (en tuiles) ou le loot se trouve
         :param y: int                           | position y (en tuiles) ou le loot se trouve
         :param forced: tuple(bool, Equipment)   | permet de forcer le loot à avoir des attributs prédéfini (dans ce cas seul x et y seront défini en dehors de forced)
-        :var self.type: str(Class-name)         | défini le type de l'objet par une chaine de charactère (nom de l'Objet ou 'Life')
         """
         self.forced = forced
-        if self.forced[0] and self.forced[1] == "Life":
-            self.type = "Life"
+        if self.forced[0] and self.forced[1] == "Sante":
+            self.type = "Sante"
         self.x = x
         self.y = y
         self.niveau = niveau
@@ -57,7 +56,7 @@ class Loot:
 
     def get_loot(self, getter):
         """récupère le loot et le donne à getter (Player) en appliquant toute les modifications implicite"""
-        if getter.game.looting or self.type == "Life":
+        if getter.game.looting or self.type == "Sante":
             if self.forced[0]:
                 if type(self.forced[1]) in Weapon.__subclasses__():
                     getter.game.loots.insert(0, Loot(0, getter.x, getter.y, (True, getter.weapon)))
@@ -75,7 +74,7 @@ class Loot:
             else:
                 all_armor_loot = Armor.__subclasses__()
                 all_weapon_loot = Weapon.__subclasses__()
-                if self.type == "Life":
+                if self.type == "Sante":
                     getter.hp += self.niveau * TAUX_PV
                     if getter.hp > getter.maxhp:
                         getter.hp = getter.maxhp
@@ -100,12 +99,12 @@ class Loot:
     def blit_inv(self):
         """affiche l'objet dans l'inventaire à l'emplacement pour voir ce qui est au sol"""
         if self.forced[0]:
-            if self.forced[1] == "Life":
+            if self.forced[1] == "Sante":
                 py.blt(WIN_W-32, 195, IMAGE_EQUIPMENT, 0, 48, 16, 32, 7)
             else:
                 self.forced[1].blit(decalY=195 if type(self.forced[1]) in Weapon.__subclasses__() else 175)
-        elif self.type == "Life":
-            py.blt(WIN_W-32, 180, IMAGE_EQUIPMENT, 0, 48, 16, 32, 7)
+        elif self.type == "Sante":
+            py.blt(WIN_W-32, 195, IMAGE_EQUIPMENT, 0, 48, 16, 32, 7)
         else:
             img = LOOT_IMAGE[self.type]
             py.blt(WIN_W-32, 195, IMAGE_EQUIPMENT, img[0], img[1], 16, 32, 0 if self.type != "MagmaArmor" else 7)

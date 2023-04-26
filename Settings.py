@@ -24,7 +24,8 @@ IMAGE_PORTE_FERMEE = (32, 0)
 IMAGE_PORTE_OUVERTE = (48, 0)
 
 TAUX_DROP = 50 / 100
-TAUX_PV = 20
+TAUX_PV = 30
+MAX_LOOT = 2
 
 # définition des murs et des pièges
 EQUIVALANCE = {
@@ -128,6 +129,9 @@ EQUIVALANCE = {
         (10, 20), (11, 20), (10, 21), (11, 21),  # lave haut-gauche
         (8, 22), (9, 22), (8, 23), (9, 23),  # lave left 1
         (10, 22), (11, 22), (10, 23), (11, 23),  # lave left 2
+        (10, 2), (11, 2), (10, 3), (11, 3),  # lave haut-gauche 2
+        (14, 2), (15, 2), (14, 3), (15, 3),  # lave haut-gauche 3
+        (12, 2), (13, 2), (12, 3), (13, 3),  # lave bas-gauche 2
     ],
     "right-side": [
         (24, 16), (25, 16), (24, 17), (25, 17),  # wall (bottom right corner)
@@ -146,6 +150,9 @@ EQUIVALANCE = {
         (2, 22), (3, 22), (2, 23), (3, 23),  # lave haut-droite
         (4, 22), (5, 22), (4, 23), (5, 23),  # lave right 1
         (6, 22), (7, 22), (6, 23), (7, 23),  # lave right 2
+        (10, 0), (11, 0), (10, 1), (11, 1),  # lave bas-droite 2
+        (8, 2), (9, 2), (8, 3), (9, 3),  # lave bas-droite 3
+        (14, 0), (15, 0), (14, 1), (15, 1),  # lave haut-droite 2
     ],
     "top-side": [
         (22, 16), (23, 16), (22, 17), (23, 17),  # wall (top left corner)
@@ -164,6 +171,11 @@ EQUIVALANCE = {
         (2, 22), (3, 22), (2, 23), (3, 23),  # lave haut-droite
         (6, 20), (7, 20), (6, 21), (7, 21),  # lave haut 1
         (10, 20), (11, 20), (10, 21), (11, 21),  # lave haut-gauche
+        (12, 0), (13, 0), (12, 1), (13, 1),  # lave haut 2
+        (14, 0), (15, 0), (14, 1), (15, 1),  # lave haut-droite 2
+        (10, 2), (11, 2), (10, 3), (11, 3),  # lave haut-gauche 2
+        (14, 2), (15, 2), (14, 3), (15, 3),  # lave haut-gauche 3
+        (14, 4), (15, 4), (14, 5), (15, 5),  # lave bas 
 
     ],
     "bottom-side": [
@@ -181,6 +193,9 @@ EQUIVALANCE = {
         (0, 22), (1, 22), (0, 23), (1, 23),  # lave bas-droite
         (4, 20), (5, 20), (4, 21), (5, 21),  # lave bas 1
         (8, 20), (9, 20), (8, 21), (9, 21),  # lave bas-gauche
+        (10, 0), (11, 0), (10, 1), (11, 1),  # lave bas-droite 2
+        (8, 2), (9, 2), (8, 3), (9, 3),  # lave bas-droite 3
+        (12, 2), (13, 2), (12, 3), (13, 3),  # lave bas-gauche 2
     ],
     "event": [  # déclancheur d'évênement
         (5, 2), (6, 2), (5, 3), (6, 3),  # piège éclaté
@@ -244,6 +259,8 @@ DEAFEAT_FIRST_PART = lambda x, y: (x, y, 2, 0, 240, 32, 16, 7)
 DEAFEAT_SECOND_PART = lambda x, y: (x, y, 2, 16, 224, 16, 16, 7)
 BOUTON_ADD = lambda x, y: (x, y, 1, 240, 240, 16, 16, 0)
 BOUTON_SUB = lambda x, y: (x, y, 1, 224, 240, 16, 16, 0)
+CROIX = lambda x, y: (x, y, 2, 208, 192, 32, 32, 0)
+VALID = lambda x, y: (x, y, 2, 208, 224, 32, 32, 0)
 
 MONSTER_IMG = {
     "Zombie": lambda x, y: (x, y, 1, 0, 16, 16, 16, 7),
