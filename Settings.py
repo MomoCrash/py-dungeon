@@ -1,18 +1,25 @@
 """
 Contient Presque toute les varaibles global et les constantes néccéssaire
 C'est un stock énorme ou on y retrouve :
-- l'image de la sortie des étages ouverte/fermée (sont vecteur)
+- la taille du carré de la map (ici 3) ainsi que la définition de la taille de la fenêtre
+afin de pouvoir ajouter les pv et l'inventaire
+- l'image de la sortie des étages ouverte/fermée (vecteur)
+- Des variables relatives aux objects drop et aux taux de drop
 - la classification des tuiles selon si elle sont des murs, des demis murs etc ...
 - les limites des cartes dessinée pour l'instant (à modifier en cas de rajout)
-- une fonction qui prends l'entier entre 1 et 4 qui représente la direction et qui renvoie le tuple qui défini le mouvmement de 1 vers cette même direction.
+- une fonction qui prends l'entier entre 1 et 4 qui représente la direction et qui
+renvoie le tuple qui défini le mouvmement de 1 vers cette même direction.
 - Image des entite (1)
 - Image de l'équipment (2)
 - les images dans l'inventaire de tout ce qui est ramassable
 - la table des efficacité (efficacite[dest][source])
 - equivalence des orientation : int to str
-- fonctions de param (x ; y) qui renvoient un gros tuples avec tout ce qu'il faut pour définir une image
+- fonctions de param (x ; y) qui renvoient un gros tuples avec tout ce qu'il faut pour définir une image positionné
+selon des coordonées comme un long tuple
 - MONSTER_IMG : dictionnaire qui lie le nom d'un monstre à sa fonction de param (x ; y) pour pouvoir le dessiner
 - TEXTS : tout les dialogs, les texts à mettre dans les menu etc ...
+- ATTRIBUT : toute les compétences des monstres
+- milieumot : renvoie selon un paramètre <n_lettre> la taille en pixel de la moitié de la largeur du mot
 """
 
 LARGEUR = 3
@@ -215,13 +222,13 @@ LIMITE = {
 
 }
 
-# math pour transformer le int de l'orientation en coordonné
+# math pour transformer le int de l'orientation en coordonné (Innutilisé)
 f = lambda x: round((2 / 3) * x ** 3 - (7 / 2) * x ** 2 + (29 / 6) * x - 1)
 g = lambda x: round((2 / 3) * x ** 3 - (5 / 2) * x ** 2 + (11 / 6) * x)
-
 orient_to_coor = lambda orient: (f(orient), g(orient))
 
 # numméro de l'images du fichier
+IMAGE_ENTITE = 1
 IMAGE_EQUIPMENT = 2
 
 # toute les images des différents items
@@ -233,6 +240,10 @@ LOOT_IMAGE = {
     "DiamondArmor": (0, 112),
     "MagmaArmor": (64, 224),
     "DragonScaleArmor": (48, 224),
+    "DragonWaterArmor": (144, 224),
+    "DragonPlantArmor": (160, 224),
+    "DragonDarkArmor": (176, 224),
+    "DragonLightArmor": (192, 224),
     "Sword": (16, 0),
     "Spear": (16, 32),
     "Hammer": (16, 128),
@@ -242,15 +253,14 @@ LOOT_IMAGE = {
     "Katana": (16, 184)
 }
 
+# toute les (suoer efficacité)
 EFFICACITE = ((1, 1, 1, 1, 1, 1), (1, 0.9, 0.5, 2, 0.7, 0.7), (1, 2, 0.9, 0.5, 0.7, 0.7), (1, 0.5, 2, 0.9, 0.7, 0.7),
               (1, 1, 1, 1, 0, 3), (1, 1, 1, 1, 3, 0))
 
 ORIENT_EQ = ["left", "right", "top", "bottom"]
 
-IMAGE_ENTITE = 1
 
-# images :
-
+# images décor :
 KATANA0 = lambda x, y: (x, y, 2, 32, 184, 16, 32, 0)
 KATANA1 = lambda x, y: (x, y, 2, 32, 184, 16, 32, 0)
 KATANA2 = lambda x, y: (x, y, 2, 16, 184, 16, 32, 0)
@@ -264,6 +274,7 @@ VALID = lambda x, y: (x, y, 2, 208, 224, 32, 32, 0)
 HEALTH_ICO = lambda x, y: (x, y, 2, 176, 208, 16, 16, 0)
 DAMAGE_ICO = lambda x, y: (x, y, 2, 192, 208, 16, 16, 0)
 
+# toute les images d'ennemis positionné selon une coordonée (x, y)
 MONSTER_IMG = {
     "Zombie": lambda x, y: (x, y, 1, 0, 16, 16, 16, 7),
     "Squelette": lambda x, y: (x, y, 1, 0, 32, 16, 16, 6),
@@ -299,8 +310,8 @@ MONSTER_IMG = {
     "BlobDark": lambda x, y: (x, y, 1, 64, 16, 16, 16, 6),
 }
 
-# Text
 
+# Stock de Text en tout genre
 TEXTS = {
     "touches": "[Touches]\n"
                " - Z,Q,S,D -> Deplacements\n"
@@ -368,7 +379,9 @@ TEXTS = {
                     "une action. Dans l'ordre : \n"
                     " > Deplacement Joueur\n > Deplacement Monstre\n > attaque Monstre\n > attaque Joueur. \n"
                     "Vous pouvez ainsi toucher un ennemi sur la case ou \n"
-                    "il va arriver ! c'est une infoa ne surtout pas negliger.\n\n"
+                    "il va arriver ! c'est une infoa ne surtout pas negliger.\n"
+                    "- interaction des type :\n"
+                    "eau > feu > plant > eau et tenebre <> lumiere\n\n"
                     "3) Le loot : quand vous vainquez un ennemi, \n"
                     "celui ci a 1 chance sur 2 de donner 1 objet \n"
                     "2 fois. (1 chance sur 2 > rien , \n"
@@ -423,6 +436,8 @@ TEXTS = {
     "BlobDark": "Une boule de noirceur, toute noire et noire",
 }
 
+
+# descriptif des compétences
 ATTRIBUT = {
     "Zombie": "Aucune capacite",
     "Squelette": " - Longue portee",
@@ -459,6 +474,10 @@ ATTRIBUT = {
 }
 
 
+# milieu d'un mot en pixels :
+MILIEUMOT = lambda n_lettre: (n_lettre*4-1)/2 - 1
+
+# non implémenté
 song = [
     "end",
     "catacomb theme",
@@ -467,6 +486,3 @@ song = [
     "item",
     "hell",
 ]
-
-# milieu d'un mot en pixels :
-MILIEUMOT = lambda n_lettre: (n_lettre*4-1)/2 - 1

@@ -63,6 +63,7 @@ class Game:
         # Create list of menu instance for -> TAB menu (e.g bestiare, start, niveau)
         self.all_menus = {
             "TAB": Box((0, 0),
+                        (Bloc, (48, 24), (270, 150), 9),
                        (Bloc, (0, 0), (WIN_W, 25), 1),
                        (Text, ((WIN_W - MILIEUMOT(4)) // 2, 7), "MENU", 7),
                        (Text, (50, 30), TEXTS["touches"], 0),
@@ -79,6 +80,7 @@ class Game:
                        (Button, (WIN_W - 80, 101), (100, 16), "EXPLICATION>>", 1, 7, self.open_expication),
                        wh=(WIN_W, WIN_H), bg=10, root=self, but_exit=((0, WIN_H - 20), (WIN_W, 20), "QUIT", 15, 8)),
             "START": Box((0, 0),
+                         (Bloc, (48, 24), (270, 300), 9),
                          (Bloc, (0, 0), (WIN_W, 25), 1),
                          (Text, ((WIN_W - MILIEUMOT(16)) // 2, 7), "-| Py-Dungeon |-", 7),
                          (Text, (50, 26), TEXTS["touches"], 0),
@@ -91,6 +93,7 @@ class Game:
                          wh=(WIN_W, WIN_H), bg=10, root=self, but_exit=(
                     ((WIN_W - MILIEUMOT(7) - 40) // 2, WIN_H - 46), (70, 20), "START !", 1, 6, self.start)),
             "STORY": Box((0, 0),
+                        (Bloc, (48, 24), (250, 240), 9),
                          (Bloc, (0, 0), (WIN_W, 25), 1),
                          (Text, ((WIN_W - MILIEUMOT(5)) // 2, 7), "STORY", 7),
                          (Bloc, (5, 46), (16, 40), 14),
@@ -106,9 +109,10 @@ class Game:
                          (Button, (WIN_W - 80, 101), (100, 16), "EXPLICATION>>", 1, 7, self.open_expication),
                          wh=(WIN_W, WIN_H), bg=10, root=self, but_exit=((0, WIN_H - 20), (WIN_W, 20), "QUIT", 15, 8)),
             "STATS": Box((0, 0),
+                        (Bloc, (48, 24), (150, 75), 9),
                          (Bloc, (0, 0), (WIN_W, 25), 1),
                          (Text, ((WIN_W - MILIEUMOT(6)) // 2, 7), "NIVEAU", 7),
-                         (StatText, (35, 30), 5, self.player),
+                         (StatText, (50, 30), 5, self.player),
                          (Bloc, (5, 46), (16, 40), 14),
                          (Bloc, (5, 96), (16, 40), 14),
                          (Bloc, (5, 146), (16, 40), 14),
@@ -121,6 +125,7 @@ class Game:
                          (Button, (WIN_W - 80, 101), (100, 16), "EXPLICATION>>", 1, 7, self.open_expication),
                          wh=(WIN_W, WIN_H), bg=10, root=self, but_exit=((0, WIN_H - 20), (WIN_W, 20), "QUIT", 15, 8)),
             "EXPLICATION": Box((0, 0),
+                        (Bloc, (48, 24), (270, 250), 9),
                                (Bloc, (0, 0), (WIN_W, 25), 1),
                                (Text, ((WIN_W - MILIEUMOT(11)) // 2, 7), "EXPLICATION", 7),
                                (Text, (50, 30), TEXTS["Explications"], 1),
@@ -613,11 +618,11 @@ class Game:
         self.menu = self.all_menus["TAB"]
 
     def open_stats(self):
-        self.all_menus["STATS"].element[2].actu()
+        self.all_menus["STATS"].element[3].actu()
         self.menu = self.all_menus["STATS"]
 
     def open_header(self):
-        self.bestiaire["HEADER"].element[7].cooldown = 15
+        self.bestiaire["HEADER"].element[8].cooldown = 15
         self.menu = self.bestiaire["HEADER"]
 
     def open_histoire(self):
@@ -862,7 +867,7 @@ class Game:
         for loot in self.loots:
             if loot.x == self.player.x and loot.y == self.player.y and (self.looting or loot.type == "Sante"):
                 loot.blit_inv()
-        py.rect(WIN_W - 32, 230, 32, 2, 7)
+        py.rect(WIN_W - 32, 250, 32, 2, 7)
         temp = f"Score :\n{self.score} pts"
         chaine = ""
         for i in range(len(temp)):
@@ -872,7 +877,7 @@ class Game:
             chaine += temp[i]
             if i % 8 == 7:
                 chaine += "\n"
-        py.text(WIN_W - 31, 335, chaine, 7)
+        py.text(WIN_W - 31, 355, chaine, 7)
         for anime in self.animation_layer:
             py.blt(anime[0], anime[1], anime[2], anime[3], anime[4], anime[5], anime[6], anime[7])
         self.animation_layer.clear()

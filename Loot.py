@@ -18,6 +18,10 @@ class Loot:
         "DiamondArmor": 0.3,
         "MagmaArmor": 0.2,
         "DragonScaleArmor": 0.1,
+        "DragonWaterArmor": 0.1,
+        "DragonPlantArmor": 0.1,
+        "DragonDarkArmor": 0.1,
+        "DragonLightArmor": 0.1,
         "Sword": 1.2,
         "Spear": 1,
         "Hammer": 0.2,
@@ -27,7 +31,7 @@ class Loot:
         "Katana": 1.4,
         "Sante": 5,
     }
-    
+
     def __init__(self, niveau, x, y, forced=(False, )):
         """
         :param niveau: int                      | niveau de l'arme, l'arme ou la vie généré
@@ -102,7 +106,7 @@ class Loot:
             if self.forced[1] == "Sante":
                 py.blt(WIN_W-32, 195, IMAGE_EQUIPMENT, 0, 48, 16, 32, 7)
             else:
-                self.forced[1].blit(decalY=195 if type(self.forced[1]) in Weapon.__subclasses__() else 175)
+                self.forced[1].blit(decalY=195 if type(self.forced[1]) in Weapon.__subclasses__() else 195)
         elif self.type == "Sante":
             py.blt(WIN_W-32, 195, IMAGE_EQUIPMENT, 0, 48, 16, 32, 7)
         else:
