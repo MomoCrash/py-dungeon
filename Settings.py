@@ -312,46 +312,46 @@ TEXTS = {
                " - TAB -> Ouvrir/Fermer les menus\n"
                " - F1 -> Fullscreen le jeu\n",
     "resumé": "[RESUME]\n"
-              "Vous controlerez un jeune aventurier qui, en quete \n"
+              "Vous controlez un jeune aventurier qui, en quete \n"
               "de puissance, alla dans la grotte dimensionnelle \n"
-              "pour augmenter sa puissance sans savoir qu'il \n"
-              "allait y rester tant que la guerre entre Le \n"
-              "Paradis et Les Enfers n'est pas terminee et que \n"
-              "le sorcier qui la controle n'est pas mort. Vous \n"
-              "allez devoir gravir les etages un a un et trouver \n"
-              "du stuff pour vaincre le magicien tout en evitant \n"
-              "la mort.",
+              "afin augmenter sa puissance sans savoir qu'il \n"
+              "allait y rester. Et tant que la guerre entre Le \n"
+              "Paradis et Les Enfers ne sera pas terminee et que \n"
+              "le sorcier qui la controle ne sera pas mort. Vous \n"
+              "allez devoir gravir les etages un a un, et, trouver \n"
+              "des equipement pour vaincre le magicien tout en \n"
+              "evitant la mort.",
     "histoire": "[HISTOIRE]\n"
                 "Un jeune chevalier trouva une admiration pour la \n"
-                "magie et la sorcellerie.Mais malheureusement \n"
-                "malgre beaucoup d'efforts pendant plusieurs \n"
-                "annees, il n'arrivait pas à manier  la magie et \n"
-                "se faisait harceler par des aventuriers, tous \n"
-                "types de sorciers et meme par certains \n"
+                "magie et la sorcellerie. Mais malheureusement, \n"
+                "malgre beaucoup d'efforts et de tentatives, \n"
+                "il n'arriva pas à manier la magie et se \n"
+                "faisait harceler par les autres aventuriers, \n"
+                "tous types de sorciers et meme par certains \n"
                 "villageois. Un jour, il entendit parler d'une \n"
-                "grotte avec une personne pouvant realiser un voeu \n"
+                "grotte avec un demon pouvant realiser un voeu \n"
                 "en echange d'une contrepartie. Un jour, il alla \n"
                 "dans cette fameuse grotte pour augmenter sa \n"
                 "puissance et pouvoir enfin manier la magie. Une \n"
                 "fois au bout du tunnel, le sorcier entra dans \n"
                 "une piece sombre avec un feu de bois au milieu \n"
-                "et un demon assis à côté de celui-ci. Une fois \n"
-                "devant le demon, il demanda de faire un pacte \n"
-                "avec celui-ci et le demon accepta en echange \n"
-                "de sa force physique. Le demon lui passa un \n"
-                "pouvoir egal à celui du sorcier suprême et \n"
-                "lui offrir aussi un livre de sorcellerie pour\n"
-                " preparer diverses concoctions. Le sorcier, \n"
+                "et un demon assis a cote de celui-ci. Une fois \n"
+                "devant le demon, il lui demanda de faire un pacte \n"
+                "avec celui-ci et le demon accepta ! En echange \n"
+                "de sa force physique, le demon lui passa un \n"
+                "pouvoir magique egal à celui du sorcier suprême \n"
+                "et lui offrit aussi un livre de sorcellerie pour\n"
+                "preparer diverses concoctions. Le sorcier, \n"
                 "tellement puissant, fit de la simple grotte du \n"
                 "demon une grotte dimensionnelle pour y accueillir \n"
                 "une faune riche et variée pour être maître de \n"
-                "son propre monde et aussi implémenter les enfers \n"
-                "à l'interieur comme cadeau au demon. Mais quand \n"
-                "le Paradis a appris que les Enfers ne sont plus \n"
-                "a leurs endroits habituelle, ils ont décide \n"
-                "d'enqueter et on trouver la fameuse grotte du \n"
-                "demon. Ils entrerent à l'interieur et trouverent \n"
-                "un passage dimensionnel et decouvrirent un monde \n"
+                "son propre monde et, crea également, les enfers \n"
+                "à l'interieur comme present au demon. Mais quand \n"
+                "le Paradis appris que les Enfers ne n'etait plus \n"
+                "a leur endroit habituelle, ils déciderent \n"
+                "d'enqueter. Il finirent par trouver la fameuse grotte \n"
+                "du demon. Ils entrerent à l'interieur et trouverent \n"
+                "un passage dimensionnel. Ils decouvrirent alors un monde \n"
                 "entier dans cette grotte. Le Paradis installa \n"
                 "leur base principale dans cette grotte pour y \n"
                 "combattre leurs ennemies de toujours Les Enfers.",
@@ -382,47 +382,45 @@ TEXTS = {
                     "mettres en attaque et que les pv MAX < pv alors les pv \n"
                     "seront reduit aux pv MAX.",
     "Zombie": "Voila le Zombie, un mort vivant enfin je vous refais pas\n"
-              "toute l'histoire quoi vous voyez ...",
-    "Squelette": "Le Squelette, En char et en os... Enfin surtout \n"
-                 "en os puisque c'est un squelette.",
-    "Demon": "Je suis un mechant tres mechant vraiment pas gentil.",
-    "Bat": "I'M BATMAN",
-    "Ghost": "GHOST BUSTER !!! Alors t as peur ?",
-    "Golem": "Racaillou C'est toi ? ",
-    "Spider": "CHUIS SPIDERMAN FDP",
-    "Diablotin": "je suis un mechant (sans sucre, sans aditif, \n"
+              "toute l'histoire quoi, vous voyez...",
+    "Squelette": "Le Squelette, en chaire et en os... Enfin surtout \n"
+                 "en os, puisque c'est un squelette du coup.",
+    "Demon": "Je suis mechant, tres mechant, vraiment pas gentil du tout.",
+    "Bat": "I'M BATMAN !!",
+    "Ghost": "GHOST... BUSTER !!! Alors t as peur ?",
+    "Golem": "Un tas de pierre mechant !!",
+    "Spider": "Spider-cochon",
+    "Diablotin": "je suis un mechant (sans sucre, sans aditif et \n"
                  "sans charisme)",
-    "Vampire": "J adore sucer... le sang je veux dire",
-    "BlobFeu": "Blblblbl",
-    "Necromancien": "INVOCATION !!!!!!!!!!",
-    "Aligator": "Lacoste Tn ouaiiiiiis",
-    "Abomination": "beuuuuuuuuuuuuuuh",
-    "Mommies": "wsh Ramses II ?",
-    "Loup": "Le Village se reveile ..",
+    "Vampire": "Suceur de sang de pere en fils S/o dracula",
+    "BlobFeu": "Une boule de slime en feu. ",
+    "Necromancien": "Invocateur (fou), attention aux zombies",
+    "Aligator": "Il porte pas des TN mais il mord",
+    "Abomination": "Un mob moche, tres moche, tu veux pas le voir je pense",
+    "Mommies": "Une momie reanime pour te tuer",
+    "Loup": "Le Village se reveille ...",
     "Fox": "Goupil, rien de plus.",
-    "BlobEau": "bllbllbllbllbll",
+    "BlobEau": "Une boule... d'eau en eau'",
     "Witch": "Cette personne est extremement enquiquinante sur le \n"
-             "jeu nommee Mincraft.",
-    "DragonFeu": "Bien avec L ane de Shrek, votre relation se passe bien ?",
-    "Snake": "sssssssssssssssssssssssssssssssssssssssssssssssssssssssssss\n"
-             "ssssssssssssssssssssssssssssssssssalopessssssssssssssssssss\n"
-             "sssssssssssssssssssssssssssssssssssssssssssssssssssssssssss\n"
-             "ss",
-    "Creeper": "tsssssssssss ... BOOOOOOOOOOOOOOOOOOOOOOOOOOOM",
-    "Rampant": "Discret tel la musaraigne",
-    "Notch": "vous connaissez son jeu, moi je l aime bien il est style",
-    "Angel": "vous savez se qu on dis, il ne faut pas tuer l habit du moine\n"
+             "jeu nommee Minecraft.",
+    "DragonFeu": "Un dragon qui vole et crache du feu de loin",
+    "Snake": "SSSSSSSSSSSsssssssssssssssssssssssSSSSSSSSSSSSS",
+    "Creeper": "tsssssssssss... BOOOOOOOOOM (tah la ref)",
+    "Rampant": "Discret tel la musaraigne, mord les pieds et les mollets",
+    "Notch": "Vous connaissez son jeu ? Moi je l aime bien il est style \n"
+             " et peu connu genre 238 millions de telechargement",
+    "Angel": "Vous savez se qu on dis, il ne faut pas tuer l habit du moine\n"
              "avant d avoir chasser la pierre qui roule et voir la goutte d'eau\n"
              "sonner a sa porte.",
     "Arcangel": "Wsh Tyrael depuis qu on a battue Diablo, ca se passe bien ?",
-    "DragonLight": "FLASHBANG !!!",
-    "BlobPlant": "bbllbbllbbllbbll",
+    "DragonLight": "Un dragon qui vole et crache de la LUMIERE de loin wow",
+    "BlobPlant": "Une boule de plante qui bouge, lourd hein ?",
     "DragonDark": "LE TEMOIN VOUS OBSERVE .. sa forme final approche, mais n ayez crainte\n"
                   "les gardiens sont la.",
-    "DragonEau": "Plouf",
-    "DragonPlant": "le papier ca coupe.",
-    "BlobLight": "bblbblbbl",
-    "BlobDark": "lblblblblb",
+    "DragonEau": "Un dragon qui vole et crache de l'EAU... de loin... attention aux eclaboussures",
+    "DragonPlant": "Le papier ca coupe.",
+    "BlobLight": "Une boule de lumiere... aveuglante et dangereuse",
+    "BlobDark": "Une boule de noirceur, toute noire et noire",
 }
 
 ATTRIBUT = {

@@ -81,7 +81,7 @@ class Weapon:
 
     def blit(self, decalY=0) -> None:
         """
-        affiche l'arme dans linventaire
+        Affiche l'arme dans l'inventaire
         :param decalY: int décalage pour afficher plus bas dans l'inventaire (objet au sol)
         """
         temp = str(self.dmg)
@@ -218,8 +218,8 @@ class Axe(Weapon):
 
 class Katana(Weapon):
     """
-    héritage de Weapon avec des charactéristique défini (Hache)
-    patern : attaque les trois case devant
+    Héritage de Weapon avec des caractéristiques défini (Hache)
+        Paterne: attaque les trois cases devant
     """
 
     def __init__(self, owner, lvl):
