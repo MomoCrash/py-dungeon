@@ -1,22 +1,38 @@
-# PROJET
+### LE GUIDE
+
+Allez tout simplement dans le Wiki de GitHub :  
+-> https://github.com/MomoCrash/py-dungeon/wiki
+
+----------------
+
+### PROJET
+
+Py-Dungeon est un Dungeon-Crawler, fait en Python avec la librarie [Pyxel](https://github.com/kitao/pyxel), le concepte est simple, vous apparaissez dans une salle avec une simple épée et sans armure, vous affrontez les ennemies de la salle et passez à la suivante une fois tous mort, récuperez de l'équipement, plus vous irez loin, plus la tâche devienra rude... attention les bases ne viennent pas aux premières parties... Perseverez, recommencez et allez de plus en plus loin jusqu'à devenir le meilleur de Py-Dungeon !  
+
+Le but !? Faire un max de score, avoir les meilleurs statistiques, les meilleures armes et armures ! Cherchez les meilleures stratégies, parcourrez un maximum d'étages, battez les ennemies et les boss et, bien sûr, amusez vous bien !
+
+Bien sûr, vous traverserez plusieurs biomes, des décors unique à chaque parties et chaque étages (génération procédurale), une variaté assez complète d'ennemies, de boss, d'armes, d'armures, de références !
+Maintenant trêve de lecture et joue au jeu en suivant les étapes (très simple) si dessous !
+
+---
 
 Le jeu, le concept, le site ainsi que les textures ont été faite par un groupe de 5 étudiants au lycée Charle Gabriel Pravaz (38).  
 Dans le cadre: 
- - Du trophées NSI 2023 : https://trophees-nsi.fr/documentation
- - Du projet de NSI proposé par M. Ruyer
+ - Du Trophées NSI 2023 : https://trophees-nsi.fr/
+ - Du projet de NSI proposé par M. Ruyer (Notre enseignant)
+ 
+Il est compatible avec toute les platformes **Windows, Linux ou MacOS**. (Il vous suffit d'avoir Python et de suivre le tuto ci-dessous)
+Le jeux est dans une version semi-finale, il est jouable et plein de contenus, mais reste limité et en manque de certaine fonctionnalité nous sommes à l'écoute de toute remarques ou de propositions d'améliorations
 
-# INFORMATIONS | INSTALLATION | GUIDE
+----------------
+
+### INFORMATIONS | INSTALLATION
 
 > Du mal avec les readme ?  
-Va sur le site du jeu: https://mysticalspread.github.io/dungeon-tales/
+Va sur le site du jeu (en cours): https://mysticalspread.github.io/dungeon-tales/
 
 > Un bug, un feedback (avec plaisir), une proposition d'amélioration ??  
 Contactez le support sur discord: xxxTristantacion#3231 ou MomoCrash#0877
-
-Py-Dungeon est un Dungeon-Crawler, fait en Python avec la librarie Pyxel (), le concepte est simple, vous apparaissez dans une salle avec une simple épée et sans armure, vous affrontez les ennemies de la salle
-et passez à la suivante, le but !? Faire un max de score, avoir les meilleurs statistiques, et les meilleures armes et armures ! Cherchez les meilleures stratégies.
-
-Bien sûr, vous traverserez plusieurs biomes, des décors unique à chaque parties (génération procédurale), une variaté assez complète d'ennemies, de boss, d'armes et d'armures ! 
 
 > Vous voulez découvrir le jeu ? Connaître l'histoire notre jeune aventurier ou juste battre les scores de vos amis, vos collègues ou votre famille ?  
 Installez gratuitement et directement le jeux (facilement aussi) ici :
@@ -45,12 +61,15 @@ LINUX / MACOS :
   - 2. Lancez le fichier main.py
   - 3. Profitez du jeu !
 
+----------------
+
 Gros big up à notre équipe:
  - Tristan (xxxTristantacion): le Lead Développeur du jeu
  - Ethan (MomoCrash): Chef du projet, de la communication et second développeur
  - Adrien (masterez): Game Designer, Testeur et Graphiste 
  - Yann (Yaice): Game Designer, Testeur et Graphiste 
  - Ilan (Kouakou): Testeur et développeur du Site Web
+ Ainsi qu'à notre professeur M. Ruyer
 
 > Crédits:  
 > Le nom de certain ennemies et boss sont inspirés d'un autre jeu tel que [Minecraft](https://www.minecraft.net/fr-fr)
