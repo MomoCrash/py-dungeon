@@ -1,3 +1,10 @@
+# PROJET
+
+Le jeu, le concept, le site ainsi que les textures ont été faite par un groupe de 5 étudiants au lycée Charle Gabriel Pravaz (38).  
+Dans le cadre: 
+ - Du trophées NSI 2023 : https://trophees-nsi.fr/documentation
+ - Du projet de NSI proposé par M. Ruyer
+
 # INFORMATIONS | INSTALLATION | GUIDE
 
 > Du mal avec les readme ?  
@@ -34,5 +41,16 @@ LINUX / MAC :
   - 1. Télécharger le code Python (pas la release) ([ici](https://FEUR))
   - 2. Lancez le fichier main.py
   - 3. Profitez du jeu !
-  
-Merci de votre lecture et amusez vous bien !
+
+Gros big up à notre équipe:
+ - Adrien (masterez): Game Designer, Testeur et Graphiste 
+ - Tristan (xxxTristantacion): le Lead Développeur du jeu
+ - Ilan (Kouakou): Testeur et développeur du Site Web
+ - Ethan (MomoCrash): Chef du projet, de la communication et second développeur
+ - Yann (Yaice): Game Designer, Testeur et Graphiste 
+
+> Crédits:  
+> Le nom de certain ennemies et boss sont inspirés d'un autre jeu tel que [Minecraft](https://www.minecraft.net/fr-fr)
+> Certaines références sont tirées de licenses, mais ne contribue aucunement au jeu
+
+### Merci de votre lecture et amusez vous bien !
