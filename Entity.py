@@ -168,18 +168,21 @@ class Entity:
         distance_y = self.y - other_entity.y
         return distance_x, distance_y
 
-    def low_distance_side(self, other_entity) -> str:
+    def low_distance_side(self, other_entity) -> int:
         distances = self.distance(other_entity)
         if abs(distances[0]) > abs(distances[1]):
             if distances[0] > 0:
                 return 2
             else:
                 return 3
-        else:
+        elif abs(distances[1]) > abs(distances[0]):
             if distances[1] > 0:
                 return 0
             else:
                 return 1
+        else:
+            print("diago")
+            return randint(0, 3)
 
 
 # Player ---------------------------------------------------------------------------------------------------------------
