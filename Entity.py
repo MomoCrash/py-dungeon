@@ -301,8 +301,8 @@ class Ennemies(Entity):
         self.attaque_tile = (16, 32)
         self.lvl = lvl
         self.speed = 1
-        self.dmg = (lvl - 1) * dmg + randint(1, dmg - 1)
-        self.hp = (lvl - 1) * hp + randint(1, hp - 1)
+        self.dmg = lvl * dmg + randint(1, dmg - 1)
+        self.hp = lvl * hp + randint(1, hp - 1)
         self.maxhp = self.hp
         self.element = 0
         self.loot = loot
@@ -500,7 +500,7 @@ class Ghost(Ennemies):
 
 class DragonFeu(Ennemies):
     def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
-        super().__init__(game, x, y, (32, 64), (16, 16), 35, lvl, 15, loot=loot, colkey=7, value=15)
+        super().__init__(game, x, y, (32, 64), (16, 16), 20, lvl, 40, loot=loot, colkey=7, value=15)
         self.patern = {"left": [[(-1, 0), (-2, 0), (-3, 0)]],
                        "right": [[(1, 0), (2, 0), (3, 0)]],
                        "top": [[(0, -1), (0, -2), (0, -3)]],
@@ -793,7 +793,7 @@ class Creeper(Ennemies):
     """héritage de Ennemi avec des valeurs prédéfini"""
 
     def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
-        super().__init__(game, x, y, (32, 96), (16, 16), 12, lvl, 40, loot=loot, colkey=7, value=10)
+        super().__init__(game, x, y, (32, 96), (16, 16), 12, lvl, 50, loot=loot, colkey=7, value=10)
         self.speed = 1
         self.element = 0
         self.patern = {
@@ -859,7 +859,7 @@ class DragonLight(Ennemies):
     """héritage de Ennemi avec des valeurs prédéfini"""
 
     def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
-        super().__init__(game, x, y, (32, 176), (16, 16), 35, lvl, 15, loot=loot, colkey=6, value=20)
+        super().__init__(game, x, y, (32, 176), (16, 16), 40, lvl, 20, loot=loot, colkey=6, value=20)
         self.speed = 1
         self.element = 4
         self.patern = {"left": [[(-1, 0), (-2, 0), (-3, 0)]],
@@ -873,7 +873,7 @@ class DragonDark(Ennemies):
     """héritage de Ennemi avec des valeurs prédéfini"""
 
     def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
-        super().__init__(game, x, y, (32, 208), (16, 16), 35, lvl, 15, loot=loot, colkey=6, value=20)
+        super().__init__(game, x, y, (32, 208), (16, 16), 40, lvl, 20, loot=loot, colkey=6, value=20)
         self.speed = 1
         self.element = 5
         self.patern = {"left": [[(-1, 0), (-2, 0), (-3, 0)]],
@@ -887,7 +887,7 @@ class DragonEau(Ennemies):
     """héritage de Ennemi avec des valeurs prédéfini"""
 
     def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
-        super().__init__(game, x, y, (32, 224), (16, 16), 35, lvl, 15, loot=loot, colkey=7, value=20)
+        super().__init__(game, x, y, (32, 224), (16, 16), 40, lvl, 20, loot=loot, colkey=7, value=20)
         self.speed = 1
         self.element = 1
         self.patern = {"left": [[(-1, 0), (-2, 0), (-3, 0)]],

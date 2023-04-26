@@ -1,5 +1,5 @@
 import pyxel as py
-from Settings import BOUTON_ADD, BOUTON_SUB
+from Settings import BOUTON_ADD, BOUTON_SUB, HEALTH_ICO, DAMAGE_ICO
 
 
 class Box:
@@ -142,6 +142,28 @@ class Text:
 class ScoreText(Text):
     def __init__(self, root, xy, score, col):
         super().__init__(root, xy, f"Votre score est de : {score}", col)
+
+
+class StatsEnnemi(Box):
+    def __init__(self, root, xy, w, max, maxhp, attack, hp=None):
+        super().__init__(xy,
+                         (Text, xy, f'Point de vie ({maxhp}) : ', 7),
+                         (Canevas, HEALTH_ICO(xy[0], xy[1]+10)),
+                         (Bloc, (xy[0]+20, xy[1]+10), (w * maxhp/max, 8), 8),
+                         (Bloc, (xy[0]+20, xy[1]+10), (w * hp/max, 8), 11) if hp is not None else (Bloc, (0, 0), (0, 0), 0),
+                         (Text, (xy[0], xy[1] + 40), f"Attaque ({attack}) :", 7),
+                         (Canevas, DAMAGE_ICO(xy[0], xy[1]+50)),
+                         (Bloc, (xy[0]+20, xy[1]+50), (w * attack/max, 8), 9),
+                         wh=(w, 50), root=root
+                         )
+
+    def set_attack(self, attack):
+        self.element[3].set_text(f"Attaque lv1 ({attack}) :")
+        self.element[5].w = self.w * attack/120
+
+    def set_hp(self, hp):
+        self.element[0].set_text(f"Attaque lv1 ({hp}) :")
+        self.element[2].w = self.w * hp/120
 
 
 class StatText(Box):

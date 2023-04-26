@@ -175,7 +175,7 @@ EQUIVALANCE = {
         (14, 0), (15, 0), (14, 1), (15, 1),  # lave haut-droite 2
         (10, 2), (11, 2), (10, 3), (11, 3),  # lave haut-gauche 2
         (14, 2), (15, 2), (14, 3), (15, 3),  # lave haut-gauche 3
-        (14, 4), (15, 4), (14, 5), (15, 5),  # lave bas 
+        (14, 4), (15, 4), (14, 5), (15, 5),  # lave bas
 
     ],
     "bottom-side": [
@@ -236,7 +236,7 @@ LOOT_IMAGE = {
     "Sword": (16, 0),
     "Spear": (16, 32),
     "Hammer": (16, 128),
-    "Bow": (128, 184),
+    "Bow": (16, 152),
     "Hallebarde": (16, 64),
     "Axe": (16, 96),
     "Katana": (16, 184)
@@ -251,9 +251,9 @@ IMAGE_ENTITE = 1
 
 # images :
 
-KATANA0 = lambda x, y: (x, y, 2, 16, 184, 16, 32, 0)
+KATANA0 = lambda x, y: (x, y, 2, 32, 184, 16, 32, 0)
 KATANA1 = lambda x, y: (x, y, 2, 32, 184, 16, 32, 0)
-KATANA2 = lambda x, y: (x, y, 2, 48, 184, 16, 32, 0)
+KATANA2 = lambda x, y: (x, y, 2, 16, 184, 16, 32, 0)
 DRAGON_SCAlE_ARMOR = lambda x, y: (x, y, 2, 48, 224, 16, 32, 0)
 DEAFEAT_FIRST_PART = lambda x, y: (x, y, 2, 0, 240, 32, 16, 7)
 DEAFEAT_SECOND_PART = lambda x, y: (x, y, 2, 16, 224, 16, 16, 7)
@@ -261,6 +261,8 @@ BOUTON_ADD = lambda x, y: (x, y, 1, 240, 240, 16, 16, 0)
 BOUTON_SUB = lambda x, y: (x, y, 1, 224, 240, 16, 16, 0)
 CROIX = lambda x, y: (x, y, 2, 208, 192, 32, 32, 0)
 VALID = lambda x, y: (x, y, 2, 208, 224, 32, 32, 0)
+HEALTH_ICO = lambda x, y: (x, y, 2, 176, 208, 16, 16, 0)
+DAMAGE_ICO = lambda x, y: (x, y, 2, 192, 208, 16, 16, 0)
 
 MONSTER_IMG = {
     "Zombie": lambda x, y: (x, y, 1, 0, 16, 16, 16, 7),
@@ -353,7 +355,32 @@ TEXTS = {
                 "entier dans cette grotte. Le Paradis installa \n"
                 "leur base principale dans cette grotte pour y \n"
                 "combattre leurs ennemies de toujours Les Enfers.",
-
+    "Explications": "QUE FAIRE ? VOICI UN GUIDE : -----\n\n"
+                    "1) Tout d'abord le principe, vous etes sur un \n"
+                    "grande map avec pleins de tuiles, pleines, creuse\n"
+                    ", partiellement creuse ainsi vous devinez qu'il va \n"
+                    "falloir se deplacer sur celle ci afin d'atteindre \n"
+                    "les monstres et pouvoir les battres.\n\n"
+                    "2) Le combat : si vous bougez ou attaquer, cela \n"
+                    "compte comme 1 action quand vous effectuez une \n"
+                    "action (ce qui n'inclue pas bouger la vision) \n"
+                    "tout les ennemis dans la salle effectuerons aussi\n"
+                    "une action. Dans l'ordre : \n"
+                    " > Deplacement Joueur\n > Deplacement Monstre\n > attaque Monstre\n > attaque Joueur. \n"
+                    "Vous pouvez ainsi toucher un ennemi sur la case ou \n"
+                    "il va arriver ! c'est une infoa ne surtout pas negliger.\n\n"
+                    "3) Le loot : quand vous vainquez un ennemi, \n"
+                    "celui ci a 1 chance sur 2 de donner 1 objet \n"
+                    "2 fois. (1 chance sur 2 > rien , \n"
+                    "1 chance sur 2 > 1 objet , 1 chance sur 4 > 2 objets)\n\n"
+                    "4) Les stats : vaincre des ennemis pour la gloire \n"
+                    "c'est bien mais pour les points, c'est mieux. Tuer \n"
+                    "un ennemi vous donne des points ET de << l'xp >> que vous pouvez\n"
+                    " depenser en niveau. Attention ajouter des points \n"
+                    "de vie augmente les points de vie MAX, mais pas les pv \n"
+                    "et au contraire si vous enlever des stats de pv pour les \n"
+                    "mettres en attaque et que les pv MAX < pv alors les pv \n"
+                    "seront reduit aux pv MAX.",
     "Zombie": "Voila le Zombie, un mort vivant enfin je vous refais pas\n"
               "toute l'histoire quoi vous voyez ...",
     "Squelette": "Le Squelette, En char et en os... Enfin surtout \n"
@@ -397,6 +424,42 @@ TEXTS = {
     "BlobLight": "bblbblbbl",
     "BlobDark": "lblblblblb",
 }
+
+ATTRIBUT = {
+    "Zombie": "Aucune capacite",
+    "Squelette": " - Longue portee",
+    "Demon": " - MINI BOSS (peu de chance de spawn) \n - degats tres elevees",
+    "Bat": "Aucune capacite",
+    "Ghost": " - extremement resistant aux arcs",
+    "Golem": " - resistant aux degats elementaires (-50 pourcents) \n - faibles aux degats physisques (+20 pourcents)",
+    "Spider": "Aucune capacite",
+    "Diablotin": "Aucune capacite",
+    "Vampire": " - recupere 50 pourcent de sa vie a chaque coup infligee",
+    "BlobFeu": " - insensible a l'element plante",
+    "Necromancien": " - fait apparaître 1 ou 2 ennemis a certains tours",
+    "Aligator": "Aucune capacite",
+    "Abomination": " - MINI BOSS (peu de chance de spawn) \n - gros paterne d'attaque",
+    "Mommies": "Aucune capacite",
+    "Loup": "Aucune capacite",
+    "Fox": " - possede 2 tours pour chaque actions",
+    "BlobEau": " - insensible a l'element feu",
+    "Witch": "Aucune capacite",
+    "DragonFeu": "Aucune capacite",
+    "Snake": "Aucune capacite",
+    "Creeper": " - inflige de gros degats mais meurt au meme tour",
+    "Rampant": "Aucune capacite",
+    "Notch": " - MINI BOSS (peu de chance de spawn)\n - points de vie tres elevees",
+    "Angel": "Aucune capacite",
+    "Arcangel": "Aucune capacite",
+    "DragonLight": "Aucune capacite",
+    "BlobPlant": " - insensible a l'element eau",
+    "DragonDark": "Aucune capacite",
+    "DragonEau": "Aucune capacite",
+    "DragonPlant": "Aucune capacite",
+    "BlobLight": " - insensible a l'element tenebre",
+    "BlobDark": " - insensible a l'element lumiere",
+}
+
 
 song = [
     "end",

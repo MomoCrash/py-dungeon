@@ -62,7 +62,7 @@ class Loot:
                     getter.game.loots.insert(0, Loot(0, getter.x, getter.y, (True, getter.weapon)))
                     getter.set_weapon(self.forced[1])
                     getter.game.loots.remove(self)
-                elif type(self.forced[1]) is str:
+                elif self.forced[1] == "Sante":
                     getter.hp += self.niveau * TAUX_PV
                     if getter.hp > getter.maxhp:
                         getter.hp = getter.maxhp

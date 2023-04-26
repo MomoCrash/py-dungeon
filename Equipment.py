@@ -172,9 +172,10 @@ class Bow(Weapon):
 
     def __init__(self, owner, lvl):
         strenght = randint(0, 3)
-        super().__init__(owner, LOOT_IMAGE["Bow"], lvl, strenght)
+        super().__init__(owner, LOOT_IMAGE["Bow"], lvl, strenght+1, strenght)
         self.element = 0
         self.dmg += strenght*lvl
+        self.element = 0
         self.patern = {
             "left": [[(-i, 0) for i in range(1, LARGEUR*8 + 1)]],
             "right": [[(i, 0) for i in range(1, LARGEUR*8 + 1)]],
