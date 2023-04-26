@@ -24,10 +24,11 @@ Vous avez finis l'étape 1 !
 > POUR TOUTES DIFFICULTES CONTACTEZ LE SUPPORT ! (remonte le README) 
 
 WINDOWS :  
-  - 1. Télécharger le jeu directement sur discord depuis le menu des realeases ([ici](https://FEUR)) décompressez l'archive (Avec [WinRAR](https://www.win-rar.com/start.html?&L=10) par exemple)
-  - 2. Cherche l'éxecutable Py-Dungeon.exe (Garantie sans Virus on vous à juste simplifié la vie)
-  - 3. Executez le !
-  - 4. Profitez du jeu !
+  - 1. Télécharger le jeu directement sur GitHub depuis le menu des realeases ([ici](https://FEUR))
+  - 2. Décompressez l'archive (Avec [WinRAR](https://www.win-rar.com/start.html?&L=10) par exemple)
+  - 3. Cherche l'éxecutable Py-Dungeon.exe (Garantie sans Virus on vous à juste simplifié la vie)
+  - 4. Executez le !
+  - 5. Profitez du jeu !
 
 LINUX / MAC :  
   - 1. Télécharger le code Python (pas la release) ([ici](https://FEUR))
