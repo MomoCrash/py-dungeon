@@ -181,7 +181,6 @@ class Entity:
             else:
                 return 1
         else:
-            print("diago")
             return randint(0, 3)
 
 
@@ -313,7 +312,6 @@ class Ennemies(Entity):
     def action(self, forced=None):
         """effectue une action"""
         left_action = self.speed
-        print(" - -- - - - - - - - ")
         while left_action > 0:
             # If entity has a contraint to move or attack
             if forced is not None:
@@ -351,10 +349,8 @@ class Ennemies(Entity):
                 left_action -= 1
             if left_action > 0:
                 distances = self.distance(self.game.player)
-                print("Distance", distances)
                 if (abs(distances[0]) + abs(distances[1])) < 10:
                     side = self.low_distance_side(self.game.player)
-                    print("Side oriented", side)
                     if side == 0:
                         self.top()
                     elif side == 1:
@@ -366,7 +362,6 @@ class Ennemies(Entity):
                     left_action -= 1
                 else:
                     rand = random.randint(0, 3)
-                    print("Random", rand)
                     if rand == 0:
                         self.top()
                     elif rand == 1:

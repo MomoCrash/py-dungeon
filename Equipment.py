@@ -299,7 +299,7 @@ class Armor:
         """
         self.owner = owner
         self.lvl = lvl
-        self.defence_negation = int((defence_p-self.lvl) * (self.lvl+1))
+        self.defence_negation = int((defence_p-self.lvl) * self.lvl)
         self.name = name
         self.image = image
         self.colkey = 0

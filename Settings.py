@@ -31,7 +31,7 @@ IMAGE_PORTE_FERMEE = (32, 0)
 IMAGE_PORTE_OUVERTE = (48, 0)
 
 TAUX_DROP = 50 / 100
-TAUX_PV = 30
+TAUX_PV = 20
 MAX_LOOT = 2
 
 # définition des murs et des pièges
