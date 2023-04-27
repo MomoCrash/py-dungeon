@@ -69,7 +69,7 @@ Gros big up à notre équipe:
  - Ethan (MomoCrash): Chef du projet, de la communication et second développeur
  - Adrien (masterez): Game Designer, Testeur et Graphiste 
  - Yann (Yaice): Game Designer, Testeur et Graphiste 
- - Ilan (Kouakou): Testeur et développeur du Site Web
+ - Ilan (Kouakou): Testeur et développeur du Site Web  
  Ainsi qu'à notre professeur M. Ruyer
 
 > Crédits:  
