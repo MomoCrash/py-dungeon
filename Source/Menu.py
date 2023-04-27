@@ -236,7 +236,7 @@ class StatText(Box):
         if self.p.stats["points"] > 0:
             self.p.stats["points"] -= 1
             self.p.stats["sante"] += 1
-            self.p.maxhp = 100 + self.p.stats["sante"] * 5
+            self.p.maxhp = 100 + self.p.stats["sante"] * 10
             self.element[3].set_text(self.p.stats["sante"])
             self.element[0].set_text(f"[ STATS ] | POINTS : {self.p.stats['points']}")
 
@@ -248,7 +248,7 @@ class StatText(Box):
         if self.p.stats["sante"] > 0:
             self.p.stats["points"] += 1
             self.p.stats["sante"] -= 1
-            self.p.maxhp = 100 + self.p.stats["sante"] * 5
+            self.p.maxhp = 100 + self.p.stats["sante"] * 10
             if self.p.maxhp < self.p.hp:
                 self.p.hp = self.p.maxhp
             self.element[3].set_text(self.p.stats["sante"])

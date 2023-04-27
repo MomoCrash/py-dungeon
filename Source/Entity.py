@@ -39,8 +39,8 @@ class Entity:
         self.colkey = colkey
         self.orient = 1
         self.watch_right()
-        self.debuff = []
-        self.buff = []
+        self.debuff = []  # inutile
+        self.buff = []  # inutile
 
     def watch_left(self) -> None:
         """regarder à gauche"""

@@ -7,7 +7,7 @@
   },
   {
    "optionDest": "filenames",
-   "value": "C:/Users/trist/PycharmProjects/Dungeon/main.py"
+   "value": "C:/Users/trist/PycharmProjects/Dungeon/Source/main.py"
   },
   {
    "optionDest": "onefile",
@@ -19,7 +19,7 @@
   },
   {
    "optionDest": "icon_file",
-   "value": "C:/Users/trist/PycharmProjects/Dungeon/logo-py-dungon.ico"
+   "value": "C:/Users/trist/PycharmProjects/Dungeon/Source/logo-py-dungon.ico"
   },
   {
    "optionDest": "name",
@@ -75,7 +75,43 @@
   },
   {
    "optionDest": "datas",
-   "value": "C:/Users/trist/PycharmProjects/Dungeon/assets.pyxres;."
+   "value": "C:/Users/trist/PycharmProjects/Dungeon/Source/Animate.py;."
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/trist/PycharmProjects/Dungeon/Source/assets.pyxres;."
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/trist/PycharmProjects/Dungeon/Source/Carte.py;."
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/trist/PycharmProjects/Dungeon/Source/Entity.py;."
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/trist/PycharmProjects/Dungeon/Source/Equipment.py;."
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/trist/PycharmProjects/Dungeon/Source/logo-py-dungon.ico;."
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/trist/PycharmProjects/Dungeon/Source/Loot.py;."
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/trist/PycharmProjects/Dungeon/Source/main.py;."
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/trist/PycharmProjects/Dungeon/Source/Menu.py;."
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/trist/PycharmProjects/Dungeon/Source/Settings.py;."
   }
  ],
  "nonPyinstallerOptions": {

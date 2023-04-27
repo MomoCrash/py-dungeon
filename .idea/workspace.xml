@@ -2,17 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2183c6bc-1a1a-4d40-87f9-f7151fc60582" name="Changes" comment="update range arme">
-      <change beforePath="$PROJECT_DIR$/Animate.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Carte.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Data.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Entity.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Equipment.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Loot.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Menu.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Settings.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets.pyxres" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logo-py-dungon.ico" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/Entity.py" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Entity.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/Menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Menu.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/Settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Settings.py" afterDir="false" />
     </list>
     <list id="ccebec4d-0009-4a21-93ca-21184357b414" name="Changes by ethan.gilotin" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -49,7 +41,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "codeWithMe.voiceChat.enabledByDefault": "false",
-    "last_opened_file_path": "C:/Users/trist/PycharmProjects/Dungeon/Source",
+    "last_opened_file_path": "C:/Users/trist/PycharmProjects/Dungeon",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
 }]]></component>

@@ -1,0 +1,284 @@
+
+
+-- main.py : -----------------------------------------------------------------------------------------------------------
+
+contient la classe principale du jeu
+
+classes :
+ - Game
+  - __init__ :
+   atributs :
+    - carte  | Carte -> voir Carte
+    - player | Player -> voir Player
+    - ennemi | list -> voir Ennemi
+    - loot | list -> voir Loot
+    - looting | bool -> est ce qu'on est sur une map de loot ou de combats
+    - annimation_list | list -> Animation
+    - annimation_list | list -> liste de tuple représentant des images à afficher par dessus tout
+    - score | int -> valeur du score
+    - next_lvl | int -> point d'xp à obtenir avant de passer au niveau superieur
+    - is_loose | bool -> est ce que ma fenêtre de commencement est active (pour créer une nouvelle map)
+    - all_menus | dict -> voir Menu
+    - bestiaire | dict -> Voir Menu
+    - menu | Menu -> voir Menu (menu actif)
+  - restart:
+   redémarre une partie
+  - start:
+   lance le jeu (et/ou regénère une map)
+  - loose:
+   ouvre le menu de fin
+  - close_menu:
+   ferme le menu actif
+  - open_specifique:
+   args:
+   - entity | Ennemies -> voir Ennemies
+   ouvre à la page du bestiaire avec les statistiques préçise de l'ennemi
+  - open_# (# correspondant à une page en particulier)
+   ouvre le menu acocier à # (obligation de créer des fonction sans paramètre pour les menus bouton)
+  - check_full_tile
+   args:
+   - x | int
+   - y | int
+   Vérifie si la case aux coordonnées (x, y) est remplie par une entité
+  - update
+   actualise l'écran
+  - draww
+   dessine sur l'écran
+  - run
+   lance la fenêtre du jeu
+
+
+-- Setting.py : --------------------------------------------------------------------------------------------------------
+
+
+fichier avec plein des valeurs fixes qui définissent l'entiereté du jeu
+
+
+LARGEUR | int -> largeur (en Grande tuile (voir Tile)) du carré de la map
+WIN_W, WIN_H | int -> largeur en pixel de l'écran
+
+TAUX_DROP | int -> chance en pourcentage de droo d'1 objets
+MAX_LOOT | int -> nombre max d'affilé qu'un même mob loot un objet
+
+TAUX_PV | int -> quantité par niveau que rend les coeurs de vie
+
+EQUIVALANCE | dict -> lie le caractère d'une tuile (mur, sol, etc...) à son vecteur qui la défini
+
+LIMITE | dict -> lie un biome à la taille des Grandes tuiles dessiné ainsi que leur vecteur de départ (il sont forcément inclue dans une rectangle)
+
+LOOT_IMAGE | dict -> lie le nom d'une classe Weapon (voir Weapon) à l'image du type phyisque (les autres éléments étant placé à droite à égal distance)
+
+EFFICACITE | tuple(tuple) -> lie un élément qui subit à un élément qui attaque et renvoie le coéficient d'efficacité
+
+MONSTER_IMG | dict -> lie le nom d'un ennemi (voir Ennemies) à son image à une certaine coordonnée
+
+TEXTS | dict -> stock différents texte des menus en les lient à un nom
+
+ATTRIBUT | dict -> stock différents attribut en les lient à un nom d'ennemi (voir Ennemies)
+
+MILIEUMOT | lambda n -> renvoie le milieu en pixel d'un mot de n lettres
+
+
+-- Carte.py : ----------------------------------------------------------------------------------------------------------
+
+
+définition de la carte
+
+CARTE_SPAWN | dict -> lie le nom d'un biome à une liste d'ennemi qui peuvent spawn ainsi qu'une valeur de probabilité
+
+classes :
+ - Tile:
+  - __init__:
+   args :
+   - x | int -> en pixels
+   - y | int -> en pixels
+   attributs :
+   - x | int
+   - y | int
+   - tiles | list -> liste de 4 petites tuile de tilemap
+   - types | list -> liste de si il contient 1 mur, sol, etc...
+
+ - Carte:
+  - __init__:
+   args :
+   - game | Game -> voir Game (origine de la map)
+   attributs :
+   - game | Game
+   - wh | int -> largeur en Grandes tuiles
+   - map_dim | list(tuple) -> liste des vecteur origine des Grandes tuiles (de taille fixe)
+   - grille | list(list) -> martice de Tuile (voir Tuile)
+   - etage_completed | bool -> est ce que tout les ennemis sont mort
+   - biome | str -> biome
+   - stage | int -> niveau actuel
+  - new_map:
+   args :
+   - forced | list(tuple) -> voir map_dim
+   - loot | bool -> est ce qu'on est sur la map de loot ou de combat
+   regénère une map et un biome
+  - new_stage:
+   args:
+   - forced | list(tuple) -> voir new_map
+   Créé un nouveau stage en fonction de la situation du personnage.
+  - rand_spawns:
+   args:
+   - n | int -> nombre d'énnemi (voir Ennemies)
+   - loot | bool -> est ce que les ennemis donne des objets à leur mort
+   - specifique_biome | str -> force un biome
+   - local_section | tuple -> rectangle dans lequel les ennemies peuvent spawn (non sécurisé, peut causer des erreurs si mal utilisé)
+   Rajoute des ennemies aléatoirement sur la map, où il n'y a pas de mur.
+  - actualisation:
+   actualise
+  - blit:
+   affiche toute la map
+
+
+-- Entity.py : ---------------------------------------------------------------------------------------------------------
+
+classes:
+ - Entity:
+  - __init__:
+   args:
+   - game | Game -> voir Game (jeu racine)
+   - x | int -> en tuiles
+   - y | int -> en tuiles
+   - img | tuple -> vecteur de l'image
+   - size | tuple -> taille de l'image
+   - hp | int -> point de vie
+   - colkey | int -> couleur à enlever à l'affichage
+   attributs:
+   - maxhp | int -> point de vie maximum
+   - hp | int
+   - x | int -> en tuiles
+   - y | int -> en tuiles
+   - reel_x | int -> en pixels
+   - reel_y | int -> en pixels
+   - imgX | tuple -> vecteur de l'image quand l'entité est orienté sur l'axe horizontal
+   - imgY | tuple -> vecteur de l'image quand l'entité est orienté sur l'axe vertical
+   - img | tuple -> vecteur de l'image actuel
+   - size | tuple
+   - game | Game
+   - colkey | int
+   - orient | int -> nombre entre 0 et 3 (gauche, droite, haut , bas)
+  - watch_# (# est une orientation):
+   orient l'image vers la direction #
+  - # (# est une direction):
+   déplace l'entité de 1 case dans la direction # si le mouvment n'est pas bloqué
+  - place:
+   args:
+   - x | int -> en tuile
+   - y | int -> en tuile
+   place sur la tuile (x, y)
+  - damage:
+   args:
+   - amount | int -> quantité de dégâts initial à appliquer
+   - el | int -> élément (pour tout ce qui est avec EFFICACITE voir Settings.py)
+   - source | Entity -> entité qui applique les dégâts
+   subit des dégâts
+  - attaque:
+   attaque sur toute les case de sa portée
+  - blit_entity:
+   affiche l'entité sur la map
+  - distance:
+   args:
+   - other_entity | Entity -> destination
+   calcul la distance entre sois et une autre entité
+  - low_distance_side:
+   args:
+   - other_entity | Entity -> destination
+   choisi la direction du plus court chemin vers l'autre entité
+
+ - Player:
+  sous instance de Entity
+  - __init__:
+   args:
+   - game | Game -> voir Entity
+   - x | int -> voir Entity
+   - y | int -> voir Entity
+   attributs:
+   - weapon | Weapon -> voir Weapon
+   - secondary_weapon | Weapon -> voir Weapon
+   - armor | Armor -> voir Armor
+   - stats | dict -> lie une stat à sa valeur
+   - lvl | int -> niveau (0 par défaut)
+  - reset_stats
+   remet à zéro les stats
+  - blit_entity -> voir Entity
+  - blit_life_bar:
+   affiche les points de vie en bas de l'écran
+  - damege -> voir Entity
+  - attaque -> voir Entity
+  - set_armor:
+   args:
+   - armor | Armor -> nouvelle armure (voir Armor)
+   défini l'armure
+  - set_weapon:
+   args:
+   - weapon | Weapon -> nouvelle arme (voir Weapon)
+   défini l'armue equipé
+  - swap_weapon:
+   échange les deux armes equipées
+
+ - Ennemies:
+  sous instance de Entity
+  - __init__:
+   args:
+   - game | Game
+   - x | int
+   - y | int
+   - img | tuple -> voir Entity
+   - size | tuple -> voir Entity
+   - hp | int
+   - lvl | int
+   - dmg | int
+   - loot | bool -> est ce que l'ennemi doit donner de l'equipement à sa mort
+   - colkey | int
+   - value | int -> quantité de score donné à sa mort
+   attributs:
+   - patern | dict -> lie une orientation à une liste de chaine de position relative représentant les cases des attaques (quand la chaine rencontre un mur, celle ci s'arrête)
+   - attaque_tile | tuple -> image de l'attaque
+   - speed | int -> nombre d'action par tour
+  - action:
+   args:
+   - forced | str -> force une action
+   choisi quel action faire
+  - damage -> voir Entity
+  - range_blit:
+   affiche les cases du patern actif
+  - get_if_player_touched:
+   renvoie si le joueur est dans les cases du patern actif
+  - get_coor_in_range:
+   renvoie une liste avec tout les tuiles dans la portée
+  - attaque -> voir Entity
+  - blit_life_bar:
+   affiche la barre de vie au dessus de sa tête
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -204,7 +204,7 @@ EQUIVALANCE = {
         (8, 2), (9, 2), (8, 3), (9, 3),  # lave bas-droite 3
         (12, 2), (13, 2), (12, 3), (13, 3),  # lave bas-gauche 2
     ],
-    "event": [  # déclancheur d'évênement
+    "event": [  # déclancheur d'évênement non implémenté
         (5, 2), (6, 2), (5, 3), (6, 3),  # piège éclaté
         (8, 14), (9, 14), (8, 15), (9, 15),  # piège sol
     ]
