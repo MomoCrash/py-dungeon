@@ -568,7 +568,7 @@ class Vampire(Ennemies):
     def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
         super().__init__(game, x, y, (0, 160), (16, 16), 20, lvl, 10, loot=loot, colkey=6, value=10)
         self.speed = 1
-        self.element = 0
+        self.element = 5
 
     def attaque(self):
         if self.get_if_player_touched():
@@ -663,7 +663,7 @@ class Necromancien(Ennemies):
     def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
         super().__init__(game, x, y, (0, 192), (16, 16), 10, lvl, 2, loot=loot, colkey=6, value=15)
         self.speed = 1
-        self.element = 0
+        self.element = 5
         self.timer_invocation = randint(12, 20)
 
     def action(self, forced=None):
@@ -728,7 +728,7 @@ class Abomination(Ennemies):
     def __init__(self, game, x: int, y: int, lvl: int, loot: bool):
         super().__init__(game, x, y, (0, 224), (16, 16), 70, lvl, 30, loot=loot, colkey=7, value=25)
         self.speed = 1
-        self.element = 0
+        self.element = 3
         self.patern = {
             "left": [[(-1, 0), (-2, 0), (-2, 1)], [(-1, 0), (-2, 0), (-2, -1)]],
             "right": [[(1, 0), (2, 0), (2, 1)], [(1, 0), (2, 0), (2, -1)]],
