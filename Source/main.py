@@ -828,10 +828,10 @@ class Game:
             if py.btnp(py.KEY_TAB, hold=60):
                 """Affiche le Menu"""
                 self.menu = self.all_menus["TAB"]
-            if py.btnp(py.KEY_X, hold=60):  # tue tout les mobs de la map (leurs inflige +200 000 de dégats)
+            """if py.btnp(py.KEY_X, hold=60):  # tue tout les mobs de la map (leurs inflige +200 000 de dégats)
                 for _ in range(LARGEUR * 10):
                     for enn in self.ennemi:
-                        enn.damage(10000, 0, self.player)
+                        enn.damage(10000, 0, self.player)"""
 
             if py.btnp(py.MOUSE_BUTTON_LEFT, hold=60):
                 for e in self.ennemi:
@@ -864,9 +864,9 @@ class Game:
         py.text(WIN_W - 30, 0, "Armure :", 7)
         self.player.armor.blit(decalY=8)
         py.rect(WIN_W - 32, 60, 32, 2, 7)
-        py.text(WIN_W - 30, 65, "Arme 1 \n(en main) :", 7)
+        py.text(WIN_W - 30, 65, "Arme 1 \n(main) :", 7)
         self.player.weapon.blit(decalY=79)
-        py.text(WIN_W - 30, WIN_W // 2 - 29, "Arme 2 \n(sac) :", 7)
+        py.text(WIN_W - 30, 110, "Arme 2 \n(sac) :", 7)
         self.player.secondary_weapon.blit(decalY=130)
         py.rect(WIN_W - 32, 165, 32, 2, 7)
         py.text(WIN_W - 32, 168, "Au sol :", 7)

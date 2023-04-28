@@ -3,7 +3,7 @@ from Settings import BOUTON_ADD, BOUTON_SUB, HEALTH_ICO, DAMAGE_ICO
 
 
 """
-permet des créer des menus de la menière suivante :
+permet des créer des menus de la menière suivante (en arbre) :
 la racine doit être un Box qui contient des sous instance.
 ces sous instances peuvent être formé entre eux d'autre sous instances
 
