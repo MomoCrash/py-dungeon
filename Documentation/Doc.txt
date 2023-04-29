@@ -187,7 +187,7 @@ classes:
    - other_entity | Entity -> destination
    choisi la direction du plus court chemin vers l'autre entité
 
- - Player:
+ - Player: (Hérite de Entity)
   sous instance de Entity
   - __init__:
    args:
@@ -218,7 +218,7 @@ classes:
   - swap_weapon:
    échange les deux armes equipées
 
- - Ennemies:
+ - Ennemies: (Hérite de Entity)
   sous instance de Entity
   - __init__:
    args:
@@ -251,18 +251,315 @@ classes:
   - attaque -> voir Entity
   - blit_life_bar:
    affiche la barre de vie au dessus de sa tête
+  SOUS INSTANCES :
+   - Zombie
+   - Squelette
+   - Demon
+   - Bat
+   - Ghost
+   - Golem
+   - Spider
+   - Diablotin
+   - Vampire
+   - BlobFeu
+   - Necromancien
+   - Aligator
+   - Abomination
+   - Mommies
+   - Loup
+   - Fox
+   - BlobEau
+   - Witch
+   - DragonFeu
+   - Snake
+   - Creeper
+   - Rampant
+   - Notch
+   - Angel
+   - Arcangel
+   - DragonLight
+   - BlobPlant
+   - DragonDark
+   - DragonEau
+   - DragonPlant
+   - BlobLight
+   - BlobDark
 
 
+-- Equipment.py : ------------------------------------------------------------------------------------------------------
 
 
+classes :
+ - Weapon:
+  - __init__:
+   args:
+   - owner | Player -> voir Player
+   - image | tuple -> vecteur de coordonnée de l'image
+   - lvl | int
+   - dmg | int -> dégâts
+   - element | int -> élément
+   - col_k | int -> couleur du fond à supprimer à l'affichage
+   attributs:
+   - elemnt | int
+   - owner | Player
+   - patern | dict -> voir Ennemies.patern
+   - attaque_tile | tuple -> constante de l'image du hit marqueur
+   - image | list -> image de l'arme comme [u, v, col_k]
+   - lvl | int
+   - dmg | int
+  - blit_range:
+   affiche les cases où le joueur peut attaquer
+  - get_coor_in_range: -> list
+   renvoie la list des coordonnée des cases décrivant la portée de l'arme
+  - get_ennemi_in_range: -> list
+   renvoie la list des ennemies dans la portée de l'arme
+  - attaque:
+   inflige des dégâts à tout les ennemis dans sa portée
+  - blit:
+   affiche
+  SOUS INSTANCE:
+   - RustySword
+   - Sword
+   - Spear
+   - Hammer
+   - Bow
+   - Hallebarde
+   - Axe
+   - Katana (fais avancer en plus d'attaquer)
+
+ - Armor:
+  - __init__:
+   args:
+   - owner | Player -> voir Player
+   - name | str
+   - defence_p | int -> valeur de la résistance de l'armure
+   - image | tuple -> vecteur image de l'armure
+   - element | int -> element interagissant avec l'ennemi (les ennemies font des dégâts de leur element)
+   - lvl | int
+   - durabilite | int -> nombre de coup à prendre avant que l'armure cass
+   attributs:
+   - owner | Player
+   - lvl | int
+   - defence_negation | int -> valeur final de la réduction après scaling par rapport au niveau
+   - name | str
+   - image | tuple
+   - colkey | int -> 0 (supprime le fond)
+   - element | int
+   - durabilite | int -> résistance dans le temps de l'armure (si str alors indestructible)
+  - defence:
+   renvoie la valeur de negation de dégâts
+  - damage_armor:
+   args:
+   - dmg | int -> par défaut 1, nombre de point de durabilité à soustraire
+   soustrait une quantité de point de durabilité à l'amure
+  - blit:
+   affiche
+  SOUS INSTANCE:
+   - NakedArmor -> pas d'armure
+   - LeatherArmor
+   - IronArmor
+   - GoldArmor
+   - DiamondArmor
+   - MagmaArmor -> type feu
+   - DragonScaleArmor -> type feu
+   - DragonWaterArmor -> type eau
+   - DragonPlantArmor -> type plante
+   - DragonDarkArmor" -> type ténèbre
+   - DragonLightArmor -> type lumière
 
 
+-- Animate.py : --------------------------------------------------------------------------------------------------------
 
 
+classes:
+ - Animation:
+  - __init__:
+   args:
+   - game | Game -> voir Game
+   - type | str -> type de l'animation ("Move" ou "Attaque")
+   - origine | Entity -> (voir Entity) acteur de l'action
+  - delete:
+   s'efface des animations
+
+ - Move: (Hérite de Animation)
+  - __init__:
+   args:
+   - game | Game
+   - origine | Entity
+   - sens | int -> 0-3, direction de déplacement
+   - distance | int -> en pixels, par défaut 16 (1 petite tuile)
+   - frame | int -> temps en frame pour réaliser le déplacement
+   attributs:
+   - baseXY | tuple(int, int) -> position de départ de l'animation
+   - sens | int
+   - frame | int
+   - distance | float -> calcul de la distance à parcourir par frame (distance/frame)
+  - animate:
+   déplace l'entité de moins de 1 case pour mimer une translation ou termine l'animation
+
+ - Attaque:
+  - __init__:
+   args:
+   - game | Game
+   - origine | Entity
+   attributs:
+   - frame | int -> 4, nombre de frame pour faire l'animation
+   - tile_coors | list -> liste des coordonnées de la portée de l'attaque de l'entité récupéré de <origine>
+  - animate:
+   ajoute au layer des animations une particule pour chaque case attaqué ou termine l'animation si toute les frame sont passés
 
 
+-- Loot.py : -----------------------------------------------------------------------------------------------------------
 
 
+classes:
+ - Loot:
+ attributs global:
+ - taux_loot | dict -> valeur des probabilité de spawn des objets.
+  - __init__:
+   args:
+   - niveau | int
+   - x | int
+   - y | int
+   - forced | tuple(bool, Loot)
+   attributs:
+   - forced | tuple
+   - x | int
+   - y | int
+   - niveau |int
+   - type | str
+   /!\ -> si forcé, alors Loot, contitent lui même un objet Loot ou Weapon ou Armor (utilisé quand un objet connue est reposé au sol)
+  - get_loot:
+   args:
+   - getter | Player -> voir Player
+   donne le contenue du loot à player (et repose au sol ce qui était équipé sur le joueur)
+  - blit:
+   affiche sur la map, au sol, l'icone du loot
+  - blit_inv:
+   affiche dans l'inventaire dans "au sol" l'objet contenue (sans les détaills)
+
+
+-- Menu.py : -----------------------------------------------------------------------------------------------------------
+
+
+contient les Menu qui sont organisé selon un arbre de dépendance dont la racine est le jeu (voir Game)
+
+
+classes:
+ - Box:
+  Contient plein d'éléments à afficher
+  - __int__:
+   args:
+   - xy | tuple(int, int)
+   - *elem | tuple -> voir **
+   - wh | tuple(int, int)
+   - bg | int
+   - root | Game ou instanceof Box ou instanceof Bloc ou instanceof Text
+   - but_exit | tuple -> voir ***
+   attributs:
+   - root | Game ou instanceof Box ou instanceof Bloc ou instanceof Text
+   - x | int
+   - y | int
+   - w | int
+   - h | int
+   - bgc | int
+   - element | list(tuple)
+   - exit | tuple
+  - blit:
+   affiche la fenêtre et ses éléments
+  - close:
+   ferme la fenêtre
+  - update:
+   met à jour la fenêtre et ses éléments
+  SOUS INSTANCE:
+  - StatsEnnemi -> bestiaire spécial avec les stats préçise
+  - StatText -> menu pour les niveaux
+
+ - Bloc:
+  Rectangle
+  - __init__:
+   args:
+   - root | Game ou instanceof Box ou instanceof Bloc ou instanceof Text
+   - xy | tuple(int, int)
+   - wh | tuple(int, int)
+   - c | int -> couleur du rectangle
+   attributs:
+   - root | Game ou instanceof Box ou instanceof Bloc ou instanceof Text
+   - xy | tuple(int, int)
+   - wh | tuple(int, int)
+   - c | int
+  - blit:
+   affiche la fenêtre
+
+ - Text:
+  - __init__:
+   args:
+   - root | Game ou instanceof Box ou instanceof Bloc ou instanceof Text
+   - xy | tuple(int, int)
+   - wh | tuple(int, int)
+   - txt | str -> texte
+   - col | int -> couleur du texte
+   attributs:
+   - root | Game ou instanceof Box ou instanceof Bloc ou instanceof Text
+   - x | int
+   - y | int
+   - w | int
+   - h | int
+   - txt | str -> texte
+   - col | int -> couleur du texte
+  - set_text:
+   args:
+   - txt | str -> nouveau texte
+   défini un nouveau texte
+  - blit:
+   affiche la fenêtre
+  SOUS INSTANCE:
+  - ScoreText
+
+ - Canevas:
+  Images
+  - __init__:
+   args:
+   - root | Game ou instanceof Box ou instanceof Bloc ou instanceof Text
+   - imgs | tuple -> (x, y, tilemap, u, v, w, h, col_key)
+   attributs:
+   - root | Game ou instanceof Box ou instanceof Bloc ou instanceof Text
+   - imgs | tuple
+  - blit:
+   affiche la fenêtre
+
+ - Button: (Herité de Box)
+ Bloc + Text + interaction
+ - __init__:
+  args:
+  root | Game ou instanceof Box ou instanceof Bloc ou instanceof Text
+  xy | tuple(int, int)
+  wh | tuple(int, int)
+  text | str -> texte à afficher au centre du bouton
+  bcol | int -> couleur de fond du boutton
+  col | int -> couleur du texte
+  cmd | fonction -> commande à executer à la pression (/!\ ne doit pas avoir d'arguments)
+  attibuts:
+  - cmd | foncition
+  - cooldown | int (temps en frame entre 2 pression d'affilé)
+ - blit -> voir Box
+ - update:
+  actualise si pressé la commande du boutton
+
+ - Iframe: (Herité de Box)
+ Boutton + Image
+  - __init__:
+   args:
+   - root | Game ou instanceof Box ou instanceof Bloc ou instanceof Text
+   - img | tuple -> (x, y, tilemap, u, v, w, h, col_key)
+   - bcol | int
+   - cmd | fonction
+   attibuts:
+   - cmd | fonction
+   - cooldown | int
+  - blit -> voir Box
+  - update:
+   actualise si pressé la commande de l'Iframe
 
 
 
