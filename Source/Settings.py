@@ -319,7 +319,8 @@ TEXTS = {
                " - E -> Interagir/Ramasser\n"
                " - Fleches -> Diriger la visée\n"
                " - F -> Echanger d'armes\n"
-               " - W -> Skip la salle de loot\n"
+               " - W -> Skip la salle une fois la salle vidé\n"
+               " - R -> Relance la partie\n"
                " - TAB -> Ouvrir/Fermer les menus\n"
                " - F1 -> Fullscreen le jeu\n",
     "resumé": "[RESUME]\n"

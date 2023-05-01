@@ -883,7 +883,7 @@ class Game:
             chaine += temp[i]
             if i % 8 == 7:
                 chaine += "\n"
-        py.text(WIN_W - 31, 355, chaine, 7)
+        py.text(WIN_W - 28, 355, chaine, 7)
         for anime in self.animation_layer:
             py.blt(anime[0], anime[1], anime[2], anime[3], anime[4], anime[5], anime[6], anime[7])
         self.animation_layer.clear()
